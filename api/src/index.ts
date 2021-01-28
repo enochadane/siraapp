@@ -4,7 +4,7 @@ import cors from "cors";
 import path from "path";
 import dotenv from "dotenv";
 import mongoose from "mongoose"
-import authRoutes from "./routes/auth"
+import routes from "./routes"
 
 const app = express()
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +21,11 @@ const PORT = process.env.PORT || 8383;
 const DATABASE_URI =  process.env.DATABASE_URI || "mongodb://localhost:27017/sira_app";
 
 
-app.use("/api", authRoutes)
+app.use("/api", routes.authRoutes)
+app.use("/api/users", routes.userRoutes)
+app.use("/api/jobs", routes.jobRoutes)
+app.use("/api/apply", routes.jobApplyRoutes)
+app.use("/api/categories", routes.jobCategoryRoutes)
 app.use("/", (_req, res)=> res.json({message: "The API is working"}))
 
 mongoose
@@ -29,6 +33,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
   })
   .then(() => {
     app.listen(PORT, () =>
