@@ -8,7 +8,6 @@ export const requireSignIn = (req: Request|any, res: Response, next: Function) =
   try {
     const token = req.headers.authorization?.split(" ")[1] || "sample";
     const decoded = Jwt.verify(token, secret);
-    console.log(decoded);
     req.user = decoded;
     next();
   } catch (err) {

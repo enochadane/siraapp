@@ -7,6 +7,7 @@ import {
   deleteJob,
   getJobsWithCategory,
   updateJob,
+  getJobBySearch,
 } from "../controllers/job";
 import { authMiddleware, requireSignIn } from "../middlewares/auth";
 import { jobFormValidator } from "../validators/job";
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.post("/", jobFormValidator, requireSignIn, authMiddleware, createJob);
 router.get("/", getJobs);
+router.get("/search", getJobBySearch);
 router.get("/:id", getJob);
 router.put("/:id", jobFormValidator, requireSignIn, authMiddleware, updateJob);
 router.delete("/:id", requireSignIn, deleteJob);

@@ -1,7 +1,8 @@
-import { IJob, JobTypes } from "../models/job";
+import job, { IJob, JobTypes } from "../models/job";
 import { Request, Response } from "express";
 import Job from "../models/job";
 import models from "../models";
+import querystring from "query-string";
 /* 
  name: String;
  description: String;
@@ -15,7 +16,7 @@ import models from "../models";
  deadline: String;
  */
 
-export const createJob = async (req: Request|any, res: Response) => {
+export const createJob = async (req: Request | any, res: Response) => {
   const {
     name,
     description,
@@ -28,7 +29,6 @@ export const createJob = async (req: Request|any, res: Response) => {
     job_position,
   } = req.body;
   let selectedJobType;
-
 
   switch (job_type) {
     case "contract":
@@ -52,7 +52,7 @@ export const createJob = async (req: Request|any, res: Response) => {
     newJob.experience_level = experience_level;
     newJob.deadline = deadline;
     newJob.job_position = job_position;
-    newJob.company_id =  req.profile._id;
+    newJob.company_id = req.profile._id;
     const job = await newJob.save();
     if (job) {
       res.status(201).json({ message: "Job has been created successfuly" });
@@ -164,8 +164,7 @@ export const updateJob = async (req: Request | any, res: Response) => {
   }
 };
 
-export const deleteJob = async (req: Request|any, res: Response) => {
-
+export const deleteJob = async (req: Request | any, res: Response) => {
   try {
     const job_id = req.params.id;
     const existedjob: IJob | null = await models.Job.findById(job_id);
@@ -181,9 +180,26 @@ export const deleteJob = async (req: Request|any, res: Response) => {
         .json({ message: "Job with a specified category is not found" });
     }
     res.status(200).json(job);
+  } catch (error) {}
+};
 
-  } catch (error) {
-    
+export const getJobBySearch = async (req: Request, res: Response) => {
+  const query: any = {};
+  if (req.query.search_query) {
+    const searchQuery =
+      req.query.search_query?.toString().toLowerCase().trim() || "all";
+    query.name = { $regex: searchQuery, $options: "i" };
+    if (req.query.job_category && req.query.job_category !== "all") {
+      query.job_category = { $regex: req.query.job_category, $options: "i" };
+    }
+    models.Job.find(query).exec((err, jobs) => {
+      if (err || !jobs) {
+        return res.status(400).json({
+          message: "No Result",
+        });
+      }
+      // const jobresults = [...jobresults.forEach(job => job.photo = undefined)]
+      return res.json(jobs);
+    });
   }
-
 };
