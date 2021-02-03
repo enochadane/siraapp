@@ -2,18 +2,17 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/index.ts",
-    "start": "node index.ts",
+    "start": "tsc node index.js",
     "postinstall": "tsc",
     "watch-node": "nodemon index.ts",
     "watch-ts": "tsc -w"
   },
   "engines": {
-    "node": "15.3.0"
+    "node": "15.*"
   },
-  "postinstall": "tsc && mv -i -v public dist/ && rm -v -rf src",
   "keywords": [],
   "author": "",
   "license": "ISC",
