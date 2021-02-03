@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/index.ts",
-    "start": "ts-node index.ts"
+    "start": "tsc node ./src/index.js"
   },
   "engines": {
     "node": "15.*"
