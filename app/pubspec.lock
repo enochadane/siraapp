@@ -64,8 +64,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-<<<<<<< HEAD
-=======
   fake_async:
     dependency: transitive
     description:
@@ -80,7 +78,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.6"
->>>>>>> 6df7e8b124be0efe0e4554b355456a017b9777a8
   flutter:
     dependency: "direct main"
     description: flutter
@@ -98,15 +95,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
-  image:
-    dependency: transitive
-    description:
-      name: image
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.4"
-=======
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -147,7 +135,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
->>>>>>> 6df7e8b124be0efe0e4554b355456a017b9777a8
   matcher:
     dependency: transitive
     description:
@@ -168,18 +155,13 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.6.4"
-=======
     version: "1.8.0-nullsafety.1"
->>>>>>> 6df7e8b124be0efe0e4554b355456a017b9777a8
   pedantic:
     dependency: transitive
     description:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.8.0+1"
   petitparser:
     dependency: transitive
@@ -195,16 +177,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-=======
-    version: "1.9.2"
-  plugin_platform_interface:
-    dependency: transitive
-    description:
-      name: plugin_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
->>>>>>> 6df7e8b124be0efe0e4554b355456a017b9777a8
   sky_engine:
     dependency: transitive
     description: flutter
@@ -274,9 +246,5 @@ packages:
     source: hosted
     version: "3.5.0"
 sdks:
-<<<<<<< HEAD
-  dart: ">=2.7.0 <3.0.0"
-=======
   dart: ">=2.10.0-110 <2.11.0"
   flutter: ">=1.12.13 <2.0.0"
->>>>>>> 6df7e8b124be0efe0e4554b355456a017b9777a8
