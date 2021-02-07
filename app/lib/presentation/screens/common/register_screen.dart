@@ -1,9 +1,7 @@
-import 'package:app/ui/screens/common/common.dart';
-import 'package:app/ui/screens/common/dialog.dart';
-import 'package:app/ui/screens/job_seeker/job_seeker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'login_screen.dart';
+
+import '../screens.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback onSignedIn;

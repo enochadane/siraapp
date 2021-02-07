@@ -26,61 +26,24 @@ class _ProfilePageFormState extends State<ProfilePageForm> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
 
-  String _fileName;
-  List<PlatformFile> _paths;
-  String _directoryPath;
-  String _extension;
-  bool _loadingPth = false;
-  bool _multiPick = false;
-  FileType _pickingType = FileType.any;
-  TextEditingController _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(() => _extension = _controller.text);
-  }
-
   void _openFileExplorer() async {
-    setState(() => _loadingPth = true);
-    try {
-      _directoryPath = null;
-      _paths = (await FilePicker.platform.pickFiles(
-        type: _pickingType,
-        allowedExtensions: (_extension?.isNotEmpty ?? false)
-            ? _extension?.replaceAll('', '')?.split(',')
-            : null,
-      ))
-          ?.files;
-    } on PlatformException catch (e) {
-      print('Unsupported operation' + e.toString());
-    } catch (ex) {
-      print(ex);
-    }
-    if (!mounted) return;
-    setState(() {
-      _loadingPth = false;
-      _fileName = _paths != null ? _paths.map((e) => e.name).toString() : '...';
-    });
-  }
+    FilePickerResult result = await FilePicker.platform.pickFiles();
 
-  // void _clearCachedFiles() {
-  //   FilePicker.platform.clearTemporaryFiles().then((result) {
-  //     _scaffoldKey.currentState.showSnackBar(
-  //       SnackBar(
-  //         backgroundColor: result ? Colors.green : Colors.red,
-  //         content: Text((result
-  //             ? 'Temporary files removed with success.'
-  //             : 'Failed to clean temporary files')),
-  //       ),
-  //     );
-  //   });
-  // }
+    if (result != null) {
+      File file = File(result.files.single.path);
+      print(file.path);
+    } else {}
 
-  void _selectFolder() {
-    FilePicker.platform.getDirectoryPath().then((value) {
-      setState(() => _directoryPath = value);
-    });
+    if (result != null) {
+      PlatformFile file = result.files.first;
+
+      print(file.name);
+      print(file.bytes);
+      print(file.size);
+      print(file.extension);
+      print(file.path);
+    } else {}
+
   }
 
   @override
@@ -210,12 +173,13 @@ class _ProfilePageFormState extends State<ProfilePageForm> {
   }
 
   void takePhoto(ImageSource source) async {
-    final pickedFile = _picker.getImage(
+    final pickedFile = await _picker.getImage(
       source: source,
     );
     setState(() {
-      _imageFile = pickedFile as PickedFile;
+      _imageFile = pickedFile;
     });
+    // print(_imageFile.path + ' profile page');
   }
 
   Widget _buildFirstNameField() {
