@@ -1,3 +1,4 @@
+import 'package:app/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -35,56 +36,58 @@ class _SignUpPage extends State<SignUpPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        height: height,
-        decoration: BoxDecoration(),
-        child: Column(children: [
-          logo(isKeyboardShowing),
-          Align(
-            alignment:
-                isKeyboardShowing ? Alignment.center : Alignment.bottomCenter,
-            child: Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-                    height: height * 0.6,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _isCompany
-                            ? _buildNameTextField()
-                            : Text(
-                                'Job Seeker',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Container(
+          height: height,
+          decoration: BoxDecoration(),
+          child: Column(children: [
+            logo(isKeyboardShowing),
+            Align(
+              alignment:
+                  isKeyboardShowing ? Alignment.center : Alignment.bottomCenter,
+              child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 20.0),
+                      height: height * 0.6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _isCompany
+                              ? _buildNameTextField()
+                              : Text(
+                                  'Job Seeker',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        _buildEmailTextField(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        _buildPasswordTextField(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        _buildChooseAccountType(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _submitButton(),
-                        _createAccountLabel(),
-                      ],
+                          SizedBox(
+                            height: 10,
+                          ),
+                          _buildEmailTextField(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _buildPasswordTextField(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _buildChooseAccountType(),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          _submitButton(),
+                          _createAccountLabel(),
+                        ],
+                      ),
                     ),
-                  ),
-                )),
-          ),
-        ]),
+                  )),
+            ),
+          ]),
+        ),
       ),
     );
   }
@@ -99,8 +102,8 @@ class _SignUpPage extends State<SignUpPage> {
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    Color(0xff4064f3),
-                    Color(0xff9607c1),
+                    kBrown100,
+                    kBrown400,
                   ])),
           width: double.infinity,
           height: isKeyboardShowing
@@ -289,8 +292,8 @@ class _SignUpPage extends State<SignUpPage> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  Color(0xff4064f3),
-                  Color(0xff9607c1),
+                  kBrown100,
+                  kBrown900,
                 ])),
         child: _isLoading == true
             ? DialogBox().loading(context)
@@ -313,8 +316,8 @@ class _SignUpPage extends State<SignUpPage> {
         });
 
         if (!_isCompany) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ProfilePageForm()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ProfilePageForm()));
 
           setState(() {
             _isLoading = false;

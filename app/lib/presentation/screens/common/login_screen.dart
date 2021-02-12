@@ -1,4 +1,5 @@
 
+import 'package:app/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -97,8 +98,8 @@ class _LoginPage extends State<LoginPage> {
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    Color(0xff4064f3),
-                    Color(0xff9607c1),
+                    kBrown100, 
+                    kBrown900
                   ])),
           width: double.infinity,
           height: isKeyboardShowing
@@ -270,8 +271,8 @@ class _LoginPage extends State<LoginPage> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  Color(0xff4064f3),
-                  Color(0xff9607c1),
+                  kBrown200,
+                  kBrown900
                 ])),
         child:
              _isLoading == true

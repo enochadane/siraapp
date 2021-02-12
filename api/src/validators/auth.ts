@@ -1,9 +1,6 @@
 import { check } from "express-validator";
 
 export const userSignUpValidator = [
-  check("password")
-    .matches(check("confirm_password").toString())
-    .withMessage("password is not the same"),
   check("username")
     .isLength({ min: 3 })
     .withMessage("Name Must be at least 3 length character"),
