@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/constants/colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,13 +44,13 @@ class _ProfilePageFormState extends State<ProfilePageForm> {
       print(file.extension);
       print(file.path);
     } else {}
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kBrown400,
         title: Text('Edit Profile'),
       ),
       body: Container(
@@ -264,6 +265,9 @@ class _ProfilePageFormState extends State<ProfilePageForm> {
 
   Widget _buildFileUploadField() {
     return RaisedButton(
+      color: kBrown500,
+      textColor: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
       onPressed: () => _openFileExplorer(),
       child: Text('Upload CV'),
     );
