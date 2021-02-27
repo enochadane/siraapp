@@ -101,3 +101,54 @@ export const getApplicationWithCompanyId = async (
     return res.status(404).json({ message: "There is an error on applicaton" });
   }
 };
+
+export const updateApplication = async (req: Request | any, res: Response) => {
+  const {
+    job_id,
+    applicant_id,
+    company_id,
+    first_name,
+    last_name,
+    phone,
+    email,
+    other_info,
+  } = req.body;
+
+  try {
+    const application_id = req.params.id;
+    const application = await models.Application.findByIdAndUpdate(
+      application_id, {
+        job_id,
+        applicant_id,
+        company_id,
+        first_name,
+        last_name,
+        phone,
+        email,
+        other_info,
+      }
+    );
+    if(!application) {
+      return res.status(403).json({ message: "There is an error in updating application" });
+    }
+    return res.status(201).json(application);
+  } catch (error) {
+    return res.status(404).json({ message: "There is an error in getting application" });
+  }
+}
+
+export const deleteApplication = async (req: Request | any, res: Response) => {
+  try {
+    const application_id = req.params.id;
+    console.log(application_id);
+    const application = await models.Application.findByIdAndRemove(application_id);
+
+    if(!application) {
+      return res.status(404).json({ message: "Application with such id is not found" });
+    }
+    res.status(200).json(application)
+  } catch(error) {
+    console.log(error);
+  }
+}
+
