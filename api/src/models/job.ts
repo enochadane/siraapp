@@ -18,7 +18,7 @@ export interface IJob extends Document {
   other_info: String;
   deadline: String;
   date_published: String;
-  job_category_id: String;
+  job_category_id: mongoose.Types.ObjectId;
   job_type: JobTypes;
   company_id: String;
 }
@@ -47,16 +47,12 @@ const jobSchema: Schema<IJob> = new mongoose.Schema(
       default: Date.now(),
     },
     job_type: {
-      type: JobTypes,
-      default: JobTypes.CONTRACT,
+      type: String,
+      default: "CONTRACT",
     },
     job_category_id: {
-      type: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "JobCategory",
-        },
-      ],
+      type: mongoose.Types.ObjectId,
+      ref: "JobCategory",
     },
     company_id: {
       type: mongoose.Types.ObjectId,

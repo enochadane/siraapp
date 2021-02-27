@@ -14,7 +14,7 @@ class EditJob extends StatelessWidget{
 
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Colors.black), onPressed: () {  },
         ),
         title: Text("edit job"),
         backgroundColor: Colors.blueGrey,

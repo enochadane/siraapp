@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import Job from "../models/job";
 import models from "../models";
 import querystring from "query-string";
+import { Mongoose } from "mongoose";
 /* 
  name: String;
  description: String;
@@ -47,12 +48,12 @@ export const createJob = async (req: Request | any, res: Response) => {
     newJob.description = description;
     newJob.date_published = date_published;
     newJob.job_category_id = job_category_id;
-    newJob.job_type = selectedJobType;
+    newJob.job_type = job_type;
     newJob.other_info = other_info;
     newJob.experience_level = experience_level;
     newJob.deadline = deadline;
     newJob.job_position = job_position;
-    newJob.company_id = req.profile._id;
+    newJob.company_id = req.profile?._id;
     const job = await newJob.save();
     if (job) {
       res.status(201).json({ message: "Job has been created successfuly" });
@@ -100,6 +101,27 @@ export const getJobs = async (req: Request, res: Response) => {
       .json({ message: "There is an error on getting jobs" });
   }
 };
+
+
+export const getJobsByCompanyId = async (req: Request, res: Response) => {
+  const company_id = req.params.company_id.toLowerCase();
+  
+  try {
+    models.Job.find({company_id}).exec((err, jobs) => {
+      if (err || !jobs) {
+        return res
+          .status(404)
+          .json({ message: "There is not jobs with a specified id" });
+      }
+      return res.status(200).json(jobs);
+    });
+  } catch (error) {
+    return res
+      .status(404)
+      .json({ message: "There is an error on getting jobs" });
+  }
+};
+
 
 export const getJobsWithCategory = async (req: Request, res: Response) => {
   const job_category_id = req.params.cetegory.toLowerCase();
@@ -168,11 +190,15 @@ export const deleteJob = async (req: Request | any, res: Response) => {
   try {
     const job_id = req.params.id;
     const existedjob: IJob | null = await models.Job.findById(job_id);
+    console.log('existed job is ', existedjob);
+
+
+    console.log("job id ", job_id);
     const job_company_id = existedjob?.company_id;
-    if (job_company_id !== req.profile._id) {
+    console.log("profile is ", req.profile._id, job_company_id);
+    if (job_company_id?.toString() !== req.profile._id.toString()) {
       return res.status(403).json({ message: "UnAuthorized Process" });
     }
-
     const job = await models.Job.findByIdAndRemove(job_id);
     if (!job) {
       return res
@@ -180,7 +206,14 @@ export const deleteJob = async (req: Request | any, res: Response) => {
         .json({ message: "Job with a specified category is not found" });
     }
     res.status(200).json(job);
-  } catch (error) {}
+  } catch (error) {
+    console.log('error is ', error);
+    return res
+    .status(404)
+    // .json({ message: "There is an error on deleting a job" });
+    .json({ message: error });
+
+  }
 };
 
 export const getJobBySearch = async (req: Request, res: Response) => {

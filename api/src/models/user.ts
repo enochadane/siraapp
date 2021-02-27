@@ -1,20 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcryptjs";
+import { IRole } from "./role";
 
 export interface IUser extends Document {
   username: String;
   email: String;
   password: any;
-  role: Roles | null;
+  role_id: IRole;
   reset_password_link: String | null;
   authenticate: Function;
 }
-
-export enum Roles {
-  SEEKER,
-  EMPLOYER,
-}
-
 const userSchema: Schema<IUser> = new mongoose.Schema(
   {
     username: {
@@ -38,9 +33,10 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
       type: String,
       required: true,
     },
-    role: {
-      type: Roles,
-      default: Roles.SEEKER,
+    role_id: {
+      type: String,
+      ref: "Role",
+      default: 0,
     },
     reset_password_link: {
       type: String,
@@ -64,7 +60,5 @@ userSchema.pre<IUser>("save", async function (next: Function) {
 userSchema.methods.authenticate = function (plainTextPassword: string) {
   return bcrypt.compareSync(plainTextPassword, this.password);
 };
-
-// userSchema.
 
 export default mongoose.model<IUser>("User", userSchema);

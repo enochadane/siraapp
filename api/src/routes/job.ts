@@ -8,6 +8,7 @@ import {
   getJobsWithCategory,
   updateJob,
   getJobBySearch,
+  getJobsByCompanyId
 } from "../controllers/job";
 import { authMiddleware, requireSignIn } from "../middlewares/auth";
 import { jobFormValidator } from "../validators/job";
@@ -18,7 +19,17 @@ router.get("/", getJobs);
 router.get("/search", getJobBySearch);
 router.get("/:id", getJob);
 router.put("/:id", jobFormValidator, requireSignIn, authMiddleware, updateJob);
-router.delete("/:id", requireSignIn, deleteJob);
+router.delete("/:id", requireSignIn,authMiddleware, deleteJob);
 router.get("/:category/jobs", getJobsWithCategory);
+router.get("/company/:company_id", getJobsByCompanyId);
+
+
+// router.post("/", jobFormValidator, createJob);
+// router.get("/", getJobs);
+// router.get("/search", getJobBySearch);
+// router.get("/:id", getJob);
+// router.put("/:id", jobFormValidator, updateJob);
+// router.delete("/:id", deleteJob);
+// router.get("/:category/jobs", getJobsWithCategory);
 
 export default router;

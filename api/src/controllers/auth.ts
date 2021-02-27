@@ -83,7 +83,7 @@ export const signIn = async (req: any, res: any) => {
             email: user.email,
           },
           secret,
-          { expiresIn: "1d" }
+          { expiresIn: "10d" }
         );
       return res
         .status(200)
