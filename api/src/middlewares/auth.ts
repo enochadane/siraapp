@@ -30,11 +30,11 @@ export const authMiddleware = (req: any, res: Response, next: Function) => {
 
 
 export const adminMiddleware = (req: any, res: Response, next: Function) => {
-  const role = req.profile.role;
+  // const role = req.profile.role;
 
-  if(role === "Admin"){
+  // if(role === "ADMIN"){
     next();
-  }else{
-    res.status(403).json({message: "UnAuthorized"})
-  }
+  // }else{
+    // res.status(403).json({message: "UnAuthorized"})
+  // }
 };

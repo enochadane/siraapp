@@ -23,6 +23,7 @@ const DATABASE_URI =  process.env.DATABASE_URI || "mongodb://localhost:27017/sir
 
 app.use("/api", routes.authRoutes)
 app.use("/api/users", routes.userRoutes)
+app.use("/api/roles", routes.roleRoutes)
 app.use("/api/jobs", routes.jobRoutes)
 app.use("/api/apply", routes.jobApplyRoutes)
 app.use("/api/categories", routes.jobCategoryRoutes)
