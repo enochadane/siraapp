@@ -1,11 +1,16 @@
-
+import 'package:app/blocs/authentication/authentication.dart';
+import 'package:app/blocs/authentication/login/login_bloc.dart';
+import 'package:app/blocs/authentication/login/login_event.dart';
 import 'package:app/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'register_screen.dart';
 
 class LoginPage extends StatefulWidget {
+  static const String routeName = "/login";
+
   final VoidCallback onSignedIn;
   const LoginPage({Key key, this.onSignedIn}) : super(key: key);
 
@@ -19,6 +24,7 @@ class _LoginPage extends State<LoginPage> {
   String _password = "";
   bool _isLoading;
   final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
 
   @override
@@ -27,65 +33,71 @@ class _LoginPage extends State<LoginPage> {
     _isLoading = false;
   }
 
-  Widget _showCircularProgress() {
-    if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
-      // return DialogBox().loading(context);
-    }
-    return Container(
-      height: 0.0,
-      width: 0.0,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     bool isKeyboardShowing = MediaQuery.of(context).viewInsets.vertical > 0;
+    final LoginBloc _loginBloc = BlocProvider.of<LoginBloc>(context);
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(children: [
-        // _showCircularProgress(),
-        Container(
-          height: height,
-          decoration: BoxDecoration(),
-          child: Column(children: [
-            _showCircularProgress(),
-            Align(
-              alignment: Alignment.topCenter,
-              child: logo(isKeyboardShowing),
-            ),
-            Align(
-              alignment:
-                  isKeyboardShowing ? Alignment.center : Alignment.bottomCenter,
-              child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 20.0),
-                      height: height * 0.6,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _buildEmailTextField(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          _buildPasswordTextField(),
-                          _forgotPasswordLabel(),
-                          _submitButton(context),
-                          _createAccountLabel(),
-                        ],
+    void _showError(String error) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(error),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+    }
+
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+      if (state is AuthenticationFailure) {
+        _showError(state.message);
+      }
+    }, builder: (context, state) {
+      
+
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(children: [
+          // _showCircularProgress(),
+          Container(
+            height: height,
+            decoration: BoxDecoration(),
+            child: Column(children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: logo(isKeyboardShowing),
+              ),
+              Align(
+                alignment: isKeyboardShowing
+                    ? Alignment.center
+                    : Alignment.bottomCenter,
+                child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 20.0),
+                        height: height * 0.6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            _buildEmailTextField(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _buildPasswordTextField(),
+                            _forgotPasswordLabel(),
+                            (state is AuthenticationLoading) ? CircularProgressIndicator() : _submitButton(context),
+                            _createAccountLabel(),
+                          ],
+                        ),
                       ),
-                    ),
-                  )),
-            ),
-          ]),
-        ),
-      ]),
-    );
+                    )),
+              ),
+            ]),
+          ),
+        ]),
+      );
+    });
   }
 
   Widget logo(isKeyboardShowing) {
@@ -97,10 +109,7 @@ class _LoginPage extends State<LoginPage> {
               gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
-                  colors: [
-                    kBrown100, 
-                    kBrown900
-                  ])),
+                  colors: [kBrown100, kBrown900])),
           width: double.infinity,
           height: isKeyboardShowing
               ? MediaQuery.of(context).size.height * 0.3
@@ -192,6 +201,7 @@ class _LoginPage extends State<LoginPage> {
 
   Widget _buildEmailTextField() {
     return TextFormField(
+      controller: _emailController,
       onChanged: (value) => _email = value.trim(),
       validator: (value) => !isEmail(value)
           ? "Sorry, we do not recognize this email address"
@@ -220,6 +230,7 @@ class _LoginPage extends State<LoginPage> {
       validator: (value) => value.length < 4
           ? "Password must be 4 or more characters in length"
           : null,
+      onChanged: (value) => _password = value.trim(),
       obscureText: !this._showPassword,
       onSaved: (value) => _password = value,
       keyboardType: TextInputType.text,
@@ -253,7 +264,15 @@ class _LoginPage extends State<LoginPage> {
 
   Widget _submitButton(context) {
     return InkWell(
-      onTap: () => handleSubmit(context),
+      onTap: () {
+        final form = _formKey.currentState;
+        if (form.validate()) {
+          print("validated $_email $_password");
+          form.save();
+          BlocProvider.of<LoginBloc>(context).add(LoginInWithEmailButtonPressed(email: _email, password: _password));
+          
+        }
+      },
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 15),
@@ -270,68 +289,11 @@ class _LoginPage extends State<LoginPage> {
             gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [
-                  kBrown200,
-                  kBrown900
-                ])),
-        child:
-             _isLoading == true
-            ? _showCircularProgress()
-            :
-            Text('Login',
-                style: TextStyle(color: Colors.white, fontSize: 18.0)),
+                colors: [kBrown200, kBrown900])),
+        child: Text('Login',
+            style: TextStyle(color: Colors.white, fontSize: 18.0)),
       ),
     );
-  }
-
-  void handleSubmit(context) async {
-    final form = _formKey.currentState;
-    if (form.validate()) {
-      print("validated $_email $_password");
-      form.save();
-
-      try {
-        setState(() {
-          _isLoading = true;
-        });
-        if (_email.toString() == "natnael@gmail.com" && _password == "nati") {
-          // DialogBox().information(
-          // context, 'Login Success', 'You have Successfuly Logged in');
-          // Navigator.replace(
-          //  MaterialPageRoute(builder: (context) => MainScreen()));
-
-          Future.delayed(Duration(seconds: 2)).then((value) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/customer", (Route<dynamic> route) => false);
-
-            // Navigator.pushAndRemoveUntil(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => IndexPage()),
-            //     (route) => false);
-            setState(() {
-              _isLoading = false;
-            });
-          });
-        }
-        if (_email.toString() == "henok@gmail.com" && _password == "heni") {
-          // DialogBox().information(
-          // context, 'Login Success', 'You have Successfuly Logged in');
-          Future.delayed(Duration(seconds: 2)).then((value) {
-            Navigator.pushReplacementNamed(context, "/provider");
-            // Navigator.pushAndRemoveUntil(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => MainScreen()),
-            //     (route) => false);
-            setState(() {
-              _isLoading = false;
-            });
-          });
-        }
-      } catch (err) {
-        print('error');
-        print(err);
-      }
-    }
   }
 
   bool isEmail(String value) {

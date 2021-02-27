@@ -34,9 +34,8 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
       required: true,
     },
     role_id: {
-      type: String,
-      ref: "Role",
-      default: 0,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role"
     },
     reset_password_link: {
       type: String,

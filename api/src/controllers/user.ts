@@ -27,6 +27,34 @@ export const getUserProfile = async (req: Request, res: Response) => {
   }
 };
 
+
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await models.User.find({}).populate("role_id", "_id name");
+    if (users) {
+      return res.status(200).json(users);
+    } else {
+      return res.status(400).json({ message: "No user found" });
+    }
+  } catch (error) {
+    return res.status(400).json({ message: "Something went wrong" });
+  }
+};
+
+export const getUser = async (req: Request, res: Response) => {
+  const role_id = req.params.id;
+  try {
+    const user = await models.User.findById(role_id).populate("role_id", "_id name");
+    if (user) {
+      return res.status(200).json(user);
+    } else {
+      return res.status(400).json({ message: "No user found" });
+    }
+  } catch (error) {
+    return res.status(400).json({ message: "Something went wrong" });
+  }
+};
+
 export const updateUser = async (req: Request, res: Response) =>{
   const id = req.params.id;
   try {

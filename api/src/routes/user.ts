@@ -10,7 +10,7 @@ import {
   postResume,
   updateSeekerProfile,
 } from "../controllers/seeker_profile";
-import { changeUserRole, deleteUser, getUserProfile, updateUser } from "../controllers/user";
+import { changeUserRole, deleteUser, getUser, getUserProfile, getUsers, updateUser } from "../controllers/user";
 import { adminMiddleware, authMiddleware, requireSignIn } from "../middlewares/auth";
 import { requireMulterCvUpload, requireMulterProfileUpload } from "../middlewares/seeker";
 const router = express.Router();
@@ -33,5 +33,6 @@ router.get("/company/:id", deleteCompanyProfile);
 router.put(":id/changerole", requireSignIn, authMiddleware, adminMiddleware, changeUserRole)
 router.put(":id", requireSignIn, authMiddleware, updateUser)
 router.delete(":id", requireSignIn, authMiddleware, deleteUser)
-
+router.get("/", requireSignIn, getUsers)
+router.get("/:id", requireSignIn, getUser)
 export default router;

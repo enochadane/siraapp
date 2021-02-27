@@ -73,7 +73,7 @@ export const signIn = async (req: any, res: any) => {
 
   try {
     console.log("the password is Password", password);
-    models.User.findOne({ email }).exec(async (_err, user: IUser | null) => {
+    models.User.findOne({ email }).populate("role_id", "_id name").exec(async (_err, user: IUser | null) => {
       console.log("user is ", user);
       if (!user) {
         return res.status(400).json({ error: "User doesn't exist" });
@@ -88,6 +88,7 @@ export const signIn = async (req: any, res: any) => {
             _id: user._id,
             username: user.username,
             email: user.email,
+            role: user.role_id.name
           },
           secret,
           { expiresIn: "10d" }
