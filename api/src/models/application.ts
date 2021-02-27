@@ -33,8 +33,12 @@ export interface IApplication extends Document{
     company_id: {
         type: mongoose.Types.ObjectId, 
         ref: "User"
-    }, 
-    other_info: String
+    },
+    first_name: String,
+    last_name: String,
+    phone: String,
+    email: String,
+    other_info: String,
  }, {timestamps: true})
 
 
