@@ -8,11 +8,11 @@ export const signUp = async (req: any, res: any) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirm_password = req.body.confirm_password;
-  const account_type = req.body.account_type;
+  const role_id = req.body.role_id;
+
   if (confirm_password !== password) {
     return res.json({ message: "Password are not the same" });
   }
-
 
   try {
     await models.User.findOne({ email }).exec(
@@ -27,18 +27,25 @@ export const signUp = async (req: any, res: any) => {
           username,
           email,
           password,
-          role: account_type
+          role_id: role_id,
+        });
+        models.Role.findById(role_id).exec((err, role) => {
+          if (err || !role) {
+          } else {
+            if (role?.name === "SEEKER") {
+              profile = models.SeekerProfile.create({
+                user_id: user._id,
+              });
+            }
+            else if (role?.name === "EMPLOYER") {
+              profile = models.CompanyProfile.create({
+                user_id: user._id,
+              });
+            }
+          }
         });
         let profile;
-        if (account_type === "SEEKER") {
-          profile = models.SeekerProfile.create({
-            user_id: user._id,
-          });
-        } else {
-          profile = models.CompanyProfile.create({
-            user_id: user._id,
-          });
-        }
+       
         if (profile) {
           return res.json({ message: "Signup success, please sign in" });
         } else {

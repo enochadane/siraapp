@@ -9,5 +9,6 @@ export default{
     userRoutes, 
     jobRoutes, 
     jobCategoryRoutes, 
-    jobApplyRoutes
+    jobApplyRoutes, 
+    roleRoutes
 }
