@@ -16,10 +16,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<JobBloc>().add(JobLoad(user: user));
+    // context.read<JobBloc>().add(JobLoad(user: user));
 
     return Scaffold(
-       endDrawer: MyDrawer(),
+       drawer: MyDrawer(),
       appBar: AppBar(
         title: Text("Job List"),
       ),

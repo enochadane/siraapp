@@ -1,3 +1,4 @@
+import 'package:app/presentation/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -10,6 +11,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MyDrawer(),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -46,22 +48,22 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 onPressed: () {},
                                 child: _isRemoved
                                     ? Row(
-                                      children: [
-                                        Icon(Icons.lock_open),
-                                        Text('Release'),
-                                      ],
-                                    )
+                                        children: [
+                                          Icon(Icons.lock_open),
+                                          Text('Release'),
+                                        ],
+                                      )
                                     : Row(
-                                      children: [
-                                        Icon(Icons.lock),
-                                        Text(
+                                        children: [
+                                          Icon(Icons.lock),
+                                          Text(
                                             'Suspend',
                                             style: TextStyle(
                                               color: Colors.red,
                                             ),
                                           ),
-                                      ],
-                                    ),
+                                        ],
+                                      ),
                               )
                             ],
                           ),

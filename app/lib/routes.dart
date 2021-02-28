@@ -104,9 +104,14 @@ class MyPageRouter {
       case JobDetails.routeName:
         {
           SingleJobDetailArguments args = settings.arguments;
+          print("args are ${args.user.username}");
           return MaterialPageRoute(
-            builder: (context) => JobDetails(user: args.user, selectedJob: args.selectedJob,),
-          );
+              builder: (context) => BlocProvider<JobBloc>.value(
+                  value: JobBloc(jobRepository: jobRepository),
+                  child: (JobDetails(
+                    user: args.user,
+                    selectedJob: args.selectedJob,
+                  ))));
         }
       default:
         {
