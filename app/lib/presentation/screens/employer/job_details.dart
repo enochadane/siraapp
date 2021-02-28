@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:app/blocs/job/job.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/models/job.dart';
+import 'package:app/models/models.dart';
 import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,11 @@ import 'create_edit_job.dart';
 
 class JobDetails extends StatelessWidget {
   static const routeName = "/jobs/single";
+    final Job selectedJob;
+    final User user;
+
+  const JobDetails({Key key, this.selectedJob, this.user}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +22,7 @@ class JobDetails extends StatelessWidget {
         ModalRoute.of(context).settings.arguments;
 
     Job selectedJob = args.selectedJob;
-    String userType = args.userType;
-
-    List<String> jobTypes = [
-      "FullTime",
-      "Internship",
-      "PartTime",
-      "Contract",
-      "Freelance"
-    ];
+    User user = args.user;
 
     return SafeArea(
       child: Scaffold(
@@ -61,7 +57,7 @@ class JobDetails extends StatelessWidget {
                           Navigator.of(context).pop();
                         },
                         child: Icon(Icons.arrow_back_ios)),
-                    (userType == "employer")
+                    (user.role == "EMPLOYER")
                         ? Row(
                             children: [
                               InkWell(
@@ -139,7 +135,7 @@ class JobDetails extends StatelessWidget {
               SizedBox(
                 height: 20.0,
               ),
-              (userType != "employer")
+              (user.role != "EMPLOYER")
                   ? RaisedButton(
                       padding:
                           EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),

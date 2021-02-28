@@ -9,6 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../screens.dart';
 
 class SignUpPage extends StatefulWidget {
+  static const String routeName = "/register";
+
   final VoidCallback onSignedIn;
   const SignUpPage({Key key, this.onSignedIn}) : super(key: key);
 
@@ -110,7 +112,6 @@ class _SignUpPage extends State<SignUpPage> {
     });
   }
 
-
   Widget logo(isKeyboardShowing) {
     return ClipPath(
       clipper: BezierClipper(),
@@ -157,9 +158,8 @@ class _SignUpPage extends State<SignUpPage> {
   Widget _buildUserNameTextField() {
     return TextFormField(
       controller: _usernameController,
-      validator: (value) => value.length <= 4
-          ? "User Name must be at least 4 character"
-          : null,
+      validator: (value) =>
+          value.length <= 4 ? "User Name must be at least 4 character" : null,
       onSaved: (value) => _username = value,
       onChanged: (value) => _username = value,
       keyboardType: TextInputType.text,
@@ -302,7 +302,10 @@ class _SignUpPage extends State<SignUpPage> {
         if (form.validate()) {
           form.save();
           BlocProvider.of<RegisterBloc>(context).add(RegisterUser(
-             username: _username, email: _email, password: _password, role_id: _role_id));
+              username: _username,
+              email: _email,
+              password: _password,
+              role_id: _role_id));
         }
       },
       child: Container(

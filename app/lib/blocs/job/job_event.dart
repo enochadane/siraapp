@@ -1,4 +1,5 @@
 import 'package:app/models/job.dart';
+import 'package:app/models/user.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class JobEvent extends Equatable {
@@ -6,9 +7,8 @@ abstract class JobEvent extends Equatable {
 }
 
 class JobLoad extends JobEvent {
-  final String userType;
-  final String companyId;
-  const JobLoad({this.userType, this.companyId});
+  final User user;
+  const JobLoad({this.user});
 
   @override
   List<Object> get props => [];
@@ -16,11 +16,9 @@ class JobLoad extends JobEvent {
 
 class JobCreate extends JobEvent {
   final Job job;
-  final String userType;
-  final String companyId;
+  final User user;
 
-
-  const JobCreate(this.job, {this.userType, this.companyId});
+  const JobCreate(this.job, this.user);
 
   @override
   List<Object> get props => [job];
@@ -32,11 +30,9 @@ class JobCreate extends JobEvent {
 class JobUpdate extends JobEvent {
   final String id;
   final Job job;
-  final String userType;
-  final String companyId;
+  final User user;
 
-
-  JobUpdate(this.id, this.job, {this.userType, this.companyId});
+  JobUpdate(this.id, this.job, this.user);
 
   @override
   List<Object> get props => [job];

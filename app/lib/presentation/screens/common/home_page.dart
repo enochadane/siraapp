@@ -1,7 +1,9 @@
 import 'package:app/blocs/job/job.dart';
 import 'package:app/models/job.dart';
+import 'package:app/models/user.dart';
 import 'package:app/presentation/screens/employer/create_edit_job.dart';
 import 'package:app/presentation/screens/employer/job_details.dart';
+import 'package:app/presentation/widgets/drawer.dart';
 import 'package:app/presentation/widgets/job/job_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,20 +11,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   static final String routeName = "/";
-  final String userType;
-  HomePage({@required this.userType});
+  final User user;
+  HomePage({@required this.user});
 
   @override
   Widget build(BuildContext context) {
-    context.read<JobBloc>().add(JobLoad(userType: userType, companyId: "60285807c314797e15dd419f"));
+    context.read<JobBloc>().add(JobLoad(user: user));
 
     return Scaffold(
+       endDrawer: MyDrawer(),
       appBar: AppBar(
         title: Text("Job List"),
       ),
       body: Container(
-        child: BlocConsumer<JobBloc, JobState>(
-          listener: (context, state) {
+        child: BlocConsumer<JobBloc, JobState>(listener: (context, state) {
           if (state is JobOperationFailure) {
             Scaffold.of(context).showSnackBar(
               SnackBar(content: Text("There is an error")),
@@ -33,12 +35,10 @@ class HomePage extends StatelessWidget {
               state is JobsLoadedSuccess && state.jobs.length == 0) {
             return Text("No Jobs Are Available");
           }
-        }, 
-        builder: (context, state) {
+        }, builder: (context, state) {
           if (state is JobLoading) {
             return CircularProgressIndicator();
           } else if (state is JobsLoadedSuccess) {
-
             if (state.jobs.length > 0) {
               return ListView.builder(
                   itemCount: state.jobs.length,
@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
                       onTap: () {
                         Navigator.pushNamed(context, JobDetails.routeName,
                             arguments: SingleJobDetailArguments(
-                                state.jobs[index], userType));
+                                selectedJob: state.jobs[index], user: user));
                       },
                       child: JobRow(
                         job: state.jobs[index],
@@ -68,7 +68,7 @@ class HomePage extends StatelessWidget {
           return Container();
         }),
       ),
-      floatingActionButton: (userType == "employer")
+      floatingActionButton: (user.role == "EMPLOYER")
           ? FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
@@ -82,7 +82,7 @@ class HomePage extends StatelessWidget {
 
 class SingleJobDetailArguments {
   final Job selectedJob;
-  final String userType;
+  final User user;
 
-  SingleJobDetailArguments(this.selectedJob, this.userType);
+  SingleJobDetailArguments({this.selectedJob, @required this.user});
 }
