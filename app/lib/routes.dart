@@ -37,7 +37,7 @@ class MyPageRouter {
             return LoginPage();
           });
         }
-           case "/register":
+      case "/register":
         {
           return MaterialPageRoute(builder: (context) {
             return SignUpPage();

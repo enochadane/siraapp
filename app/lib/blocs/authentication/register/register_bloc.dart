@@ -1,8 +1,6 @@
 import 'package:app/blocs/authentication/register/register.dart';
-import 'package:app/data_provider/auth_data.dart';
 import 'package:app/exceptions/exception.dart';
 import 'package:app/repositories/authentication_repository.dart';
-import 'package:app/repositories/repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../authentication.dart';
@@ -16,7 +14,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   @override
   Stream<RegisterState> mapEventToState(RegisterEvent event) async* {
-     if (event is RegisterUser) {
+    if (event is RegisterUser) {
       yield* _mapSeekerRegisterWithEmailToState(event);
     }
   }
@@ -24,12 +22,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   Stream<RegisterState> _mapSeekerRegisterWithEmailToState(
       RegisterUser event) async* {
     yield RegisterLoading();
-
     try {
-      final user = await authenticationRepository.register(
-          email: event.email, password: event.password, role_id: event.role_id);
-      if (user != null) {
-        authenticationBloc.add(UserLoggedIn(user: user));
+      final bool isCreated = await authenticationRepository.register(
+          username: event.username,
+          email: event.email,
+          password: event.password,
+          role_id: event.role_id);
+      print("logged in user $isCreated");
+
+      if (isCreated) {
         yield RegisterSuccess();
         yield RegisterInitial();
       } else {
@@ -41,5 +42,4 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       yield RegisterFailure(error: err.message ?? 'An unknown error occured');
     }
   }
-
 }

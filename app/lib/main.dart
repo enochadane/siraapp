@@ -1,6 +1,7 @@
 import 'package:app/blocs/authentication/authBloc.dart';
 import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/login/login.dart';
+import 'package:app/blocs/authentication/register/register_bloc.dart';
 import 'package:app/data_provider/auth_data.dart';
 import 'package:app/presentation/screens/common/login_screen.dart';
 import 'package:app/repositories/authentication_repository.dart';
@@ -39,9 +40,15 @@ class App extends StatelessWidget {
           providers: [
             BlocProvider<AuthenticationBloc>(
                 create: (context) =>
-                    AuthenticationBloc(this.authenticationRepository)..add(AppLoaded())),
+                    AuthenticationBloc(this.authenticationRepository)
+                      ..add(AppLoaded())),
             BlocProvider<LoginBloc>(
                 create: (context) => LoginBloc(
+                    authenticationBloc:
+                        AuthenticationBloc(authenticationRepository),
+                    authenticationRepository: this.authenticationRepository)),
+            BlocProvider<RegisterBloc>(
+                create: (context) => RegisterBloc(
                     authenticationBloc:
                         AuthenticationBloc(authenticationRepository),
                     authenticationRepository: this.authenticationRepository)),
@@ -51,7 +58,7 @@ class App extends StatelessWidget {
           child: MaterialApp(
             title: 'Job Portal',
             debugShowCheckedModeBanner: false,
-            initialRoute: "/register",
+            initialRoute: "/",
             onGenerateRoute: MyPageRouter.onGenerateRoute,
           ),
         ));

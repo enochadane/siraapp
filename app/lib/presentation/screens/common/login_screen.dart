@@ -50,9 +50,10 @@ class _LoginPage extends State<LoginPage> {
       if (state is AuthenticationFailure) {
         _showError(state.message);
       }
+      if (state is AuthenticationAuthenticated) {
+        Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+      }
     }, builder: (context, state) {
-      
-
       return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(children: [
@@ -85,7 +86,9 @@ class _LoginPage extends State<LoginPage> {
                             ),
                             _buildPasswordTextField(),
                             _forgotPasswordLabel(),
-                            (state is AuthenticationLoading) ? CircularProgressIndicator() : _submitButton(context),
+                            (state is AuthenticationLoading)
+                                ? CircularProgressIndicator()
+                                : _submitButton(context),
                             _createAccountLabel(),
                           ],
                         ),
@@ -268,8 +271,8 @@ class _LoginPage extends State<LoginPage> {
         if (form.validate()) {
           print("validated $_email $_password");
           form.save();
-          BlocProvider.of<LoginBloc>(context).add(LoginInWithEmailButtonPressed(email: _email, password: _password));
-          
+          BlocProvider.of<LoginBloc>(context).add(LoginInWithEmailButtonPressed(
+              email: _email, password: _password));
         }
       },
       child: Container(

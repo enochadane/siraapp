@@ -9,7 +9,7 @@ class SeekerHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Container(),
+        child: Container(child: Text("employerr"),),
       ),
     );
   }

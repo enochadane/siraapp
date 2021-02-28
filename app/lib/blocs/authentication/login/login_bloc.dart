@@ -1,7 +1,5 @@
-import 'package:app/data_provider/auth_data.dart';
 import 'package:app/exceptions/exception.dart';
 import 'package:app/repositories/authentication_repository.dart';
-import 'package:app/repositories/repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../authentication.dart';
@@ -29,6 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       final user = await authenticationRepository.logIn(
           email: event.email, password: event.password);
+      print("logged in user $user");
       if (user != null) {
         authenticationBloc.add(UserLoggedIn(user: user));
         yield LoginSuccess();

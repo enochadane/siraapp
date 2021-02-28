@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:app/models/job.dart';
+import 'package:app/repositories/authentication_repository.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import "package:http/http.dart" as http;
 
 class JobDataProvider {
   // final _baseUrl = 'http://localhost:8383/api/jobs';
   // final _baseUrl = "http://10.6.71.227:8383/api";
-  final token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDI4NTgwN2MzMTQ3OTdlMTVkZDQxOWYiLCJ1c2VybmFtZSI6ImF3ZWwiLCJlbWFpbCI6ImF3ZWxAZ21haWwuY29tIiwiaWF0IjoxNjEzNDIyOTc4LCJleHAiOjE2MTQyODY5Nzh9.sff9JfIBwtP7vqDbju-OKjt_7E5_0Y83YtzwMCvAT-w";
 
   final _baseUrl = "http://10.0.2.2:8383/api";
 
@@ -17,7 +17,15 @@ class JobDataProvider {
     this.httpClient,
   });
 
+  Future<String> getTokenFromStorage() async {
+    final storage = new FlutterSecureStorage();
+    String token = await storage.read(key: "jwt_token");
+    return token;
+  }
+
   Future<Job> createJob(Job job) async {
+    final token = getTokenFromStorage();
+
     var data = {
       "name": job.name,
       "description": job.description,
@@ -41,15 +49,13 @@ class JobDataProvider {
       print("response is $jsonResponse");
 
       if (response.statusCode == 201) {
-        
         // return Job.fromMap(jsonDecode(response.body));
       } else {
         throw Exception('Failed to create course.');
       }
     } catch (e) {
-        print(e.toString());
-        throw Exception('Failed to create course.');
-
+      print(e.toString());
+      throw Exception('Failed to create course.');
     }
   }
 
@@ -111,6 +117,8 @@ class JobDataProvider {
   }
 
   Future<Job> updateJob(String id, Job job) async {
+    final token = getTokenFromStorage();
+
     var data = {
       "name": job.name,
       "description": job.description,
@@ -144,6 +152,8 @@ class JobDataProvider {
   }
 
   Future<void> deleteJob(String id) async {
+    final token = getTokenFromStorage();
+
     final response = await httpClient.delete(
       "$_baseUrl/jobs/$id",
       headers: <String, String>{

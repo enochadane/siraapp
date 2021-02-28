@@ -1,3 +1,4 @@
+import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/register/register.dart';
 import 'package:app/blocs/authentication/register/register_bloc.dart';
 import 'package:app/constants/colors.dart';
@@ -18,10 +19,12 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPage extends State<SignUpPage> {
   bool _showPassword = false;
   String _email = "";
+  String _username = "";
   String _password = "";
-  String _confirmPassword = "";
+  // ignore: non_constant_identifier_names
   String _role_id = "";
   bool _isLoading = false;
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
@@ -39,51 +42,74 @@ class _SignUpPage extends State<SignUpPage> {
     final height = MediaQuery.of(context).size.height;
     bool isKeyboardShowing = MediaQuery.of(context).viewInsets.vertical > 0;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Container(
-          height: height,
-          decoration: BoxDecoration(),
-          child: Column(children: [
-            logo(isKeyboardShowing),
-            Align(
-              alignment:
-                  isKeyboardShowing ? Alignment.center : Alignment.bottomCenter,
-              child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 20.0),
-                      height: height * 0.6,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _buildEmailTextField(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          _buildPasswordTextField(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          _buildChooseAccountType(),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          _submitButton(),
-                          _createAccountLabel(),
-                        ],
+    void _showError(String error) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(error),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+    }
+
+    return BlocConsumer<RegisterBloc, RegisterState>(
+        listener: (context, state) {
+      if (state is RegisterFailure) {
+        _showError("There is an error on registering");
+      }
+      if (state is RegisterSuccess) {
+        Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+      }
+    }, builder: (context, state) {
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
+          child: Container(
+            height: height,
+            decoration: BoxDecoration(),
+            child: Column(children: [
+              logo(isKeyboardShowing),
+              Align(
+                alignment: isKeyboardShowing
+                    ? Alignment.center
+                    : Alignment.bottomCenter,
+                child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 20.0),
+                        height: height * 0.6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            _buildUserNameTextField(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _buildEmailTextField(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _buildPasswordTextField(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _buildChooseAccountType(),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            _submitButton(),
+                            _createAccountLabel(),
+                          ],
+                        ),
                       ),
-                    ),
-                  )),
-            ),
-          ]),
+                    )),
+              ),
+            ]),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
+
 
   Widget logo(isKeyboardShowing) {
     return ClipPath(
@@ -125,6 +151,29 @@ class _SignUpPage extends State<SignUpPage> {
               ),
             ],
           )),
+    );
+  }
+
+  Widget _buildUserNameTextField() {
+    return TextFormField(
+      controller: _usernameController,
+      validator: (value) => value.length <= 4
+          ? "User Name must be at least 4 character"
+          : null,
+      onSaved: (value) => _username = value,
+      onChanged: (value) => _username = value,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: 'Username',
+        focusColor: Color(0xff4064f3),
+        labelStyle: TextStyle(
+          color: Color(0xff4064f3),
+        ),
+        border: InputBorder.none,
+        filled: true,
+        fillColor: Color(0xfff3f3f4),
+        prefixIcon: Icon(Icons.person),
+      ),
     );
   }
 
@@ -224,7 +273,6 @@ class _SignUpPage extends State<SignUpPage> {
         } else {
           _isCompany = false;
           _role_id = "603a84396090c2311190aeac";
-
         }
         setState(() {
           selectedAccount = value;
@@ -253,8 +301,8 @@ class _SignUpPage extends State<SignUpPage> {
         final form = _formKey.currentState;
         if (form.validate()) {
           form.save();
-          BlocProvider.of<RegisterBloc>(context).add(
-              RegisterUser(email: _email, password: _password, role_id: _role_id));
+          BlocProvider.of<RegisterBloc>(context).add(RegisterUser(
+             username: _username, email: _email, password: _password, role_id: _role_id));
         }
       },
       child: Container(
