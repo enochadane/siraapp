@@ -1,5 +1,6 @@
 import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/job/job.dart';
+import 'package:app/models/models.dart';
 import 'package:app/repositories/repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import "package:meta/meta.dart";
@@ -16,12 +17,16 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     if (event is JobLoad) {
       yield JobLoading();
       try {
-        var jobs;
+        List<Job> jobs;
+        print("Lodings ${event.user.toMap()}");
+
         if (event.user.role == "SEEKER") {
           jobs = await jobRepository.getJobs();
         } else {
+          print("company id is ${event.user.id}");
           jobs = await jobRepository.getJobsByCompanyId(event.user.id);
         }
+
         yield JobsLoadedSuccess(jobs);
       } catch (_) {
         yield JobOperationFailure();

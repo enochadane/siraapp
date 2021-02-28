@@ -76,7 +76,8 @@ class JobDataProvider {
   }
 
   Future<List<Job>> getJobsByCompanyId(String companyId) async {
-    final response = await httpClient.get("$_baseUrl/jobs/company/$companyId");
+    print("$companyId is the company id");
+    final response = await http.get("$_baseUrl/jobs/company/$companyId");
 
     if (response.statusCode == 200) {
       final jobs = jsonDecode(response.body) as List;
@@ -90,7 +91,7 @@ class JobDataProvider {
   }
 
   Future<List<Job>> getJobs() async {
-    final response = await httpClient.get("$_baseUrl/jobs");
+    final response = await http.get("$_baseUrl/jobs");
 
     if (response.statusCode == 200) {
       final jobs = jsonDecode(response.body) as List;
@@ -104,7 +105,7 @@ class JobDataProvider {
   }
 
   Future<Job> getJob(String id) async {
-    final response = await httpClient.get("$_baseUrl/jobs/$id");
+    final response = await http.get("$_baseUrl/jobs/$id");
 
     if (response.statusCode == 200) {
       var job = jsonDecode(response.body);
@@ -154,7 +155,7 @@ class JobDataProvider {
   Future<void> deleteJob(String id) async {
     final token = getTokenFromStorage();
 
-    final response = await httpClient.delete(
+    final response = await http.delete(
       "$_baseUrl/jobs/$id",
       headers: <String, String>{
         "authorization": "Bearer $token",

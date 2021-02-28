@@ -2,6 +2,7 @@ import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/login/login_bloc.dart';
 import 'package:app/blocs/authentication/login/login_event.dart';
 import 'package:app/constants/colors.dart';
+import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -53,7 +54,7 @@ class _LoginPage extends State<LoginPage> {
             _showError(state.message, context);
           }
           if (state is AuthenticationAuthenticated) {
-            Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+            Navigator.pushNamedAndRemoveUntil(context, HomePage.routeName, (route) => false);
           }
         }, builder: (context, state) {
           return Stack(children: [

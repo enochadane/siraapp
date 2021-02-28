@@ -86,11 +86,12 @@ class AuthenticationDataProvider {
     // Can be used for auth state
     if (!isExpired) {
       //   Token isn't expired
+      var id = payload['_id'];
       var email = payload['email'];
       var username = payload['username'];
       var role = payload['role'];
       print("payload is $email $username $role");
-      User result = User(username: username, email: email, role: role);
+      User result = User(id:id, username: username, email: email, role: role);
       return result;
     } else {
       return null;

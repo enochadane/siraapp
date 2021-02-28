@@ -9,13 +9,12 @@ class User extends Equatable {
   final String role;
   final String email;
   final String password;
-  User({
-    this.id,
-    this.password, 
-    @required this.username,
-    @required this.email, 
-    @required this.role
-  });
+  User(
+      {this.id,
+      this.password,
+      @required this.username,
+      @required this.email,
+      @required this.role});
 
   Map<String, dynamic> toMap() {
     return {
@@ -30,17 +29,18 @@ class User extends Equatable {
   factory User.fromJson(Map<String, dynamic> map) {
     if (map == null) return null;
 
-    return User(
+    User user = User(
       id: map['_id'],
       username: map['username'],
       email: map['email'],
       password: map['password'],
       role: map['role'],
     );
+    print("user data is ${user.toJson()}");
+    return user;
   }
 
   String toJson() => json.encode(toMap());
-
 
   @override
   List<Object> get props => [id, username, email, password, role];

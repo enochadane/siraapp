@@ -18,12 +18,6 @@ class JobDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SingleJobDetailArguments args =
-        ModalRoute.of(context).settings.arguments;
-
-    Job selectedJob = args.selectedJob;
-    User user = args.user;
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: kSurfaceWhite,
@@ -39,10 +33,10 @@ class JobDetails extends StatelessWidget {
             return Text("No Jobs Are Available");
           }
         }, builder: (BuildContext context, JobState state) {
-          if (state is JobsLoadedSuccess) {
-            selectedJob = state.jobs
-                .firstWhere((element) => selectedJob.id == element.id);
-          }
+          // if (state is JobsLoadedSuccess) {
+            // selectedJob = state.jobs
+                // .firstWhere((element) => selectedJob.id == element.id);
+          // }
           return Column(
             children: [
               SizedBox(height: 10.0),
