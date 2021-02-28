@@ -1,6 +1,7 @@
 import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/login/login_bloc.dart';
 import 'package:app/blocs/authentication/login/login_event.dart';
+import 'package:app/blocs/authentication/login/login_state.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:flutter/material.dart';
@@ -48,13 +49,15 @@ class _LoginPage extends State<LoginPage> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        body: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
           if (state is AuthenticationFailure) {
-            _showError(state.message, context);
+            _showError("something went wrong", context);
           }
-          if (state is AuthenticationAuthenticated) {
-            Navigator.pushNamedAndRemoveUntil(context, HomePage.routeName, (route) => false);
+          if (state is LoginSuccess) {
+            print("nati awel");
+            Navigator.pushNamedAndRemoveUntil(
+                context, HomePage.routeName, (route) => false);
           }
         }, builder: (context, state) {
           return Stack(children: [

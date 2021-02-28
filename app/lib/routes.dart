@@ -32,6 +32,7 @@ class MyPageRouter {
             return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
               if (state is AuthenticationAuthenticated) {
+                print("${state.user.role} role");
                 if (state.user.role == "ADMIN") {
                   return AdminDashboard();
                 } else if (state.user.role == "EMPLOYER") {

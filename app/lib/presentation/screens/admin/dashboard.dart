@@ -94,6 +94,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ],
             ),
             Scaffold(
+              drawer: MyDrawer(),
               body: ListView.builder(
                 itemCount: 3,
                 itemBuilder: (BuildContext context, int index) {
@@ -105,7 +106,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('role',style: TextStyle(fontSize: 16.0),),
+                          Text(
+                            'role',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
                           Icon(
                             Icons.remove_circle,
                             color: Colors.red,
