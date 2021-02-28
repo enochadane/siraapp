@@ -105,46 +105,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-<<<<<<< HEAD
                           Text('role',style: TextStyle(fontSize: 16.0),),
                           Icon(
                             Icons.remove_circle,
                             color: Colors.red,
-=======
-                          Row(
-                            children: [
-                              Text('firstName'),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text('lastName'),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              TextButton(
-                                onPressed: () {},
-                                child: _isRemoved
-                                    ? Row(
-                                        children: [
-                                          Icon(Icons.lock_open),
-                                          Text('Release'),
-                                        ],
-                                      )
-                                    : Row(
-                                        children: [
-                                          Icon(Icons.lock),
-                                          Text(
-                                            'Suspend',
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                              )
-                            ],
->>>>>>> 1e5c70245beb0275b22e01cee224a8e054f0ade3
                           ),
                         ],
                       ),
