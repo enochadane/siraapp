@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class CreateEditJobPage extends StatefulWidget {
-  static String routeName = "/jobs/create_edit";
+  static const routeName = "/jobs/create_edit";
 
   @override
   _CreateEditJobPageState createState() => _CreateEditJobPageState();

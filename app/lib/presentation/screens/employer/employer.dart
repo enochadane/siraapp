@@ -1,4 +1,4 @@
 library employer_screen;
 
-export 'create_job.dart';
-export 'edit_job.dart';
+export 'create_edit_job.dart';
+export 'job_details.dart';

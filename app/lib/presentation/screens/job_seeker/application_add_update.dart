@@ -4,7 +4,7 @@ import 'package:app/presentation/screens/common/application_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../application_route.dart';
+import '../../../routes.dart';
 
 class AddUpdateApplication extends StatefulWidget {
   static const route = 'applicationAddUpdate';

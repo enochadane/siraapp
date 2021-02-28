@@ -1,16 +1,16 @@
 import 'package:app/blocs/job/job.dart';
 import 'package:app/models/job.dart';
 import 'package:app/presentation/screens/employer/create_edit_job.dart';
-import 'package:app/presentation/screens/employer/single_job.dart';
+import 'package:app/presentation/screens/employer/job_details.dart';
 import 'package:app/presentation/widgets/job/job_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: must_be_immutable
-class JobListPage extends StatelessWidget {
-  static final String routeName = "/jobs";
+class HomePage extends StatelessWidget {
+  static final String routeName = "/";
   final String userType;
-  JobListPage({@required this.userType});
+  HomePage({@required this.userType});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class JobListPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, SingleJobPage.routeName,
+                        Navigator.pushNamed(context, JobDetails.routeName,
                             arguments: SingleJobDetailArguments(
                                 state.jobs[index], userType));
                       },

@@ -45,8 +45,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               TextButton(
                                 onPressed: () {},
                                 child: _isRemoved
-                                    ? Text('Restore')
-                                    : Text('Remove Roll'),
+                                    ? Row(
+                                      children: [
+                                        Icon(Icons.lock_open),
+                                        Text('Release'),
+                                      ],
+                                    )
+                                    : Row(
+                                      children: [
+                                        Icon(Icons.lock),
+                                        Text(
+                                            'Suspend',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
                               )
                             ],
                           ),

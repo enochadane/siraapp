@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/models/job.dart';
-import 'package:app/presentation/screens/common/job_list.dart';
+import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'create_edit_job.dart';
 
-class SingleJobPage extends StatelessWidget {
-  static String routeName = "/jobs/single";
+class JobDetails extends StatelessWidget {
+  static const routeName = "/jobs/single";
 
   @override
   Widget build(BuildContext context) {

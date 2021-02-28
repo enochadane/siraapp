@@ -4,10 +4,10 @@ import 'package:app/presentation/screens/job_seeker/application_add_update.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../application_route.dart';
+import '../../../routes.dart';
 
 class ApplicationList extends StatelessWidget {
-  static const route = '/';
+  static const route = '/applications';
   @override
   Widget build(BuildContext context) {
     final ApplicationLoad event = ApplicationLoad(
