@@ -105,12 +105,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-<<<<<<< HEAD
-                          Text('role',style: TextStyle(fontSize: 16.0),),
-                          Icon(
-                            Icons.remove_circle,
-                            color: Colors.red,
-=======
                           Row(
                             children: [
                               Text('firstName'),
@@ -144,7 +138,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       ),
                               )
                             ],
->>>>>>> 1e5c70245beb0275b22e01cee224a8e054f0ade3
                           ),
                         ],
                       ),

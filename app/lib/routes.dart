@@ -98,8 +98,10 @@ class MyPageRouter {
       case CreateEditJobPage.routeName:
         {
           return MaterialPageRoute(
-            builder: (context) => CreateEditJobPage(),
-          );
+              builder: (context) => BlocProvider<JobBloc>.value(
+                    value: JobBloc(jobRepository: jobRepository),
+                    child: CreateEditJobPage(),
+                  ));
         }
       case JobDetails.routeName:
         {
