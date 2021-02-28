@@ -60,7 +60,7 @@ class _CreateRoleState extends State<CreateRole> {
                         form.save();
                         final RoleEvent event = RoleCreate(
                                 Role(
-                                  name: this._roles['rollName'];
+                                  name: this._roles['rollName'],
                                 ),
                               );
                         BlocProvider.of<RoleBloc>(context).add(event);

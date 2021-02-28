@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/models/application.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ApplicationDataProvider {
@@ -11,11 +12,19 @@ class ApplicationDataProvider {
   ApplicationDataProvider({@required this.httpClient})
       : assert(httpClient != null);
 
+  Future<String> getTokenFromStorage() async {
+    final storage = new FlutterSecureStorage();
+    String token = await storage.read(key: "jwt_token");
+    return token;
+  }
+
   Future<Application> createApplication(Application application) async {
-    print('in my post function');
+    final token = getTokenFromStorage();
+
     final response = await httpClient.post(
       '$_baseUrl',
       headers: <String, String>{
+        "authorization": "Bearer $token",
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{

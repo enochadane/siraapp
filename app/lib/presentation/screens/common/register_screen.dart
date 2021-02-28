@@ -110,7 +110,6 @@ class _SignUpPage extends State<SignUpPage> {
     });
   }
 
-
   Widget logo(isKeyboardShowing) {
     return ClipPath(
       clipper: BezierClipper(),
@@ -157,9 +156,8 @@ class _SignUpPage extends State<SignUpPage> {
   Widget _buildUserNameTextField() {
     return TextFormField(
       controller: _usernameController,
-      validator: (value) => value.length <= 4
-          ? "User Name must be at least 4 character"
-          : null,
+      validator: (value) =>
+          value.length <= 4 ? "User Name must be at least 4 character" : null,
       onSaved: (value) => _username = value,
       onChanged: (value) => _username = value,
       keyboardType: TextInputType.text,
@@ -269,10 +267,14 @@ class _SignUpPage extends State<SignUpPage> {
       onChanged: (AccountType value) {
         if (value.accountName == 'Company') {
           _isCompany = true;
-          _role_id = "603a84416090c2311190aead";
+          _role_id = "603ba9a11bd36aa35679ec4c";
+
+          //603ba9a11bd36aa35679ec4c
         } else {
           _isCompany = false;
-          _role_id = "603a84396090c2311190aeac";
+          _role_id = "603ba9cf1bd36aa35679ec4d";
+
+          //603ba9cf1bd36aa35679ec4d
         }
         setState(() {
           selectedAccount = value;
@@ -302,7 +304,10 @@ class _SignUpPage extends State<SignUpPage> {
         if (form.validate()) {
           form.save();
           BlocProvider.of<RegisterBloc>(context).add(RegisterUser(
-             username: _username, email: _email, password: _password, role_id: _role_id));
+              username: _username,
+              email: _email,
+              password: _password,
+              role_id: _role_id));
         }
       },
       child: Container(

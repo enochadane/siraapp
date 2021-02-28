@@ -47,9 +47,9 @@ class _LoginPage extends State<LoginPage> {
 
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
-      if (state is AuthenticationFailure) {
-        _showError(state.message);
-      }
+      // if (state is AuthenticationFailure) {
+      //   _showError(state.message);
+      // }
       if (state is AuthenticationAuthenticated) {
         Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
       }
