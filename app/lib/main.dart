@@ -3,6 +3,7 @@ import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/login/login.dart';
 import 'package:app/data_provider/auth_data.dart';
 import 'package:app/presentation/screens/common/login_screen.dart';
+import 'package:app/repositories/authentication_repository.dart';
 import 'package:app/repositories/repository.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class App extends StatelessWidget {
           child: MaterialApp(
             title: 'Job Portal',
             debugShowCheckedModeBanner: false,
-            initialRoute: "/",
+            initialRoute: "/register",
             onGenerateRoute: MyPageRouter.onGenerateRoute,
           ),
         ));

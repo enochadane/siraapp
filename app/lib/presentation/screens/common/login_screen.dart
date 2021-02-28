@@ -37,7 +37,6 @@ class _LoginPage extends State<LoginPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     bool isKeyboardShowing = MediaQuery.of(context).viewInsets.vertical > 0;
-    final LoginBloc _loginBloc = BlocProvider.of<LoginBloc>(context);
 
     void _showError(String error) {
       Scaffold.of(context).showSnackBar(SnackBar(

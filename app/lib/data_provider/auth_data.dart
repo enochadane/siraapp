@@ -38,6 +38,24 @@ class AuthenticationDataProvider {
     }
   }
 
+  Future<User> signUpWithEmailAndPassword(String email, String password, String role_id) async {
+    final response = await http.post('$_baseUrl/signup',
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body:
+            jsonEncode(<String, String>{'email': email, 'password': password, 'role_id': role_id}));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      storeJwt(data['token']);
+
+      return User.fromJson(data["user"]);
+    } else {
+      throw AuthenticationException(message: 'Wrong username or password');
+    }
+  }
+
   @override
   Future<void> signOut() {
     return null;

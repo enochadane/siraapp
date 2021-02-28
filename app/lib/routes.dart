@@ -1,11 +1,13 @@
+import 'package:app/presentation/screens/admin/dashboard.dart';
+import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/login_screen.dart';
 import 'package:app/presentation/screens/employer/employer_homepage.dart';
-import 'package:app/presentation/screens/employer/seeker_homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/authentication/authentication.dart';
+import 'presentation/screens/job_seeker/seeker_homepage.dart';
 
 class MyPageRouter {
   static Route onGenerateRoute(RouteSettings settings) {
@@ -17,7 +19,7 @@ class MyPageRouter {
                 builder: (context, state) {
               if (state is AuthenticationAuthenticated) {
                 if (state.user.role == "ADMIN") {
-                  return EmployerHomePage();
+                  return AdminDashboard();
                 } else if (state.user.role == "EMPLOYER") {
                   return EmployerHomePage();
                 } else {
@@ -32,44 +34,18 @@ class MyPageRouter {
       case "/login":
         {
           return MaterialPageRoute(builder: (context) {
-            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
-              if (state is AuthenticationNotAuthenticated) {
-                // otherwise show login page
-                // show home page
-              }
-              if (state is AuthenticationAuthenticated) {
-                if (state.user.role == "ADMIN") {
-                  return EmployerHomePage();
-                } else if (state.user.role == "EMPLOYER") {
-                  return EmployerHomePage();
-                } else {
-                  return SeekerHomePage();
-                }
-              }
-              // return HomePage(
-              //   user: state.user,
-              // );
-              return LoginPage();
-            });
+            return LoginPage();
+          });
+        }
+           case "/register":
+        {
+          return MaterialPageRoute(builder: (context) {
+            return SignUpPage();
           });
         }
       default:
         {
-          return MaterialPageRoute(builder: (context) {
-            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
-              if (state is AuthenticationAuthenticated)
-                // return HomePage(
-                // user: state.user,
-                // );
-                // if (state is AuthenticationNotAuthenticated) {
-                // otherwise show login page
-                return LoginPage();
-              // show home page
-              // }
-            });
-          });
+          return null;
         }
     }
   }

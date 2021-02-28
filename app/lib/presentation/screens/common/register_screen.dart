@@ -1,5 +1,8 @@
+import 'package:app/blocs/authentication/register/register.dart';
+import 'package:app/blocs/authentication/register/register_bloc.dart';
 import 'package:app/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../screens.dart';
@@ -17,7 +20,9 @@ class _SignUpPage extends State<SignUpPage> {
   String _email = "";
   String _password = "";
   String _confirmPassword = "";
+  String _role_id = "";
   bool _isLoading = false;
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
 
@@ -55,18 +60,6 @@ class _SignUpPage extends State<SignUpPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _isCompany
-                              ? _buildNameTextField()
-                              : Text(
-                                  'Job Seeker',
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                          SizedBox(
-                            height: 10,
-                          ),
                           _buildEmailTextField(),
                           SizedBox(
                             height: 20,
@@ -170,6 +163,7 @@ class _SignUpPage extends State<SignUpPage> {
 
   Widget _buildEmailTextField() {
     return TextFormField(
+      controller: _emailController,
       onChanged: (value) => _email = value,
       validator: (value) => !isEmail(value)
           ? "Sorry, we do not recognize this email address"
@@ -188,28 +182,6 @@ class _SignUpPage extends State<SignUpPage> {
     );
   }
 
-  Widget _buildNameTextField() {
-    return TextFormField(
-      controller: _passwordController,
-      validator: (value) => value.length <= 4
-          ? "Company Name must be at least 4 character"
-          : null,
-      onSaved: (value) => _confirmPassword = value,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: 'Company Name',
-        focusColor: Color(0xff4064f3),
-        labelStyle: TextStyle(
-          color: Color(0xff4064f3),
-        ),
-        border: InputBorder.none,
-        filled: true,
-        fillColor: Color(0xfff3f3f4),
-        prefixIcon: Icon(Icons.person),
-      ),
-    );
-  }
-
   Widget _buildPasswordTextField() {
     return TextFormField(
       controller: _passwordController,
@@ -217,7 +189,7 @@ class _SignUpPage extends State<SignUpPage> {
           ? "Password must be 6 or more characters in length"
           : null,
       obscureText: !this._showPassword,
-      onSaved: (value) => _password = value,
+      onChanged: (value) => _password = value,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Password',
@@ -248,8 +220,11 @@ class _SignUpPage extends State<SignUpPage> {
       onChanged: (AccountType value) {
         if (value.accountName == 'Company') {
           _isCompany = true;
+          _role_id = "603a84416090c2311190aead";
         } else {
           _isCompany = false;
+          _role_id = "603a84396090c2311190aeac";
+
         }
         setState(() {
           selectedAccount = value;
@@ -274,7 +249,14 @@ class _SignUpPage extends State<SignUpPage> {
 
   Widget _submitButton() {
     return InkWell(
-      onTap: () => handleSubmit(),
+      onTap: () {
+        final form = _formKey.currentState;
+        if (form.validate()) {
+          form.save();
+          BlocProvider.of<RegisterBloc>(context).add(
+              RegisterUser(email: _email, password: _password, role_id: _role_id));
+        }
+      },
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 15),

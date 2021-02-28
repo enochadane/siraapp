@@ -1,4 +1,5 @@
 
+import 'package:app/presentation/screens/admin/dashboard.dart';
 import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/login_screen.dart';
 import 'package:app/presentation/screens/screens.dart';
@@ -13,9 +14,10 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Job Portal',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      // home: LoginPage(),
       // home: SignUpPage(),
       // home: ProfilePageForm(),
+      home: AdminDashboard(),
     );
   }
 }
