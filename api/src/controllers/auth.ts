@@ -7,17 +7,13 @@ export const signUp = async (req: any, res: any) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
-  const confirm_password = req.body.confirm_password;
   const role_id = req.body.role_id;
-
-  if (confirm_password !== password) {
-    return res.json({ message: "Password are not the same" });
-  }
 
   try {
     await models.User.findOne({ email }).exec(
       async (_err: NativeError, existing_user) => {
         if (existing_user) {
+          console.log("existing user")
           return res
             .status(400)
             .json({ error: "User exists with a given email" });
@@ -29,36 +25,42 @@ export const signUp = async (req: any, res: any) => {
           password,
           role_id: role_id,
         });
-        models.Role.findById(role_id).exec((err, role) => {
+
+        let profile;
+        models.Role.findById(role_id).exec(async (err, role) => {
+          console.log(user);
+          console.log(role);
           if (err || !role) {
+            console.log("there is an error", user)
+            console.log("there is an error", err)
           } else {
             if (role?.name === "SEEKER") {
-              profile = models.SeekerProfile.create({
+              profile = await models.SeekerProfile.create({
                 user_id: user._id,
               });
             }
             else if (role?.name === "EMPLOYER") {
-              profile = models.CompanyProfile.create({
+              profile = await models.CompanyProfile.create({
                 user_id: user._id,
               });
             }
           }
         });
-        let profile;
-       
-        if (profile) {
-          return res.json({ message: "Signup success, please sign in" });
-        } else {
-          return res
-            .status(400)
-            .json({ error: "There is something wrong on creating a user" });
-        }
+        
+        // if (profile) {
+          return res.status(201).json(user);
+        // } else {
+          // return res
+
+            // .status(400)
+            // .json({ error: "There is something wrong on creating a user" });
+        // }
       }
     );
   } catch (error) {
     console.log(error);
     return res
-      .status(400)
+      .status(500)
       .json({ error: "There is something wrong on creating a user" });
   }
 };

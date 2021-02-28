@@ -18,14 +18,15 @@ class AuthenticationRepository {
         email, password);
   }
 
-  Future<User> register({
+  Future<bool> register({
+    @required String username,
     @required String email,
     @required String password,
     // ignore: non_constant_identifier_names
     @required String role_id
   }) async {
     return await authenticationDataProvider.signUpWithEmailAndPassword(
-        email, password, role_id);
+        username, email, password, role_id);
   }
 
   Future<User> getCurrentUser() async {

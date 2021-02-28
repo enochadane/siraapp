@@ -17,7 +17,6 @@ class AuthenticationBloc
     try {
       await Future.delayed(Duration(milliseconds: 500)); // a simulated delay
       final currentUser = await _authenticationRepository.getCurrentUser();
-      print("currentuser is ${currentUser.username}");
       if (currentUser != null) {
         yield AuthenticationAuthenticated(user: currentUser);
       } else {
