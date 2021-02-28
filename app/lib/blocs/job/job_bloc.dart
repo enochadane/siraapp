@@ -1,3 +1,4 @@
+import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/repositories/repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,10 +17,10 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       yield JobLoading();
       try {
         var jobs;
-        if (event.userType == "seeker") {
+        if (event.user.role == "SEEKER") {
           jobs = await jobRepository.getJobs();
         } else {
-          jobs = await jobRepository.getJobsByCompanyId(event.companyId);
+          jobs = await jobRepository.getJobsByCompanyId(event.user.id);
         }
         yield JobsLoadedSuccess(jobs);
       } catch (_) {
@@ -33,10 +34,10 @@ class JobBloc extends Bloc<JobEvent, JobState> {
         // final jobs = await jobRepository.getJobs();
 
         var jobs;
-        if (event.userType == "seeker") {
+        if (event.user.role == "SEEKER") {
           jobs = await jobRepository.getJobs();
         } else {
-          jobs = await jobRepository.getJobsByCompanyId(event.companyId);
+          jobs = await jobRepository.getJobsByCompanyId(event.user.id);
         }
 
         yield JobsLoadedSuccess(jobs);
@@ -53,10 +54,10 @@ class JobBloc extends Bloc<JobEvent, JobState> {
         // yield JobsLoadedSuccess(jobs);
 
         var jobs;
-        if (event.userType == "seeker") {
+        if (event.user.role == "SEEKER") {
           jobs = await jobRepository.getJobs();
         } else {
-          jobs = await jobRepository.getJobsByCompanyId(event.companyId);
+          jobs = await jobRepository.getJobsByCompanyId(event.user.id);
         }
         yield JobsLoadedSuccess(jobs);
       } catch (_) {

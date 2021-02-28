@@ -1,3 +1,4 @@
+import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/models/models.dart';
@@ -8,13 +9,13 @@ import 'package:intl/intl.dart';
 
 class CreateEditJobPage extends StatefulWidget {
   static const routeName = "/jobs/create_edit";
-
   @override
   _CreateEditJobPageState createState() => _CreateEditJobPageState();
 }
 
 class _CreateEditJobPageState extends State<CreateEditJobPage> {
   final _formKey = GlobalKey<FormState>();
+  final User user = null;
   Map<String, dynamic> _job = {
     "deadline": DateTime.now(),
     "job_category_id": "6029b3c1a688f767edf6d0e3",
@@ -47,80 +48,84 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
       _job["deadline"] = selectedJob.deadline;
     }
 
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: kSurfaceWhite,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-        child: Form(
-          key: _formKey,
-          child: Column(children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-              child: Row(
-                children: [
-                  InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Icon(Icons.arrow_back_ios)),
-                  SizedBox(
-                    width: 20.0,
-                  ),
-                  Text(
-                    selectedJob != null ? "Edit Job" : "Create Job",
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ],
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state){
+          if(state is AuthenticationAuthenticated){
+        return  SafeArea(
+          child: Scaffold(
+        backgroundColor: kSurfaceWhite,
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+          child: Form(
+            key: _formKey,
+            child: Column(children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Icon(Icons.arrow_back_ios)),
+                    SizedBox(
+                      width: 20.0,
+                    ),
+                    Text(
+                      selectedJob != null ? "Edit Job" : "Create Job",
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            buildJobTitleTextField(selectedJob),
-            SizedBox(
-              height: 10.0,
-            ),
-            buildJobPostionTextField(selectedJob),
-            SizedBox(
-              height: 20.0,
-            ),
-            buildExperienceLevelTextField(selectedJob),
-            SizedBox(
-              height: 20.0,
-            ),
-            buildJobDescriptionTextField(selectedJob),
-            SizedBox(
-              height: 20.0,
-            ),
-            buildJobOtherInfoTextField(selectedJob),
-            SizedBox(
-              height: 20.0,
-            ),
-            buildDatePicker(context),
-            SizedBox(
-              height: 20.0,
-            ),
-            FutureBuilder(
-                future: getCategories(context),
-                builder: (context, AsyncSnapshot<List<JobCategory>> snapshot) {
-                  return buildCategoryDropDown(snapshot.data);
-                }),
-            SizedBox(
-              height: 20.0,
-            ),
-            buildJopType(),
-            SizedBox(
-              height: 20.0,
-            ),
-            buildSubmitButton(isEditing, context, selectedJob)
-          ]),
+              SizedBox(
+                height: 10.0,
+              ),
+              buildJobTitleTextField(selectedJob),
+              SizedBox(
+                height: 10.0,
+              ),
+              buildJobPostionTextField(selectedJob),
+              SizedBox(
+                height: 20.0,
+              ),
+              buildExperienceLevelTextField(selectedJob),
+              SizedBox(
+                height: 20.0,
+              ),
+              buildJobDescriptionTextField(selectedJob),
+              SizedBox(
+                height: 20.0,
+              ),
+              buildJobOtherInfoTextField(selectedJob),
+              SizedBox(
+                height: 20.0,
+              ),
+              buildDatePicker(context),
+              SizedBox(
+                height: 20.0,
+              ),
+              FutureBuilder(
+                  future: getCategories(context),
+                  builder: (context, AsyncSnapshot<List<JobCategory>> snapshot) {
+                    return buildCategoryDropDown(snapshot.data);
+                  }),
+              SizedBox(
+                height: 20.0,
+              ),
+              buildJopType(),
+              SizedBox(
+                height: 20.0,
+              ),
+              buildSubmitButton(isEditing, context, selectedJob, state.user)
+            ]),
+          ),
         ),
-      ),
-    ));
+      )
+    );}
+  });
   }
-
   buildDatePicker(
     BuildContext context,
   ) {
@@ -422,7 +427,7 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
   }
 
   Widget buildSubmitButton(
-      bool isEditing, BuildContext context, Job selectedJob) {
+      bool isEditing, BuildContext context, Job selectedJob, User currentUser) {
     return BlocConsumer<JobBloc, JobState>(
       listener: (context, JobState state) {
       if (state is JobOperationFailure) {
@@ -474,11 +479,10 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
                   jobPosition: this._job["job_position"]);
 
               if (isEditing) {
-                context.read<JobBloc>().add(JobUpdate(selectedJob.id, job,
-                    userType: "employer", companyId: selectedJob.companyId));
+                context.read<JobBloc>().add(JobUpdate(selectedJob.id, job, currentUser));
               } else {
                 print("company id is ${this._job["company_id"]}");
-                context.read<JobBloc>().add(JobCreate(job,companyId: this._job["company_id"], userType: "employer"));
+                context.read<JobBloc>().add(JobCreate(job, currentUser));
                 // BlocProvider.of<JobBloc>(context).add(JobCreate(job));
               }
             }

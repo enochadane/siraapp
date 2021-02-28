@@ -9,6 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../screens.dart';
 
 class SignUpPage extends StatefulWidget {
+  static const String routeName = "/register";
+
   final VoidCallback onSignedIn;
   const SignUpPage({Key key, this.onSignedIn}) : super(key: key);
 

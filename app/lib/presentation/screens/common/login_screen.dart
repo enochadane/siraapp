@@ -38,68 +38,66 @@ class _LoginPage extends State<LoginPage> {
     final height = MediaQuery.of(context).size.height;
     bool isKeyboardShowing = MediaQuery.of(context).viewInsets.vertical > 0;
 
-    void _showError(String error) {
+    void _showError(String error, context) {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text(error),
         backgroundColor: Theme.of(context).errorColor,
       ));
     }
 
-    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-      // if (state is AuthenticationFailure) {
-      //   _showError(state.message);
-      // }
-      if (state is AuthenticationAuthenticated) {
-        Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
-      }
-    }, builder: (context, state) {
-      return Scaffold(
+    return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Stack(children: [
-          // _showCircularProgress(),
-          Container(
-            height: height,
-            decoration: BoxDecoration(),
-            child: Column(children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: logo(isKeyboardShowing),
-              ),
-              Align(
-                alignment: isKeyboardShowing
-                    ? Alignment.center
-                    : Alignment.bottomCenter,
-                child: Form(
-                    key: _formKey,
-                    child: SingleChildScrollView(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 20.0),
-                        height: height * 0.6,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            _buildEmailTextField(),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            _buildPasswordTextField(),
-                            _forgotPasswordLabel(),
-                            (state is AuthenticationLoading)
-                                ? CircularProgressIndicator()
-                                : _submitButton(context),
-                            _createAccountLabel(),
-                          ],
+        body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+            listener: (context, state) {
+          if (state is AuthenticationFailure) {
+            _showError(state.message, context);
+          }
+          if (state is AuthenticationAuthenticated) {
+            Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+          }
+        }, builder: (context, state) {
+          return Stack(children: [
+            Container(
+              height: height,
+              decoration: BoxDecoration(),
+              child: Column(children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: logo(isKeyboardShowing),
+                ),
+                Align(
+                  alignment: isKeyboardShowing
+                      ? Alignment.center
+                      : Alignment.bottomCenter,
+                  child: Form(
+                      key: _formKey,
+                      child: SingleChildScrollView(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 20.0),
+                          height: height * 0.6,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _buildEmailTextField(),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _buildPasswordTextField(),
+                              _forgotPasswordLabel(),
+                              (state is AuthenticationLoading)
+                                  ? CircularProgressIndicator()
+                                  : _submitButton(context),
+                              _createAccountLabel(),
+                            ],
+                          ),
                         ),
-                      ),
-                    )),
-              ),
-            ]),
-          ),
-        ]),
-      );
-    });
+                      )),
+                ),
+              ]),
+            ),
+          ]);
+        }));
   }
 
   Widget logo(isKeyboardShowing) {

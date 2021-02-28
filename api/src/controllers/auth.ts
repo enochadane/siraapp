@@ -97,7 +97,7 @@ export const signIn = async (req: any, res: any) => {
         );
       return res
         .status(200)
-        .json({ token, user: { username: user.username, email } });
+        .json({ token, user: { username: user.username, email, role: user.role_id.name } });
     });
   } catch (error) {
     console.log(error);

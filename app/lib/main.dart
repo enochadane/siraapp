@@ -6,7 +6,6 @@ import 'package:app/data_provider/auth_data.dart';
 import 'package:app/presentation/screens/admin/dashboard.dart';
 import 'package:app/presentation/screens/common/login_screen.dart';
 import 'package:app/repositories/authentication_repository.dart';
-import 'package:app/repositories/repository.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +18,6 @@ void main() {
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository(
           authenticationDataProvider: AuthenticationDataProvider());
-
   runApp(App(
     authenticationRepository: authenticationRepository,
   ));
@@ -28,14 +26,16 @@ void main() {
 class App extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
 
-  const App({Key key, this.authenticationRepository})
-      : assert(authenticationRepository != null);
+  const App({
+    Key key,
+    this.authenticationRepository,
+  }) : assert(authenticationRepository != null);
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
         providers: [
-          RepositoryProvider.value(value: this.authenticationRepository)
+          RepositoryProvider.value(value: this.authenticationRepository),
         ],
         child: MultiBlocProvider(
           providers: [
@@ -53,14 +53,12 @@ class App extends StatelessWidget {
                     authenticationBloc:
                         AuthenticationBloc(authenticationRepository),
                     authenticationRepository: this.authenticationRepository)),
-            //  BlocProvider<AuthenticationBloc>(
-            // create: (context) => AuthenticationBloc(this.authenticationRepository)),
           ],
           child: MaterialApp(
             title: 'Job Portal',
             debugShowCheckedModeBanner: false,
             initialRoute: "/",
-            onGenerateRoute: MyPageRouter.onGenerateRoute,
+            onGenerateRoute: MyPageRouter().onGenerateRoute,
             // home: AdminDashboard(),
           ),
         ));

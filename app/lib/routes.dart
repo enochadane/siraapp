@@ -1,21 +1,30 @@
-// import 'dart:js';
-
+import 'package:app/blocs/job/job.dart';
 import 'package:app/presentation/screens/admin/dashboard.dart';
 import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:app/presentation/screens/common/login_screen.dart';
-import 'package:app/presentation/screens/employer/employer_homepage.dart';
 import 'package:app/presentation/screens/screens.dart';
+import 'package:app/repositories/job_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/authentication/authentication.dart';
+import 'data_provider/data_provider.dart';
 import 'models/models.dart';
-import 'presentation/screens/job_seeker/seeker_homepage.dart';
+import 'repositories/repository.dart';
 
 class MyPageRouter {
-  static Route onGenerateRoute(RouteSettings settings) {
+// this techinique is called dependency injection
+  final JobRepository jobRepository = JobRepository(
+    dataProvider: JobDataProvider(),
+  );
+
+  final JobCategoryRepository jobCategoryRepository = JobCategoryRepository(
+    dataProvider: JobCategoryDataProvider(),
+  );
+
+  Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case "/":
         {
@@ -26,12 +35,20 @@ class MyPageRouter {
                 if (state.user.role == "ADMIN") {
                   return AdminDashboard();
                 } else if (state.user.role == "EMPLOYER") {
-                  return HomePage(
-                    userType: 'EMPLOYER',
+                  return BlocProvider<JobBloc>(
+                    create: (context) => JobBloc(jobRepository: jobRepository)
+                      ..add(JobLoad(user: state.user)),
+                    child: HomePage(
+                      user: state.user,
+                    ),
                   );
                 } else if (state.user.role == "SEEKER") {
-                  return HomePage(
-                    userType: 'SEEKER',
+                  return BlocProvider<JobBloc>(
+                    create: (context) => JobBloc(jobRepository: jobRepository)
+                      ..add(JobLoad(user: state.user)),
+                    child: HomePage(
+                      user: state.user,
+                    ),
                   );
                 }
               }
@@ -40,13 +57,13 @@ class MyPageRouter {
             });
           });
         }
-      case "/login":
+      case LoginPage.routeName:
         {
           return MaterialPageRoute(builder: (context) {
             return LoginPage();
           });
         }
-      case "/register":
+      case SignUpPage.routeName:
         {
           return MaterialPageRoute(builder: (context) {
             return SignUpPage();
@@ -86,8 +103,9 @@ class MyPageRouter {
         }
       case JobDetails.routeName:
         {
+          SingleJobDetailArguments args = settings.arguments;
           return MaterialPageRoute(
-            builder: (context) => JobDetails(),
+            builder: (context) => JobDetails(user: args.user, selectedJob: args.selectedJob,),
           );
         }
       default:
@@ -102,4 +120,11 @@ class ApplicationArgument {
   final Application application;
   final bool edit;
   ApplicationArgument({this.application, this.edit});
+}
+
+class JobDetailArgument {
+  final User user;
+  final Job job;
+
+  JobDetailArgument({this.user, @required this.job});
 }

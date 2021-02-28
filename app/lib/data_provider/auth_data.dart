@@ -30,6 +30,7 @@ class AuthenticationDataProvider {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
+      print("data is ${data}");
       storeJwt(data['token']);
 
       return User.fromJson(data["user"]);
@@ -60,13 +61,19 @@ class AuthenticationDataProvider {
 
   @override
   Future<void> signOut() {
-    return null;
+    deleteJwt();
   }
 
   void storeJwt(token) async {
     final storage = new FlutterSecureStorage();
-    // // Write value
     await storage.write(key: 'jwt_token', value: token);
+  }
+
+  void deleteJwt() async {
+    final storage = new FlutterSecureStorage();
+    await storage.delete(
+      key: 'jwt_token',
+    );
   }
 
   User getUserFromToken(token) {
