@@ -25,6 +25,7 @@ class User extends Equatable {
       'password': password
     };
   }
+  
 
   factory User.fromJson(Map<String, dynamic> map) {
     if (map == null) return null;
@@ -34,7 +35,7 @@ class User extends Equatable {
       username: map['username'],
       email: map['email'],
       password: map['password'],
-      role: map['role'],
+      role: map['role']??map['role_id']['name'],
     );
     print("user data is ${user.toJson()}");
     return user;

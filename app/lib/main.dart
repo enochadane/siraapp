@@ -7,12 +7,24 @@ import 'package:app/repositories/authentication_repository.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'bloc_observer.dart';
 
-void main() {
-  Bloc.observer = SimpleBlocObserver();
+class TokenData {
+  static String token;
+}
 
+Future<String> getToken() async {
+  final storage = new FlutterSecureStorage();
+  var token = await storage.read(key: "jwt_token");
+  return "'Bearer $token';";
+}
+
+void main() async {
+  Bloc.observer = SimpleBlocObserver();
+  WidgetsFlutterBinding.ensureInitialized();
+  TokenData.token = await getToken();
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository(
           authenticationDataProvider: AuthenticationDataProvider());

@@ -75,8 +75,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                               Text(state.users[index].email),
                                             ],
                                           ),
-                                          Row(
+                                          Column(
                                             children: [
+                                              Text(state.users[index].role),
                                               TextButton(
                                                 onPressed: () {},
                                                 child: _isRemoved

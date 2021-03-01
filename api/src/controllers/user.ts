@@ -100,7 +100,7 @@ export const deleteUser = async (req: Request, res: Response) =>{
 
 export const changeUserRole = async (req: Request, res: Response) =>{
   const id = req.params.id;
-
+  console.log(`${id} is the id`);
   try {
     const user = await models.User.findByIdAndUpdate(id, {
       role_id: req.body.role_id,

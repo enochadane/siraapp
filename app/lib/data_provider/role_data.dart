@@ -7,13 +7,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class RoleDataProvider {
+  final String token;
+
   final _baseUrl = 'http://10.0.2.2:8383/api';
 
+  RoleDataProvider({this.token});
 
   Future<Role> createRole(Role role) async {
     final response = await http.post(
       '$_baseUrl/roles',
       headers: <String, String>{
+        "authorization": "$token",
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{

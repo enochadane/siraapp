@@ -31,7 +31,12 @@ class UserDataProvider {
       final response = await http.get("$_baseUrl/users");
       if (response.statusCode == 200) {
         final users = jsonDecode(response.body) as List;
-        return users.map((user) => User.fromJson(user)).toList();
+        final result = users.map((user) {
+          var resultUser = User.fromJson(user);
+          return resultUser;
+        }).toList();
+        print("is result ${result[0].role}");
+        return result;
       } else {
         throw Exception('Failed to load users');
       }
@@ -40,7 +45,7 @@ class UserDataProvider {
     }
   }
 
-  Future<User> updateUserRole(String userId, String roleId ) async {
+  Future<User> updateUserRole(String userId, String roleId) async {
     final response = await http.put(
       '$_baseUrl/users/$userId/changerole',
       headers: <String, String>{
