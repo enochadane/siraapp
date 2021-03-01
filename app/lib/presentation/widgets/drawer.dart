@@ -1,3 +1,5 @@
+import 'package:app/blocs/authentication/authBloc.dart';
+import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/user_edit.dart';
 import 'package:app/repositories/authentication_repository.dart';
@@ -25,8 +27,10 @@ class MyDrawer extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               onTap: () {
-                RepositoryProvider.of<AuthenticationRepository>(context)
-                    .logOut();
+                // RepositoryProvider.of<AuthenticationRepository>(context)
+                    // .logOut();
+                BlocProvider.of<AuthenticationBloc>(context)
+                    .add(UserLoggedOut());
                 Navigator.pushNamedAndRemoveUntil(
                     context, LoginPage.routeName, (route) => false);
               },
@@ -49,9 +53,7 @@ class MyDrawer extends StatelessWidget {
                 color: Colors.red,
               ),
               title: Text('Remove Account'),
-              onTap: () {
-                
-              },
+              onTap: () {},
             ),
           ],
         ),

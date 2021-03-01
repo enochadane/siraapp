@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
-  static final String routeName = "/";
+  static const String routeName = "/";
   final User user;
   HomePage({@required this.user});
 

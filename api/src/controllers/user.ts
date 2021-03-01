@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import models from "../models";
 import { IUser } from "../models/user";
+import bcrypt from "bcryptjs";
 
 export const getUserProfile = async (req: Request, res: Response) => {
   const username = req.params.username.toLowerCase();
@@ -57,15 +58,36 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) =>{
   const id = req.params.id;
+  console.log(` user data ${req.body.password === ""}`)
   try {
-    const user = await models.User.findByIdAndUpdate(id, {
-      ...req.body,
-    });
+  
+    let user:IUser|null = await models.User.findById(id); 
+
+    if (!user) {
+      return res.status(400).json({ message: "No user found" });
+    }
+    
+    if(user){
+      let password
+      user.username = req.body.username;
+      user.email = req.body.email
+      if(req.body.password !== ""){
+        const salt = await bcrypt.genSalt(10);
+        password = await bcrypt.hash(
+          req.body.password,
+          salt.toString()
+        );
+        user.password =  req.body.password;
+      }
+    }
+    await user.save();
+
     if (!user) {
       return res.status(400).json({ message: "No user found" });
     }
     return res.status(201).json(user);
   } catch (error) {
+    console.log(`the error is ${error}`)
     return res.status(400).json({ message: "Something went wrong" });
   }
 }

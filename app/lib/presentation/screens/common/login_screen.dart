@@ -49,13 +49,11 @@ class _LoginPage extends State<LoginPage> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: BlocConsumer<LoginBloc, LoginState>(
-            listener: (context, state) {
-          if (state is AuthenticationFailure) {
-            _showError("something went wrong", context);
+        body: BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
+          if (state is LoginFailure) {
+            _showError("Invalid Username or Password", context);
           }
           if (state is LoginSuccess) {
-            print("nati awel");
             Navigator.pushNamedAndRemoveUntil(
                 context, HomePage.routeName, (route) => false);
           }

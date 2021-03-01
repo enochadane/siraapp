@@ -26,11 +26,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       final user = await authenticationRepository.logIn(
           email: event.email, password: event.password);
-      print("logged in user ${user.username}");
       if (user != null) {
         authenticationBloc.add(UserLoggedIn(user: user));
         yield LoginSuccess();
-        yield LoginInitial();
+        // yield LoginInitial();
       } else {
         yield LoginFailure(error: 'Something very weird just happened');
       }

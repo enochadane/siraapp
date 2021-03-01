@@ -31,10 +31,9 @@ class AuthenticationDataProvider {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      print("data is ${data}");
       storeJwt(data['token']);
 
-      return User.fromJson(data["user"]);
+      return getUserFromToken(data['token']);
     } else {
       throw AuthenticationException(message: 'Wrong username or password');
     }
@@ -91,7 +90,6 @@ class AuthenticationDataProvider {
       var email = payload['email'];
       var username = payload['username'];
       var role = payload['role'];
-      print("payload is $email $username $role");
       User result = User(id: id, username: username, email: email, role: role);
       return result;
     } else {

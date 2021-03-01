@@ -136,36 +136,63 @@ class JobDetails extends StatelessWidget {
                 height: 20.0,
               ),
               (user.role != "EMPLOYER")
-                  ? RaisedButton(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            AddUpdateApplication.route,
-                            arguments: ApplicationArgument(
-                                edit: false, job: this.selectedJob));
-                      },
-                      color: kBrown400,
-                      textColor: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 10.0),
-                        child: Text("Apply", style: TextStyle(fontSize: 18.0)),
-                      ))
+                  ? (user.role != "SEEKER")
+                      ? RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 5.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                                AddUpdateApplication.route,
+                                arguments: ApplicationArgument(
+                                    edit: false, job: this.selectedJob));
+                          },
+                          color: kBrown400,
+                          textColor: Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30.0, vertical: 10.0),
+                            child:
+                                Text("Apply", style: TextStyle(fontSize: 18.0)),
+                          ))
+                      : RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 5.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(SignUpPage.routeName);
+                          },
+                          color: kBrown400,
+                          textColor: Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30.0, vertical: 10.0),
+                            child: Text("Register To Apply",
+                                style: TextStyle(fontSize: 18.0)),
+                          ))
                   : Container(
+                      color: kBrown400,
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
                             onPressed: () => Navigator.of(context)
                                 .pushNamed(ApplicationList.route),
-                            child: Text('View Applications'),
+                            child: Text(
+                              'View Applications',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ],
                       ),
-                    ),  
+                    ),
             ],
           );
         }),

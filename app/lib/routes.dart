@@ -1,4 +1,5 @@
 import 'package:app/blocs/application/application.dart';
+import 'package:app/blocs/authentication/login/login.dart';
 import 'package:app/blocs/authentication/user/user.dart';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/blocs/role/role.dart';
@@ -10,6 +11,7 @@ import 'package:app/presentation/screens/admin/role_change.dart';
 import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:app/presentation/screens/common/login_screen.dart';
+import 'package:app/presentation/screens/common/user_edit.dart';
 import 'package:app/presentation/screens/screens.dart';
 import 'package:app/repositories/job_repository.dart';
 import 'package:app/repositories/user_repository.dart';
@@ -48,12 +50,14 @@ class MyPageRouter {
   );
 
   Route onGenerateRoute(RouteSettings settings) {
+    print("where do you print 1 ${settings.name}");
     switch (settings.name) {
-      case "/":
+      case HomePage.routeName:
         {
           return MaterialPageRoute(builder: (context) {
-            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
+            return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+                listener: (context, state) {
+            }, builder: (context, state) {
               if (state is AuthenticationAuthenticated) {
                 print("${state.user.role} role");
                 if (state.user.role == "ADMIN") {
@@ -75,7 +79,7 @@ class MyPageRouter {
                       user: state.user,
                     ),
                   );
-                } else if (state.user.role == "SEEKER") {
+                } else {
                   return BlocProvider<JobBloc>(
                     create: (context) => JobBloc(jobRepository: jobRepository)
                       ..add(JobLoad(user: state.user)),
@@ -92,6 +96,7 @@ class MyPageRouter {
         }
       case LoginPage.routeName:
         {
+          print("where do you print 2");
           return MaterialPageRoute(builder: (context) {
             return LoginPage();
           });
@@ -130,9 +135,11 @@ class MyPageRouter {
         }
       case ApplicationList.route:
         {
+          ApplicationArgument args = settings.arguments;
           return MaterialPageRoute(
             builder: (context) => BlocProvider<ApplicationBloc>.value(
-              value: ApplicationBloc(applicationRepository: applicationRepository),
+              value:
+                  ApplicationBloc(applicationRepository: applicationRepository),
               child: ApplicationList(),
             ),
           );
@@ -187,6 +194,22 @@ class MyPageRouter {
                   selectedJob: args.selectedJob,
                 ))),
           );
+        }
+
+      case UpdateUser.routeName:
+        {
+          return MaterialPageRoute(builder: (context) {
+            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+              if (state is AuthenticationAuthenticated) {
+                return BlocProvider<UserBloc>.value(
+                  value: UserBloc(userRepository: userRepository),
+                  child: UpdateUser(loggedInUser: state.user),
+                );
+              }
+              return Container();
+            });
+          });
         }
       default:
         {

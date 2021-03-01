@@ -65,6 +65,7 @@ class _SignUpPage extends State<SignUpPage> {
         body: SingleChildScrollView(
           child: Container(
             height: height,
+            margin: EdgeInsets.only(bottom: 100.0),
             decoration: BoxDecoration(),
             child: Column(children: [
               logo(isKeyboardShowing),
@@ -264,6 +265,7 @@ class _SignUpPage extends State<SignUpPage> {
 
   Widget _buildChooseAccountType() {
     return DropdownButton<AccountType>(
+      
       hint: Text('Select Account Type'),
       value: selectedAccount,
       onChanged: (AccountType value) {
@@ -339,44 +341,6 @@ class _SignUpPage extends State<SignUpPage> {
                 style: TextStyle(color: Colors.white, fontSize: 18.0)),
       ),
     );
-  }
-
-  void handleSubmit() async {
-    final form = _formKey.currentState;
-    if (form.validate()) {
-      print('validated');
-      form.save();
-
-      try {
-        setState(() {
-          _isLoading = true;
-        });
-
-        if (!_isCompany) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ProfilePageForm()));
-
-          setState(() {
-            _isLoading = false;
-          });
-        }
-
-        // final user = await widget.auth.SignIn(_email, _password);
-
-        // Navigator.push(
-        // context, MaterialPageRoute(builder: (context) => HomePage()));
-        // if (user != null) {
-        //   setState(() {
-        //     _isLoading = false;
-        //   });
-        // }
-        DialogBox().information(
-            context, 'SignUp Success', 'You have Successfuly Logged in');
-      } catch (err) {
-        print('error');
-        print(err);
-      }
-    }
   }
 
   bool isEmail(String value) {

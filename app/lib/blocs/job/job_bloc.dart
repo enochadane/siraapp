@@ -36,8 +36,6 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       yield JobLoading();
       try {
         await jobRepository.createJob(event.job);
-        // final jobs = await jobRepository.getJobs();
-
         var jobs;
         if (event.user.role == "SEEKER") {
           jobs = await jobRepository.getJobs();
@@ -54,9 +52,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     if (event is JobUpdate) {
       yield JobLoading();
       try {
-        final job = await jobRepository.updateJob(event.id, event.job);
-        // final jobs = await jobRepository.getJobs();
-        // yield JobsLoadedSuccess(jobs);
+        await jobRepository.updateJob(event.id, event.job);
 
         var jobs;
         if (event.user.role == "SEEKER") {
