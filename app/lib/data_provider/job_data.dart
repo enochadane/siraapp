@@ -6,16 +6,19 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import "package:http/http.dart" as http;
 
 class JobDataProvider {
+ 
   // final _baseUrl = 'http://localhost:8383/api/jobs';
   // final _baseUrl = "http://10.6.71.227:8383/api";
 
   final _baseUrl = "http://10.0.2.2:8383/api";
 
   final http.Client httpClient;
+  final String token;
 
   JobDataProvider({
     this.httpClient,
-  });
+    this.token
+  }):super();
 
   Future<String> getTokenFromStorage() async {
     final storage = new FlutterSecureStorage();
@@ -24,7 +27,7 @@ class JobDataProvider {
   }
 
   Future<Job> createJob(Job job) async {
-    final token = getTokenFromStorage();
+    // final token = await getTokenFromStorage();
 
     var data = {
       "name": job.name,
@@ -118,8 +121,8 @@ class JobDataProvider {
   }
 
   Future<Job> updateJob(String id, Job job) async {
-    final token = getTokenFromStorage();
-
+    final token = await getTokenFromStorage();
+    print("token is $token");
     var data = {
       "name": job.name,
       "description": job.description,
@@ -132,6 +135,7 @@ class JobDataProvider {
       "date_published": job.datePublished.toString(),
       "company_id": job.companyId
     };
+
     try {
       final response = await http.put("$_baseUrl/jobs/$id",
           headers: <String, String>{

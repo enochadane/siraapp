@@ -7,6 +7,7 @@ export const requireSignIn = (req: Request|any, res: Response, next: Function) =
   const secret = process.env.JWT_SECRET || "secret"
   try {
     const token = req.headers.authorization?.split(" ")[1] || "sample";
+    console.log(`token is `, req.headers.authorization)
     const decoded = Jwt.verify(token, secret);
     req.user = decoded;
     next();

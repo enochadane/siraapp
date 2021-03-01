@@ -1,10 +1,16 @@
+import 'package:app/blocs/authentication/user/user.dart';
 import 'package:app/blocs/job/job.dart';
+import 'package:app/blocs/role/role.dart';
+import 'package:app/blocs/role/role_bloc.dart';
+import 'package:app/presentation/screens/admin/create_role.dart';
 import 'package:app/presentation/screens/admin/dashboard.dart';
+import 'package:app/presentation/screens/admin/role_change.dart';
 import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:app/presentation/screens/common/login_screen.dart';
 import 'package:app/presentation/screens/screens.dart';
 import 'package:app/repositories/job_repository.dart';
+import 'package:app/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +24,14 @@ class MyPageRouter {
 // this techinique is called dependency injection
   final JobRepository jobRepository = JobRepository(
     dataProvider: JobDataProvider(),
+  );
+
+  final RoleRepository roleRepository = RoleRepository(
+    dataProvider: RoleDataProvider(),
+  );
+
+  final UserRepository userRepository = UserRepository(
+    dataProvider: UserDataProvider(),
   );
 
   final JobCategoryRepository jobCategoryRepository = JobCategoryRepository(
@@ -34,7 +48,16 @@ class MyPageRouter {
               if (state is AuthenticationAuthenticated) {
                 print("${state.user.role} role");
                 if (state.user.role == "ADMIN") {
-                  return AdminDashboard();
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<UserBloc>(
+                        create: (context) =>
+                            UserBloc(userRepository: userRepository)
+                              ..add(UserLoad())),
+                    BlocProvider<RoleBloc>(
+                        create: (context) =>
+                            RoleBloc(roleRepository: roleRepository)
+                              ..add(RoleLoad())),
+                  ], child: AdminDashboard());
                 } else if (state.user.role == "EMPLOYER") {
                   return BlocProvider<JobBloc>(
                     create: (context) => JobBloc(jobRepository: jobRepository)
@@ -63,6 +86,26 @@ class MyPageRouter {
           return MaterialPageRoute(builder: (context) {
             return LoginPage();
           });
+        }
+      case CreateRole.routeName:
+        {
+          return MaterialPageRoute(
+              builder: (context) => BlocProvider<RoleBloc>.value(
+                  value: RoleBloc(roleRepository: roleRepository),
+                  child: RepositoryProvider<JobCategoryRepository>.value(
+                    value: jobCategoryRepository,
+                    child: CreateRole(),
+                  )));
+        }
+      case ChangeRole.routeName:
+        {
+          User user = settings.arguments;
+          return MaterialPageRoute(
+              builder: (context) => BlocProvider<RoleBloc>(
+                create: (context) => RoleBloc(roleRepository: roleRepository)..add(RoleLoad()),
+                    // create: RoleBloc(roleRepository: roleRepository),
+                    child: ChangeRole(user: user,),
+                  ));
         }
       case SignUpPage.routeName:
         {
@@ -98,11 +141,16 @@ class MyPageRouter {
         }
       case CreateEditJobPage.routeName:
         {
+          final args = settings.arguments;
           return MaterialPageRoute(
               builder: (context) => BlocProvider<JobBloc>.value(
-                    value: JobBloc(jobRepository: jobRepository),
-                    child: CreateEditJobPage(),
-                  ));
+                  value: JobBloc(jobRepository: jobRepository),
+                  child: RepositoryProvider<JobCategoryRepository>.value(
+                    value: jobCategoryRepository,
+                    child: CreateEditJobPage(
+                      selectedJob: args,
+                    ),
+                  )));
         }
       case JobDetails.routeName:
         {

@@ -70,6 +70,21 @@ export const updateUser = async (req: Request, res: Response) =>{
   }
 }
 
+export const updateUserRole = async (req: Request, res: Response) =>{
+  const id = req.params.id;
+  try {
+    const user = await models.User.findByIdAndUpdate(id, {
+      role_id: req.body.role_id
+    });
+    if (!user) {
+      return res.status(400).json({ message: "No user found" });
+    }
+    return res.status(201).json(user);
+  } catch (error) {
+    return res.status(400).json({ message: "Something went wrong" });
+  }
+}
+
 export const deleteUser = async (req: Request, res: Response) =>{
   const id = req.params.id;
   try {

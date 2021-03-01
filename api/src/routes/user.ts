@@ -33,6 +33,6 @@ router.get("/company/:id", deleteCompanyProfile);
 router.put(":id/changerole", requireSignIn, authMiddleware, adminMiddleware, changeUserRole)
 router.put(":id", requireSignIn, authMiddleware, updateUser)
 router.delete(":id", requireSignIn, authMiddleware, deleteUser)
-router.get("/", requireSignIn, getUsers)
+router.get("/", getUsers)
 router.get("/:id", requireSignIn, getUser)
 export default router;
