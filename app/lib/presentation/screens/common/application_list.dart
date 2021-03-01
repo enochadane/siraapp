@@ -59,13 +59,13 @@ class ApplicationList extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed(
-          AddUpdateApplication.route,
-          arguments: ApplicationArgument(edit: false),
-        ),
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => Navigator.of(context).pushNamed(
+      //     AddUpdateApplication.route,
+      //     arguments: ApplicationArgument(edit: false),
+      //   ),
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 }
