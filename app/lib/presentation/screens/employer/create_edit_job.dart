@@ -9,13 +9,18 @@ import 'package:intl/intl.dart';
 
 class CreateEditJobPage extends StatefulWidget {
   static const routeName = "/jobs/create_edit";
+  final Job selectedJob;
+
+  const CreateEditJobPage({Key key, this.selectedJob}) : super(key: key);
+
   @override
   _CreateEditJobPageState createState() => _CreateEditJobPageState();
 }
 
 class _CreateEditJobPageState extends State<CreateEditJobPage> {
   final _formKey = GlobalKey<FormState>();
-  final User user = null;
+  List<JobCategory> jobcategories;
+  JobCategory selectedJobCategory;
   Map<String, dynamic> _job = {
     "deadline": DateTime.now(),
     "job_category_id": "6029b3c1a688f767edf6d0e3",
@@ -25,6 +30,9 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
 
   @override
   void initState() {
+    if (widget.selectedJob != null) {
+      this._job["deadline"] = widget.selectedJob.deadline;
+    }
     super.initState();
   }
 
@@ -34,98 +42,111 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
     });
   }
 
-  Future<List<JobCategory>> getCategories(context) async {
-    final bloc = RepositoryProvider.of<JobCategoryRepository>(context);
-    return await bloc.dataProvider.getJobCategories();
-  }
-
   @override
   Widget build(BuildContext context) {
-    Job selectedJob = ModalRoute.of(context).settings.arguments;
+    Future<List<JobCategory>> getCategories() async {
+      final bloc = RepositoryProvider.of<JobCategoryRepository>(context);
+      List<JobCategory> categories = await bloc.dataProvider.getJobCategories();
+      return categories;
+    }
 
-    bool isEditing = selectedJob != null;
-    if (selectedJob?.deadline != null) {
-      _job["deadline"] = selectedJob.deadline;
+    getjobCategories() {
+      return getCategories();
+    }
+
+    bool isEditing = widget.selectedJob != null;
+    if (widget.selectedJob?.deadline != null) {
+      _job["deadline"] = widget.selectedJob.deadline;
     }
 
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state){
-          if(state is AuthenticationAuthenticated){
-        return  SafeArea(
-          child: Scaffold(
-        backgroundColor: kSurfaceWhite,
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-          child: Form(
-            key: _formKey,
-            child: Column(children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Icon(Icons.arrow_back_ios)),
-                    SizedBox(
-                      width: 20.0,
-                    ),
-                    Text(
-                      selectedJob != null ? "Edit Job" : "Create Job",
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                  ],
+        builder: (context, state) {
+      if (state is AuthenticationAuthenticated) {
+        return SafeArea(
+            child: Scaffold(
+          backgroundColor: kSurfaceWhite,
+          body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+            child: Form(
+              key: _formKey,
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 10.0),
+                  child: Row(
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Icon(Icons.arrow_back_ios)),
+                      SizedBox(
+                        width: 20.0,
+                      ),
+                      Text(
+                        widget.selectedJob != null ? "Edit Job" : "Create Job",
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              buildJobTitleTextField(selectedJob),
-              SizedBox(
-                height: 10.0,
-              ),
-              buildJobPostionTextField(selectedJob),
-              SizedBox(
-                height: 20.0,
-              ),
-              buildExperienceLevelTextField(selectedJob),
-              SizedBox(
-                height: 20.0,
-              ),
-              buildJobDescriptionTextField(selectedJob),
-              SizedBox(
-                height: 20.0,
-              ),
-              buildJobOtherInfoTextField(selectedJob),
-              SizedBox(
-                height: 20.0,
-              ),
-              buildDatePicker(context),
-              SizedBox(
-                height: 20.0,
-              ),
-              FutureBuilder(
-                  future: getCategories(context),
-                  builder: (context, AsyncSnapshot<List<JobCategory>> snapshot) {
-                    return buildCategoryDropDown(snapshot.data);
-                  }),
-              SizedBox(
-                height: 20.0,
-              ),
-              buildJopType(),
-              SizedBox(
-                height: 20.0,
-              ),
-              buildSubmitButton(isEditing, context, selectedJob, state.user)
-            ]),
+                SizedBox(
+                  height: 10.0,
+                ),
+                buildJobTitleTextField(widget.selectedJob),
+                SizedBox(
+                  height: 10.0,
+                ),
+                buildJobPostionTextField(widget.selectedJob),
+                SizedBox(
+                  height: 20.0,
+                ),
+                buildExperienceLevelTextField(widget.selectedJob),
+                SizedBox(
+                  height: 20.0,
+                ),
+                buildJobDescriptionTextField(widget.selectedJob),
+                SizedBox(
+                  height: 20.0,
+                ),
+                buildJobOtherInfoTextField(widget.selectedJob),
+                SizedBox(
+                  height: 20.0,
+                ),
+                buildDatePicker(context),
+                SizedBox(
+                  height: 20.0,
+                ),
+                FutureBuilder(
+                    future: getCategories(),
+                    builder:
+                        (context, AsyncSnapshot<List<JobCategory>> snapshot) {
+                      if (snapshot.hasData) {
+                        return buildCategoryDropDown(snapshot.data);
+                      } else {
+                        return Container(
+                          child: Text("Loading"),
+                        );
+                      }
+                    }),
+                SizedBox(
+                  height: 20.0,
+                ),
+                buildJopType(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                buildSubmitButton(
+                    isEditing, context, widget.selectedJob, state.user)
+              ]),
+            ),
           ),
-        ),
-      )
-    );}
-  });
+        ));
+      }
+      return Container();
+    });
   }
+
   buildDatePicker(
     BuildContext context,
   ) {
@@ -313,11 +334,10 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
   }
 
   buildCategoryDropDown(List<JobCategory> categories) {
-    JobCategory getSelectedCategory = categories[0];
-    if (this._job["job_category_id"] != null) {
-      getSelectedCategory = categories.firstWhere(
-          (category) => category.id == this._job["job_category_id"]);
+    if (this.selectedJobCategory == null) {
+      this.selectedJobCategory = categories[0];
     }
+
     return Container(
       child: ListTile(
         leading: Text(
@@ -325,7 +345,7 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
           style: TextStyle(fontSize: 18.0),
         ),
         trailing: DropdownButton(
-          value: getSelectedCategory,
+          value: this.selectedJobCategory,
           items: categories.map((category) {
             return DropdownMenuItem(
               child: Text(category.name),
@@ -335,6 +355,7 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
           onChanged: (JobCategory selected) {
             setState(() {
               this._job["job_category_id"] = selected.id;
+              this.selectedJobCategory = selected;
             });
           },
         ),
@@ -428,8 +449,7 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
 
   Widget buildSubmitButton(
       bool isEditing, BuildContext context, Job selectedJob, User currentUser) {
-    return BlocConsumer<JobBloc, JobState>(
-      listener: (context, JobState state) {
+    return BlocConsumer<JobBloc, JobState>(listener: (context, JobState state) {
       if (state is JobOperationFailure) {
         Scaffold.of(context).showSnackBar(
           SnackBar(content: Text("There is an error on creating or updating")),
@@ -437,24 +457,24 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
       } else if (state is JobsLoadedSuccess) {
         Navigator.of(context).pop();
         // BlocProvider.of<JobBloc>(context)
-            // .add(JobLoad(userType: "employer", companyId: _job["company_id"]));
+        // .add(JobLoad(userType: "employer", companyId: _job["company_id"]));
       }
     }, builder: (BuildContext context, JobState state) {
-       if (state is JobLoading) {
-        return RaisedButton(
-            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onPressed: () {},
-            color: kBrown400,
-            textColor: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-              child: Text(isEditing ? "Updating" : "Creating",
-                  style: TextStyle(fontSize: 18.0)),
-            ));
-      } 
+      // if (state is JobLoading) {
+      //   return RaisedButton(
+      //       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+      //       shape: RoundedRectangleBorder(
+      //         borderRadius: BorderRadius.circular(10.0),
+      //       ),
+      //       onPressed: () {},
+      //       color: kBrown400,
+      //       textColor: Colors.white,
+      //       child: Padding(
+      //         padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+      //         child: Text(isEditing ? "Updating" : "Creating",
+      //             style: TextStyle(fontSize: 18.0)),
+      //       ));
+      // }
       return RaisedButton(
           padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
           shape: RoundedRectangleBorder(
@@ -479,7 +499,9 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
                   jobPosition: this._job["job_position"]);
 
               if (isEditing) {
-                context.read<JobBloc>().add(JobUpdate(selectedJob.id, job, currentUser));
+                context
+                    .read<JobBloc>()
+                    .add(JobUpdate(selectedJob.id, job, currentUser));
               } else {
                 print("company id is ${this._job["company_id"]}");
                 context.read<JobBloc>().add(JobCreate(job, currentUser));

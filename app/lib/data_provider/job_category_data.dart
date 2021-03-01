@@ -15,14 +15,13 @@ class JobCategoryDataProvider {
   });
 
   Future<List<JobCategory>> getJobCategories() async {
-    final response = await httpClient.get("$_baseUrl/categories");
+    final response = await http.get("$_baseUrl/categories");
     if (response.statusCode == 200) {
       final jobCategories = jsonDecode(response.body) as List;
+      List<JobCategory> jobCategoryList = jobCategories.map((category) => JobCategory.fromMap(category)).toList();
 
-      List<JobCategory> jobCategoryList = jobCategories
-          .map((category) => JobCategory.fromMap(category))
-          .toList();
       return jobCategoryList;
+
     } else {
       throw Exception('Failed to load jobs');
     }

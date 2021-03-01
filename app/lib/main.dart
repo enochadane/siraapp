@@ -3,8 +3,6 @@ import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/login/login.dart';
 import 'package:app/blocs/authentication/register/register_bloc.dart';
 import 'package:app/data_provider/auth_data.dart';
-import 'package:app/presentation/screens/admin/dashboard.dart';
-import 'package:app/presentation/screens/common/login_screen.dart';
 import 'package:app/repositories/authentication_repository.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';

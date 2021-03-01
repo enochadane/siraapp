@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateRole extends StatefulWidget {
-  static const routeName = 'createRole';
+  static const String routeName = 'createRole';
 
   @override
   _CreateRoleState createState() => _CreateRoleState();
@@ -14,7 +14,8 @@ class CreateRole extends StatefulWidget {
 
 class _CreateRoleState extends State<CreateRole> {
   final _formKey = GlobalKey<FormState>();
-
+  TextEditingController roleController = TextEditingController();
+  String role;
   final Map<String, dynamic> _roles = {};
 
   @override
@@ -28,50 +29,57 @@ class _CreateRoleState extends State<CreateRole> {
         child: Column(
           children: [
             TextFormField(
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please Enter First Name';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    labelText: 'Role Name',
-                    focusColor: Color(0xff4064f3),
-                    labelStyle: TextStyle(
-                      color: Color(0xff4064f3),
-                    ),
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Color(0xfff3f3f4),
-                  ),
-                  onSaved: (value) {
-                    setState(() {
-                      this._roles['roleName'] = value;
-                    });
-                  },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please Enter First Name';
+                }
+                return null;
+              },
+              controller: roleController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Role Name',
+                focusColor: Color(0xff4064f3),
+                labelStyle: TextStyle(
+                  color: Color(0xff4064f3),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      final form = _formKey.currentState;
-                      if (form.validate()) {
-                        form.save();
-                        final RoleEvent event = RoleCreate(
-                                Role(
-                                  name: this._roles['rollName'],
-                                ),
-                              );
-                        BlocProvider.of<RoleBloc>(context).add(event);
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/', (route) => false);
-                      }
-                    },
-                    icon: Icon(Icons.save),
-                    label: Text('SAVE'),
-                  ),
-                ),
+                border: InputBorder.none,
+                filled: true,
+                fillColor: Color(0xfff3f3f4),
+              ),
+              onSaved: (value) {
+                setState(() {
+                  this._roles['roleName'] = value;
+                  this.role = value;
+                });
+              },
+               onChanged: (value) {
+                setState(() {
+                  this.role = value;
+                });
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  final form = _formKey.currentState;
+                  if (form.validate()) {
+                    form.save();
+                    final RoleEvent event = RoleCreate(
+                      Role(
+                        name: this.role,
+                      ),
+                    );
+                    BlocProvider.of<RoleBloc>(context).add(event);
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/', (route) => false);
+                  }
+                },
+                icon: Icon(Icons.save),
+                label: Text('SAVE'),
+              ),
+            ),
           ],
         ),
       ),

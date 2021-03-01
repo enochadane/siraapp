@@ -7,19 +7,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class RoleDataProvider {
-  final _baseUrl = 'http://10.0.2.2:3000/api/roles';
-  final http.Client httpClient;
+  final _baseUrl = 'http://10.0.2.2:8383/api';
 
-  RoleDataProvider({@required this.httpClient}) : assert(httpClient != null);
 
   Future<Role> createRole(Role role) async {
-    final response = await httpClient.post(
-      '$_baseUrl',
+    final response = await http.post(
+      '$_baseUrl/roles',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'name': role.name,
+        'name': role.name.toUpperCase(),
       }),
     );
 
@@ -31,7 +29,7 @@ class RoleDataProvider {
   }
 
   Future<List<Role>> getRoles() async {
-    final response = await httpClient.get('$_baseUrl');
+    final response = await http.get('$_baseUrl/roles');
 
     if (response.statusCode == 200) {
       final roles = jsonDecode(response.body) as List;
@@ -42,8 +40,8 @@ class RoleDataProvider {
   }
 
   Future<void> deleteRole(String id) async {
-    final http.Response response = await httpClient.delete(
-      '$_baseUrl/$id',
+    final http.Response response = await http.delete(
+      '$_baseUrl/roles/$id',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
