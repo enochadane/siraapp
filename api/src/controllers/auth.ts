@@ -71,7 +71,7 @@ export const signIn = async (req: any, res: any) => {
   if (!email || !password) {
     return res.json({ message: "All Fields are required!" });
   }
-  const secret = process.env.JWT_SECRET || "sample secret";
+  const secret = process.env.JWT_SECRET || "secret";
 
   try {
     models.User.findOne({ email }).populate("role_id", "_id name").exec(async (_err, user: IUser | null) => {

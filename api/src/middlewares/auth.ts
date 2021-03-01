@@ -10,9 +10,10 @@ export const requireSignIn = (req: Request|any, res: Response, next: Function) =
     const token = req.headers.authorization?.split(" ")[1] || "sample";
     const decoded = Jwt.verify(token, secret);
     req.user = decoded;
+    console.log(`decoded is ${decoded.toString()}`);
     next();
   } catch (err) {
-    console.log(`error is ${err}`)
+    console.log(err);
     res.status(403).json({ message: "UnAuthenicated Access" });
   }
 };

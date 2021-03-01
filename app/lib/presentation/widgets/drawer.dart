@@ -36,24 +36,37 @@ class MyDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Close'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
               title: Text('Edit Account'),
               onTap: () {
                 Navigator.of(context).pushNamed(UpdateUser.routeName);
               },
             ),
             ListTile(
-              leading: Icon(
-                Icons.remove_circle,
-                color: Colors.red,
+              title: Text(
+                'Remove Account',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
               ),
-              title: Text('Remove Account'),
               onTap: () {},
+            ),
+            ListTile(
+              title: Text('Close'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Logout',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              onTap: () {
+                RepositoryProvider.of<AuthenticationRepository>(context)
+                    .logOut();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, LoginPage.routeName, (route) => false);
+              },
             ),
           ],
         ),
