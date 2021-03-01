@@ -1,11 +1,19 @@
 import 'dart:convert';
 
 import 'package:app/models/models.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class UserDataProvider {
   final _baseUrl = 'http://10.0.2.2:8383/api';
   http.Client httpClient;
+  String token;
+
+  Future<String> getToken() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: "jwt_token");
+    return "Bearer $token";
+  }
 
   Future<User> createUser(User user) async {
     final response = await http.post(
@@ -47,10 +55,13 @@ class UserDataProvider {
   }
 
   Future<void> updateUser(User user) async {
-    final http.Response response = await httpClient.patch(
-      '$_baseUrl/${user.id}',
+    token = await getToken();
+
+    final http.Response response = await http.put(
+      '$_baseUrl/users/${user.id}',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "authorization": "$token",
       },
       body: jsonEncode(<String, dynamic>{
         'id': user.id,
@@ -60,16 +71,19 @@ class UserDataProvider {
       }),
     );
 
-    if (response.statusCode != 204) {
+    if (response.statusCode != 201) {
       throw Exception('Failed to update user');
     }
   }
 
   Future<User> updateUserRole(String userId, String roleId) async {
+    token = await getToken();
+
     final response = await http.put(
       '$_baseUrl/users/$userId/changerole',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "authorization": "$token",
       },
       body: jsonEncode(<String, dynamic>{
         'role_id': roleId,
@@ -84,10 +98,13 @@ class UserDataProvider {
   }
 
   Future<void> deleteUser(String id) async {
+    token = await getToken();
+
     final http.Response response = await http.delete(
-      '$_baseUrl/$id',
+      '$_baseUrl/users/$id',
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8'
+        'Content-Type': 'application/json; charset=UTF-8',
+        "authorization": "$token",
       },
     );
 

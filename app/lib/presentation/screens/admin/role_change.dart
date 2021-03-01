@@ -3,6 +3,7 @@ import 'package:app/blocs/authentication/user/user_event.dart';
 import 'package:app/blocs/role/role_bloc.dart';
 import 'package:app/blocs/role/role_event.dart';
 import 'package:app/blocs/role/role_state.dart';
+import 'package:app/constants/colors.dart';
 import 'package:app/models/models.dart';
 import 'package:app/models/role.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +37,7 @@ class _ChangeRoleState extends State<ChangeRole> {
       child: ListTile(
         leading: Text(
           "Select Role",
-          style: TextStyle(fontSize: 18.0),
+          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
         trailing: DropdownButton(
           value: this.selectedRole,
@@ -55,6 +56,11 @@ class _ChangeRoleState extends State<ChangeRole> {
       ),
     );
   }
+  handleDelete() {
+      // context.read<RoleBloc>().add(JobDelete(selectedJob));
+      // BlocProvider.of<JobBloc>(context).add(JobDelete(selectedJob));
+      Navigator.of(context).pop();
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +74,41 @@ class _ChangeRoleState extends State<ChangeRole> {
               return Form(
                   key: _formKey,
                   child: Column(children: [
-                    Text(
-                      widget.user.username,
-                      style: TextStyle(fontSize: 30.0),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Username: ",
+                            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            widget.user.username,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Email: ",
+                            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            widget.user.username,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 20.0,
@@ -78,7 +116,9 @@ class _ChangeRoleState extends State<ChangeRole> {
                     buildRoleDropDown(state.roles),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: ElevatedButton.icon(
+                      child: RaisedButton.icon(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                        color: kBrown400,
                         onPressed: () {
                           final form = _formKey.currentState;
                           if (form.validate()) {
@@ -92,8 +132,8 @@ class _ChangeRoleState extends State<ChangeRole> {
                                 .pushNamedAndRemoveUntil('/', (route) => false);
                           }
                         },
-                        icon: Icon(Icons.save),
-                        label: Text('SAVE'),
+                        icon: Icon(Icons.save, color: Colors.white,),
+                        label: Text('SAVE', style: TextStyle(color: Colors.white),),
                       ),
                     )
                   ]));
@@ -104,4 +144,6 @@ class _ChangeRoleState extends State<ChangeRole> {
           listener: (context, state) {}),
     );
   }
+
+
 }

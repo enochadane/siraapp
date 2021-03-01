@@ -47,7 +47,7 @@ class JobDataProvider {
       print("response is $jsonResponse");
 
       if (response.statusCode == 201) {
-        // return Job.fromMap(jsonDecode(response.body));
+        return Job.fromJson(jsonDecode(response.body));
       } else {
         throw Exception('Failed to create course.');
       }
@@ -58,7 +58,7 @@ class JobDataProvider {
   }
 
   Future<List<Job>> getJobsByCategory(String categoryId) async {
-    final response = await httpClient.get(
+    final response = await http.get(
       Uri.http(_baseUrl, "/$categoryId/jobs"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
@@ -74,13 +74,11 @@ class JobDataProvider {
   }
 
   Future<List<Job>> getJobsByCompanyId(String companyId) async {
-    print("$companyId is the company id");
     final response = await http.get("$_baseUrl/jobs/company/$companyId");
 
     if (response.statusCode == 200) {
       final jobs = jsonDecode(response.body) as List;
-      print("${jobs.length} $jobs");
-      List<Job> jobList = jobs.map((job) => Job.fromMap(job)).toList();
+      List<Job> jobList = jobs.map((job) => Job.fromJson(job)).toList();
 
       return jobList;
     } else {
@@ -93,8 +91,7 @@ class JobDataProvider {
 
     if (response.statusCode == 200) {
       final jobs = jsonDecode(response.body) as List;
-      print("${jobs.length}");
-      List<Job> jobList = jobs.map((job) => Job.fromMap(job)).toList();
+      List<Job> jobList = jobs.map((job) => Job.fromJson(job)).toList();
 
       return jobList;
     } else {
@@ -107,7 +104,7 @@ class JobDataProvider {
 
     if (response.statusCode == 200) {
       var job = jsonDecode(response.body);
-      Job selectedjob = Job.fromMap(job);
+      Job selectedjob = Job.fromJson(job);
 
       return selectedjob;
     } else {
@@ -138,9 +135,6 @@ class JobDataProvider {
             'Content-Type': 'application/json',
           },
           body: jsonEncode(data));
-      var jsonResponse = jsonDecode(response.body);
-      print("response is $jsonResponse");
-
       if (response.statusCode == 201) {
         return Job.fromJson(jsonDecode(response.body));
       } else {
@@ -163,7 +157,7 @@ class JobDataProvider {
     );
     print("response status code is ${response.statusCode}");
     if (response.statusCode == 200) {
-      // return Job.fromMap(jsonDecode(response.body));
+      return Job.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to delete job.');
     }

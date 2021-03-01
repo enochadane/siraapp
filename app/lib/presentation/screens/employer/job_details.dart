@@ -2,7 +2,6 @@ import 'package:app/blocs/job/job.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/models/job.dart';
 import 'package:app/models/models.dart';
-import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:app/presentation/screens/screens.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +19,8 @@ class JobDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     handleDelete() {
-      context.read<JobBloc>().add(JobDelete(selectedJob));
-      // BlocProvider.of<JobBloc>(context).add(JobDelete(selectedJob));
+      // context.read<JobBloc>().add(JobDelete(selectedJob));
+      BlocProvider.of<JobBloc>(context).add(JobDelete(selectedJob));
       Navigator.of(context).pop();
     }
 
@@ -136,25 +135,45 @@ class JobDetails extends StatelessWidget {
                 height: 20.0,
               ),
               (user.role != "EMPLOYER")
-                  ? RaisedButton(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            AddUpdateApplication.route,
-                            arguments: ApplicationArgument(
-                                edit: false, job: this.selectedJob));
-                      },
-                      color: kBrown400,
-                      textColor: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 10.0),
-                        child: Text("Apply", style: TextStyle(fontSize: 18.0)),
-                      ))
+                  ? (user.role == "SEEKER")
+                      ? RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 5.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                                AddUpdateApplication.route,
+                                arguments: ApplicationArgument(
+                                    edit: false, job: this.selectedJob));
+                          },
+                          color: kBrown400,
+                          textColor: Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30.0, vertical: 10.0),
+                            child:
+                                Text("Apply", style: TextStyle(fontSize: 18.0)),
+                          ))
+                      : RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 5.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(SignUpPage.routeName);
+                          },
+                          color: kBrown400,
+                          textColor: Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30.0, vertical: 10.0),
+                            child: Text("Register To Apply",
+                                style: TextStyle(fontSize: 18.0)),
+                          ))
                   : Container(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -172,7 +191,7 @@ class JobDetails extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ),  
+                    ),
             ],
           );
         }),

@@ -50,10 +50,6 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
       return categories;
     }
 
-    getjobCategories() {
-      return getCategories();
-    }
-
     bool isEditing = widget.selectedJob != null;
     if (widget.selectedJob?.deadline != null) {
       _job["deadline"] = widget.selectedJob.deadline;
@@ -70,7 +66,7 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
             child: Form(
               key: _formKey,
               child: Column(children: [
-                Padding(
+                Container(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 10.0),
                   child: Row(

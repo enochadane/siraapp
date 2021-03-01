@@ -37,7 +37,11 @@ class ApplicationList extends StatelessWidget {
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).pushNamed(ApplicationDetails.route,
-                          arguments: applications[index]);
+                          arguments: ApplicationArgument(
+                            application: applications[index],
+                            job: args.job,
+                            user: args.user
+                          ));
                     },
                     child: ApplicationCard(
                       firstName: '${applications[index].firstName}',

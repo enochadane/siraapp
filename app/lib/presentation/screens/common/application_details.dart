@@ -1,6 +1,7 @@
 import 'package:app/blocs/application/application.dart';
 import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/models/application.dart';
+import 'package:app/models/job.dart';
 import 'package:app/models/user.dart';
 import 'package:app/presentation/screens/job_seeker/application_add_update.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,9 @@ class ApplicationDetails extends StatelessWidget {
   static const route = 'applicationDetails';
   final Application application;
   final User user;
+  final Job job;
 
-  ApplicationDetails({@required this.application, this.user});
+  ApplicationDetails({@required this.application, this.user, this.job});
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ApplicationBloc, ApplicationState>(
@@ -39,30 +41,34 @@ class ApplicationDetails extends StatelessWidget {
                 appBar: AppBar(
                   title: Text('Applications'),
                   actions: [
-                    (state.user.role == "SEEKER") ? Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => Navigator.of(context).pushNamed(
-                            AddUpdateApplication.route,
-                            arguments: ApplicationArgument(
-                                application: this.application, edit: true),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 32,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            BlocProvider.of<ApplicationBloc>(context)
-                                .add(ApplicationDelete(this.application));
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                ApplicationList.route, (route) => false);
-                          },
-                        ),
-                      ],
-                    ) : Container()
+                    (state.user.role == "SEEKER")
+                        ? Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () =>
+                                    Navigator.of(context).pushNamed(
+                                  AddUpdateApplication.route,
+                                  arguments: ApplicationArgument(
+                                      application: this.application,
+                                      edit: true),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 32,
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  BlocProvider.of<ApplicationBloc>(context)
+                                      .add(ApplicationDelete(this.application));
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      ApplicationList.route, (route) => false);
+                                },
+                              ),
+                            ],
+                          )
+                        : Container()
                   ],
                 ),
                 body: SingleChildScrollView(
@@ -159,19 +165,22 @@ class ApplicationDetails extends StatelessWidget {
                             ),
                           ),
                         ),
-                        (state.user.role == "EMPLOYER")? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            TextButton(
-                              child: Text('Decline'),
-                              onPressed: () {},
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text('Approve'),
-                            )
-                          ],
-                        ): Container()
+                        (state.user.role == "EMPLOYER")
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  TextButton(
+                                    child: Text('Decline'),
+                                    onPressed: () {},
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: Text('Approve'),
+                                  )
+                                ],
+                              )
+                            : Container()
                       ],
                     ),
                   ),
