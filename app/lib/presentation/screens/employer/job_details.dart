@@ -3,6 +3,8 @@ import 'package:app/constants/colors.dart';
 import 'package:app/models/job.dart';
 import 'package:app/models/models.dart';
 import 'package:app/presentation/screens/common/home_page.dart';
+import 'package:app/presentation/screens/screens.dart';
+import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,14 +12,14 @@ import 'create_edit_job.dart';
 
 class JobDetails extends StatelessWidget {
   static const routeName = "/jobs/single";
-    final Job selectedJob;
-    final User user;
+  final Job selectedJob;
+  final User user;
 
   const JobDetails({Key key, this.selectedJob, this.user}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
+    print('${user.id} from Job details');
     return SafeArea(
       child: Scaffold(
         backgroundColor: kSurfaceWhite,
@@ -34,8 +36,8 @@ class JobDetails extends StatelessWidget {
           }
         }, builder: (BuildContext context, JobState state) {
           // if (state is JobsLoadedSuccess) {
-            // selectedJob = state.jobs
-                // .firstWhere((element) => selectedJob.id == element.id);
+          // selectedJob = state.jobs
+          // .firstWhere((element) => selectedJob.id == element.id);
           // }
           return Column(
             children: [
@@ -136,7 +138,12 @@ class JobDetails extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                            AddUpdateApplication.route,
+                            arguments: ApplicationArgument(
+                                edit: false, job: this.selectedJob));
+                      },
                       color: kBrown400,
                       textColor: Colors.white,
                       child: Padding(
@@ -144,7 +151,17 @@ class JobDetails extends StatelessWidget {
                             horizontal: 30.0, vertical: 10.0),
                         child: Text("Apply", style: TextStyle(fontSize: 18.0)),
                       ))
-                  : Container(),
+                  : Container(
+                      child: Row(
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
+                                .pushNamed(ApplicationList.route),
+                            child: Text('View Applications'),
+                          ),
+                        ],
+                      ),
+                    ),  
             ],
           );
         }),

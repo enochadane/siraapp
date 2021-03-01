@@ -28,9 +28,9 @@ class ApplicationDataProvider {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'job_id': '602ab56bdade2735baf65105',
-        'applicant_id': '602ab91cdade2735baf6510c',
-        'company_id': '602ab8c2dade2735baf65109',
+        'job_id': application.jobId,
+        'applicant_id': application.applicantId,
+        'company_id': application.companyId,
         'first_name': application.firstName,
         'last_name': application.lastName,
         'phone': application.phone,
