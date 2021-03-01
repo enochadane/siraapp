@@ -21,7 +21,7 @@ class JobCreate extends JobEvent {
   const JobCreate(this.job, this.user);
 
   @override
-  List<Object> get props => [job];
+  List<Object> get props => [job, user];
 
   @override
   String toString() => 'Job Created {job: $job}';
@@ -35,7 +35,7 @@ class JobUpdate extends JobEvent {
   JobUpdate(this.id, this.job, this.user);
 
   @override
-  List<Object> get props => [job];
+  List<Object> get props => [job, user];
   @override
   String toString() => 'Job Updated {job: $job}';
 }

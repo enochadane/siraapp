@@ -77,10 +77,13 @@ class UserDataProvider {
   }
 
   Future<User> updateUserRole(String userId, String roleId) async {
+    token = await getToken();
+
     final response = await http.put(
       '$_baseUrl/users/$userId/changerole',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "authorization": "$token",
       },
       body: jsonEncode(<String, dynamic>{
         'role_id': roleId,
@@ -95,10 +98,13 @@ class UserDataProvider {
   }
 
   Future<void> deleteUser(String id) async {
+    token = await getToken();
+
     final http.Response response = await http.delete(
-      '$_baseUrl/$id',
+      '$_baseUrl/users/$id',
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8'
+        'Content-Type': 'application/json; charset=UTF-8',
+        "authorization": "$token",
       },
     );
 

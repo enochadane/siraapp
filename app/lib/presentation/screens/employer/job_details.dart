@@ -2,7 +2,6 @@ import 'package:app/blocs/job/job.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/models/job.dart';
 import 'package:app/models/models.dart';
-import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:app/presentation/screens/screens.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +19,8 @@ class JobDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     handleDelete() {
-      context.read<JobBloc>().add(JobDelete(selectedJob));
-      // BlocProvider.of<JobBloc>(context).add(JobDelete(selectedJob));
+      // context.read<JobBloc>().add(JobDelete(selectedJob));
+      BlocProvider.of<JobBloc>(context).add(JobDelete(selectedJob));
       Navigator.of(context).pop();
     }
 

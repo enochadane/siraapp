@@ -2,6 +2,8 @@ import 'package:app/blocs/authentication/user/user.dart';
 import 'package:app/blocs/role/role.dart';
 import 'package:app/blocs/role/role_bloc.dart';
 import 'package:app/blocs/role/role_state.dart';
+import 'package:app/models/models.dart';
+import 'package:app/models/role.dart';
 import 'package:app/presentation/screens/admin/create_role.dart';
 import 'package:app/presentation/screens/admin/role_change.dart';
 import 'package:app/presentation/widgets/drawer.dart';
@@ -17,6 +19,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
   final bool _isRemoved = false;
   @override
   Widget build(BuildContext context) {
+    handleUserDelete(User selectedUser) {
+      final UserEvent event = UserDelete(selectedUser);
+      BlocProvider.of<UserBloc>(context).add(event);
+    }
+
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -59,7 +66,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                         vertical: 10.0, horizontal: 20.0),
                                     elevation: 1.0,
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20.0, horizontal: 10.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -67,42 +75,44 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
                                             children: [
-                                              Text(state.users[index].username),
-                                              SizedBox(
-                                                width: 20.0,
+                                              Text(
+                                                state.users[index].username,
+                                                style:
+                                                    TextStyle(fontSize: 18.0),
                                               ),
-                                              Text(state.users[index].email),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Text(
+                                                state.users[index].email,
+                                                style:
+                                                    TextStyle(fontSize: 14.0),
+                                              ),
                                             ],
                                           ),
                                           Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(state.users[index].role),
-                                              TextButton(
-                                                onPressed: () {},
-                                                child: _isRemoved
-                                                    ? Row(
-                                                        children: [
-                                                          Icon(Icons.lock_open),
-                                                          Text('Release'),
-                                                        ],
-                                                      )
-                                                    : Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.lock,
-                                                            color: Colors.red,
-                                                            size: 16.0,
-                                                          ),
-                                                          Text(
-                                                            'Suspend',
-                                                            style: TextStyle(
-                                                              color: Colors.red,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                              )
+                                              SizedBox(
+                                                height: 10.0,
+                                              ),
+                                              InkWell(
+                                                onTap: () async {
+                                                  await _showUserDeleteWizard(
+                                                      context,
+                                                      state.users[index],
+                                                      handleUserDelete);
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -139,28 +149,29 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   Navigator.of(context)
                                       .pushNamed(CreateRole.routeName);
                                 },
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      state.roles[index].name,
-                                      style: TextStyle(fontSize: 16.0),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.remove_circle,
-                                        color: Colors.red,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 15.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        state.roles[index].name,
+                                        style: TextStyle(fontSize: 16.0),
                                       ),
-                                      onPressed: () {
-                                        final RoleEvent event =
-                                            RoleDelete(state.roles[index]);
-                                        BlocProvider.of<RoleBloc>(context)
-                                            .add(event);
-                                        // Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
+                                      InkWell(
+                                        onTap: () async {
+                                          await _showRoleDeleteWizard(
+                                              context, state.roles[index]);
+                                        },
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -180,5 +191,91 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 }),
           ]),
         ));
+  }
+
+  Future<void> _showRoleDeleteWizard(
+      BuildContext context, Role selectedRole) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Do you want to delete?',
+            style: TextStyle(color: Colors.redAccent),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Would you like to delete the role?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                  textStyle: TextStyle(color: Colors.grey)),
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            TextButton(
+                style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: Colors.redAccent)),
+                child: Text('Delete'),
+                onPressed: () {
+                  final RoleEvent event = RoleDelete(selectedRole);
+                  BlocProvider.of<RoleBloc>(context).add(event);
+                }),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showUserDeleteWizard(BuildContext context, User selectedUser,
+      Function handleUserDelete) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Do you want to delete?',
+            style: TextStyle(color: Colors.redAccent),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Would you like to delete the role?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                  textStyle: TextStyle(color: Colors.grey)),
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            TextButton(
+                style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: Colors.redAccent)),
+                child: Text('Delete'),
+                onPressed: () {
+                  handleUserDelete(selectedUser);
+                  Navigator.of(context).pop();
+                }),
+          ],
+        );
+      },
+    );
   }
 }

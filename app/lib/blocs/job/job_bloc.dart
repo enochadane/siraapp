@@ -18,13 +18,10 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       yield JobLoading();
       try {
         List<Job> jobs;
-        print("Lodings ${event.user.toMap()}");
-
-        if (event.user.role == "SEEKER") {
-          jobs = await jobRepository.getJobs();
-        } else {
-          print("company id is ${event.user.id}");
+        if (event.user.role == "EMPLOYER") {
           jobs = await jobRepository.getJobsByCompanyId(event.user.id);
+        } else {
+          jobs = await jobRepository.getJobs();
         }
 
         yield JobsLoadedSuccess(jobs);
@@ -37,10 +34,10 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       try {
         await jobRepository.createJob(event.job);
         var jobs;
-        if (event.user.role == "SEEKER") {
-          jobs = await jobRepository.getJobs();
-        } else {
+        if (event.user.role == "EMPLOYER") {
           jobs = await jobRepository.getJobsByCompanyId(event.user.id);
+        } else {
+          jobs = await jobRepository.getJobs();
         }
 
         yield JobsLoadedSuccess(jobs);

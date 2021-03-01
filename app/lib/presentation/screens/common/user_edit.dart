@@ -1,4 +1,5 @@
 import 'package:app/blocs/authentication/user/user.dart';
+import 'package:app/constants/colors.dart';
 import 'package:app/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,16 +62,25 @@ class _UpdateUserState extends State<UpdateUser> {
                       }
                       return null;
                     },
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                      labelText: 'userName',
-                      focusColor: Color(0xff4064f3),
-                      labelStyle: TextStyle(
-                        color: Color(0xff4064f3),
+                      isCollapsed: true,
+                      labelText: "Username",
+                      labelStyle: TextStyle(color: kBrown300),
+                      hintText: 'Enter of Username',
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Color(0xfff3f3f4),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: kBrown300, width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: kBrown300, width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
                     ),
                     onChanged: (value) {
                       setState(
@@ -80,6 +90,9 @@ class _UpdateUserState extends State<UpdateUser> {
                       );
                     },
                   ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   TextFormField(
                     initialValue: this._user['email'],
                     validator: (value) {
@@ -88,16 +101,25 @@ class _UpdateUserState extends State<UpdateUser> {
                       }
                       return null;
                     },
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                      labelText: 'Email',
-                      focusColor: Color(0xff4064f3),
-                      labelStyle: TextStyle(
-                        color: Color(0xff4064f3),
+                      isCollapsed: true,
+                      labelText: "Email",
+                      labelStyle: TextStyle(color: kBrown300),
+                      hintText: 'Enter of Email',
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Color(0xfff3f3f4),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: kBrown300, width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: kBrown300, width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
                     ),
                     onChanged: (value) {
                       setState(
@@ -107,6 +129,9 @@ class _UpdateUserState extends State<UpdateUser> {
                       );
                     },
                   ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   TextFormField(
                     // initialValue: ,
                     validator: (value) {
@@ -115,16 +140,25 @@ class _UpdateUserState extends State<UpdateUser> {
                       }
                       return null;
                     },
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                      labelText: 'Password',
-                      focusColor: Color(0xff4064f3),
-                      labelStyle: TextStyle(
-                        color: Color(0xff4064f3),
+                      isCollapsed: true,
+                      labelText: "Password",
+                      labelStyle: TextStyle(color: kBrown300),
+                      hintText: 'Enter of Password',
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Color(0xfff3f3f4),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: kBrown300, width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: kBrown300, width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
                     ),
                     onChanged: (value) {
                       setState(
@@ -134,9 +168,16 @@ class _UpdateUserState extends State<UpdateUser> {
                       );
                     },
                   ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: ElevatedButton(
+                    child: RaisedButton(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 20.0),
+                      color: kBrown400,
+                      textColor: Colors.white,
                       onPressed: () {
                         final form = _formKey.currentState;
                         if (form.validate()) {
