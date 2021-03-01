@@ -30,9 +30,10 @@ router.get("/seeker/:id/profile", requireSignIn, getSeekerProfile);
 router.get("/company/:id", getCompanyProfile);
 router.get("/seeker/:id", deleteSeekerProfile);
 router.get("/company/:id", deleteCompanyProfile);
-router.put(":id/changerole", requireSignIn, authMiddleware, adminMiddleware, changeUserRole)
-router.put(":id", requireSignIn, authMiddleware, updateUser)
-router.delete(":id", requireSignIn, authMiddleware, deleteUser)
+// router.put("/:id/changerole", requireSignIn, authMiddleware, adminMiddleware, changeUserRole)
+router.put("/:id/changerole", changeUserRole)
+router.put("/:id", requireSignIn, authMiddleware, updateUser)
+router.delete("/:id", requireSignIn, authMiddleware, deleteUser)
 router.get("/", getUsers)
 router.get("/:id", requireSignIn, getUser)
 export default router;

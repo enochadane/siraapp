@@ -6,8 +6,8 @@ const router = express.Router()
 
 router.get("/", getRoles)
 
-// router.post("/", requireSignIn, authMiddleware, adminMiddleware, createRole)
-router.post("/", createRole)
+router.post("/", requireSignIn, authMiddleware, adminMiddleware, createRole)
+// router.post("/", createRole)
 
 router.put("/:id", requireSignIn, authMiddleware, adminMiddleware, updateRole)
 

@@ -26,12 +26,14 @@ export const createRole = async (req: Request, res: Response) =>{
         name,
       });
       if (!role) {
+        console.log('role creation failed')
         return res
           .status(403)
           .json({ message: "There is an error on creating role" });
       }
       return res.status(200).json(role);
     } catch (error) {
+      console.log(`${error} error is `)
       return res
         .status(404)
         .json({ message: "There is an error on creating role" });

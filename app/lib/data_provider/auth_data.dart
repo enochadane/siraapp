@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 class AuthenticationDataProvider {
   final _baseUrl = "http://10.0.2.2:8383/api";
+  String token;
 
   Future<User> getCurrentUser() async {
     var user = getUserFromToken(await getToken()); // return null for now
@@ -91,7 +92,7 @@ class AuthenticationDataProvider {
       var username = payload['username'];
       var role = payload['role'];
       print("payload is $email $username $role");
-      User result = User(id:id, username: username, email: email, role: role);
+      User result = User(id: id, username: username, email: email, role: role);
       return result;
     } else {
       return null;

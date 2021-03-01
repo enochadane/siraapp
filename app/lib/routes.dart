@@ -3,6 +3,7 @@ import 'package:app/blocs/authentication/user/user.dart';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/blocs/role/role.dart';
 import 'package:app/blocs/role/role_bloc.dart';
+import 'package:app/main.dart';
 import 'package:app/presentation/screens/admin/create_role.dart';
 import 'package:app/presentation/screens/admin/dashboard.dart';
 import 'package:app/presentation/screens/admin/role_change.dart';
@@ -25,7 +26,7 @@ import 'repositories/repository.dart';
 class MyPageRouter {
 // this techinique is called dependency injection
   final JobRepository jobRepository = JobRepository(
-    dataProvider: JobDataProvider(),
+    dataProvider: JobDataProvider(token: TokenData.token),
   );
 
   final RoleRepository roleRepository = RoleRepository(
@@ -109,11 +110,17 @@ class MyPageRouter {
         {
           User user = settings.arguments;
           return MaterialPageRoute(
-              builder: (context) => BlocProvider<RoleBloc>(
-                create: (context) => RoleBloc(roleRepository: roleRepository)..add(RoleLoad()),
+              builder: (context) => BlocProvider.value(
+                  value: UserBloc(userRepository: userRepository),
+                  child: BlocProvider<RoleBloc>(
+                    create: (context) =>
+                        RoleBloc(roleRepository: roleRepository)
+                          ..add(RoleLoad()),
                     // create: RoleBloc(roleRepository: roleRepository),
-                    child: ChangeRole(user: user,),
-                  ));
+                    child: ChangeRole(
+                      user: user,
+                    ),
+                  )));
         }
       case SignUpPage.routeName:
         {

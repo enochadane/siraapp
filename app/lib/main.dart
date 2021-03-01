@@ -2,17 +2,22 @@ import 'package:app/blocs/authentication/authBloc.dart';
 import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/login/login.dart';
 import 'package:app/blocs/authentication/register/register_bloc.dart';
+import 'package:app/constants/colors.dart';
 import 'package:app/data_provider/auth_data.dart';
 import 'package:app/repositories/authentication_repository.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'bloc_observer.dart';
 
-void main() {
-  Bloc.observer = SimpleBlocObserver();
+class TokenData {
+  static String token;
+}
 
+void main() async {
+  Bloc.observer = SimpleBlocObserver();
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository(
           authenticationDataProvider: AuthenticationDataProvider());
@@ -56,6 +61,7 @@ class App extends StatelessWidget {
             title: 'Job Portal',
             debugShowCheckedModeBanner: false,
             initialRoute: "/",
+            theme: ThemeData(primaryColor: kBrown500, accentColor: kBrown300),
             onGenerateRoute: MyPageRouter().onGenerateRoute,
             // home: AdminDashboard(),
           ),

@@ -19,7 +19,12 @@ class JobDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('${user.id} from Job details');
+    handleDelete() {
+      context.read<JobBloc>().add(JobDelete(selectedJob));
+      // BlocProvider.of<JobBloc>(context).add(JobDelete(selectedJob));
+      Navigator.of(context).pop();
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: kSurfaceWhite,
@@ -69,7 +74,7 @@ class JobDetails extends StatelessWidget {
                               InkWell(
                                   onTap: () async {
                                     await _showDeleteWizard(
-                                        context, selectedJob);
+                                        context, selectedJob, handleDelete);
                                     Navigator.pop(context);
                                   },
                                   child: Icon(Icons.delete)),
@@ -102,7 +107,6 @@ class JobDetails extends StatelessWidget {
                     SizedBox(height: 20),
                     Text(
                       selectedJob.description,
-                      // style: TextStyle(fontSize: 18.0, color: kGrayText),
                     ),
                   ],
                 ),
@@ -169,7 +173,8 @@ class JobDetails extends StatelessWidget {
     );
   }
 
-  Future<void> _showDeleteWizard(BuildContext context, Job selectedJob) async {
+  Future<void> _showDeleteWizard(
+      BuildContext context, Job selectedJob, Function handleDelete) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -198,14 +203,10 @@ class JobDetails extends StatelessWidget {
               width: 5,
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.redAccent)),
-              child: Text('Delete'),
-              onPressed: () {
-                context.read<JobBloc>().add(JobDelete(selectedJob));
-                Navigator.of(context).pop();
-              },
-            ),
+                style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: Colors.redAccent)),
+                child: Text('Delete'),
+                onPressed: handleDelete),
           ],
         );
       },

@@ -26,8 +26,11 @@ class _ChangeRoleState extends State<ChangeRole> {
   Role selectedRole;
 
   buildRoleDropDown(List<Role> roles) {
+    print("role is ${widget.user.toJson()}");
     if (selectedRole == null) {
-      selectedRole = roles[0];
+      selectedRole = roles.firstWhere(
+          (element) => element.name == widget.user.role,
+          orElse: () => Role(id: "23092039203", name: "ADMIN"));
     }
     return Container(
       child: ListTile(
