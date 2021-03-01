@@ -9,6 +9,10 @@ import 'package:app/blocs/authentication/authBloc.dart';
 import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/user_edit.dart';
+import 'package:app/blocs/authentication/authBloc.dart';
+import 'package:app/blocs/authentication/authentication.dart';
+import 'package:app/presentation/screens/common/common.dart';
+import 'package:app/presentation/screens/common/user_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -76,7 +80,7 @@ class MyDrawer extends StatelessWidget {
               leading: Icon(Icons.logout),
               title: Text(
                 'Logout',
-                style: TextStyle(
+               style: TextStyle(
                   fontSize: 18.0,
                 ),
               ),
@@ -92,10 +96,7 @@ class MyDrawer extends StatelessWidget {
             Spacer(flex: 1),
             ListTile(
               leading: Icon(Icons.close_outlined),
-              title: Text(
-                'Close',
-                style: TextStyle(fontSize: 18.0),
-              ),
+              title: Text('Close', style: TextStyle(fontSize: 18.0),),
               onTap: () {
                 Navigator.pop(context);
               },
