@@ -17,10 +17,7 @@ class JobRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FaIcon(
-              FontAwesomeIcons.addressBook,
-              size: 80,
-            ),
+            Image.asset('assets/images/job.png', scale: 1.0, height: 100.0, width: 80.0,),
             SizedBox(
               width: 30.0,
             ),

@@ -9,7 +9,6 @@ import 'package:app/repositories/authentication_repository.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'bloc_observer.dart';
 
@@ -49,9 +48,8 @@ class App extends StatelessWidget {
                       ..add(AppLoaded())),
             BlocProvider<LoginBloc>(
                 create: (context) => LoginBloc(
-                    authenticationBloc:
                         AuthenticationBloc(authenticationRepository),
-                    authenticationRepository: this.authenticationRepository)),
+                    this.authenticationRepository)),
             BlocProvider<RegisterBloc>(
                 create: (context) => RegisterBloc(
                     authenticationBloc:

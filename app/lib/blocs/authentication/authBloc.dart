@@ -29,6 +29,8 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapUserLoggedInToState(
       UserLoggedIn event) async* {
+    await Future.delayed(Duration(milliseconds: 500)); // a simulated delay
+
     if (event.user != null) {
       yield AuthenticationAuthenticated(user: event.user);
     } else {

@@ -57,7 +57,9 @@ class MyPageRouter {
           return MaterialPageRoute(builder: (context) {
             return BlocConsumer<AuthenticationBloc, AuthenticationState>(
                 listener: (context, state) {
+              print('listener state '+state.toString());
             }, builder: (context, state) {
+              print("print state in route generate " + state.toString());
               if (state is AuthenticationAuthenticated) {
                 print("${state.user.role} role");
                 if (state.user.role == "ADMIN") {
