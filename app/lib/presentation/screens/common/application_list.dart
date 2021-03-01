@@ -7,17 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../routes.dart';
 
 class ApplicationList extends StatelessWidget {
-  static const route = '/applications';
+  static const route = 'applications';
+
+  final ApplicationArgument args;
+
+  ApplicationList({Key key, this.args}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final ApplicationLoad event = ApplicationLoad(
-      // User(
-      //   id: '602ab8c2dade2735baf65109',
-      //   username: 'Company Name',
-      //   email: 'email@email.com',
-      //   role: 'EMPLOYER',
-      // ),
-    );
+  
+    final ApplicationLoad event = ApplicationLoad(job: args.job, user: args.user);
     BlocProvider.of<ApplicationBloc>(context).add(event);
     return Scaffold(
       appBar: AppBar(

@@ -1,4 +1,6 @@
 import 'package:app/models/application.dart';
+import 'package:app/models/job.dart';
+import 'package:app/models/user.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ApplicationEvent extends Equatable {
@@ -6,13 +8,13 @@ abstract class ApplicationEvent extends Equatable {
 }
 
 class ApplicationLoad extends ApplicationEvent {
-  // final User user;
-  // const ApplicationLoad(this.user);
+  final Job job;
+  final User user;
+  const ApplicationLoad({this.job, this.user});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [job, user];
 
-  // List<Object> get props => [user];
 }
 
 class ApplicationCreate extends ApplicationEvent {

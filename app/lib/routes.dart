@@ -130,10 +130,15 @@ class MyPageRouter {
         }
       case ApplicationList.route:
         {
+          ApplicationArgument args = settings.arguments;
+          print('$args from routesttttttttttttttssssssssssssssssss');
           return MaterialPageRoute(
             builder: (context) => BlocProvider<ApplicationBloc>.value(
-              value: ApplicationBloc(applicationRepository: applicationRepository),
-              child: ApplicationList(),
+              value:
+                  ApplicationBloc(applicationRepository: applicationRepository),
+              child: ApplicationList(
+                args: args,
+              ),
             ),
           );
         }
@@ -142,10 +147,13 @@ class MyPageRouter {
         {
           Application application = settings.arguments;
           return MaterialPageRoute(
-            builder: (context) => ApplicationDetails(
-              application: application,
-            ),
-          );
+              builder: (context) => BlocProvider<ApplicationBloc>.value(
+                    value: ApplicationBloc(
+                        applicationRepository: applicationRepository),
+                    child: ApplicationDetails(
+                      application: application,
+                    ),
+                  ));
         }
         break;
       case AddUpdateApplication.route:

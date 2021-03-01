@@ -48,8 +48,23 @@ class ApplicationDataProvider {
     }
   }
 
-  Future<List<Application>> getApplications(String companyId) async {
-    final response = await httpClient.get('$_baseUrl/company/$companyId');
+  Future<List<Application>> getApplications(String jobId) async {
+    final response = await httpClient.get('$_baseUrl/job/$jobId');
+    if (response.statusCode == 200) {
+      final applications = jsonDecode(response.body) as List;
+      return applications
+          .map((application) => Application.fromJson(application))
+          .toList();
+    } else {
+      throw Exception('Failed to load applications');
+    }
+  }
+
+  Future<List<Application>> getApplicationsWithApplicantId(
+      String applicantId) async {
+    print('$applicantId form application data provider **********');
+
+    final response = await httpClient.get('$_baseUrl/user/$applicantId');
     if (response.statusCode == 200) {
       final applications = jsonDecode(response.body) as List;
       return applications
@@ -74,17 +89,16 @@ class ApplicationDataProvider {
   }
 
   Future<void> updateApplication(Application application) async {
-    print(application.id);
+    final token = await getTokenFromStorage();
+    print('${application.applicantId} from update data provider ***************');
     final http.Response response = await httpClient.patch(
       '$_baseUrl/${application.id}',
       headers: <String, String>{
+        "authorization": "Bearer $token",
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
         'id': application.id,
-        'job_id': '602ab56bdade2735baf65105',
-        'applicant_id': '602ab91cdade2735baf6510c',
-        'company_id': '602ab8c2dade2735baf65109',
         'first_name': application.firstName,
         'last_name': application.lastName,
         'phone': application.phone,

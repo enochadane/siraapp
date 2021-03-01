@@ -156,14 +156,21 @@ class JobDetails extends StatelessWidget {
                         child: Text("Apply", style: TextStyle(fontSize: 18.0)),
                       ))
                   : Container(
-                      child: Row(
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed(ApplicationList.route),
-                            child: Text('View Applications'),
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context)
+                                  .pushNamed(ApplicationList.route, arguments: ApplicationArgument(
+                                    job: this.selectedJob,
+                                    user: this.user,
+                                  )),
+                              child: Text('View Applications'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),  
             ],

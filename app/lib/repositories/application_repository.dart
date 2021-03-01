@@ -12,8 +12,13 @@ class ApplicationRepository {
     return await dataProvider.createApplication(application);
   }
 
-  Future<List<Application>> getApplications(String companyId) async {
-    return await dataProvider.getApplications(companyId);
+  Future<List<Application>> getApplications(String jobId) async {
+    return await dataProvider.getApplications(jobId);
+  }
+
+  Future<List<Application>> getApplicationsWithApplicantId(
+      String applicantId) async {
+    return await dataProvider.getApplicationsWithApplicantId(applicantId);
   }
 
   Future<void> updateApplication(Application application) async {

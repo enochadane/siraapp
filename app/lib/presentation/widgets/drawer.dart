@@ -1,11 +1,16 @@
+import 'package:app/blocs/authentication/authentication.dart';
+import 'package:app/models/job.dart';
+import 'package:app/models/user.dart';
 import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/user_edit.dart';
 import 'package:app/repositories/authentication_repository.dart';
+import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key key}) : super(key: key);
+  final User user;
+  const MyDrawer({Key key, this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +24,23 @@ class MyDrawer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             createDrawerHeader(),
-            ListTile(
-              title: Text('My Applications'),
-              onTap: (){},
+            BlocConsumer<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                // TODO: implement listener
+              },
+              builder: (context, state) {
+                if (state is AuthenticationAuthenticated) {
+                  return ListTile(
+                    title: (state.user.role == "SEEKER")? Text('My Applications'): Container(),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(ApplicationList.route,
+                          arguments: ApplicationArgument(
+                            user: state.user,
+                          ));
+                    },
+                  );
+                }
+              },
             ),
             ListTile(
               title: Text('Edit Account'),
