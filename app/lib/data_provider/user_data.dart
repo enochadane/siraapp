@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 class UserDataProvider {
   final _baseUrl = 'http://10.0.2.2:8383/api';
+  http.Client httpClient;
 
   Future<User> createUser(User user) async {
     final response = await http.post(
@@ -40,7 +41,26 @@ class UserDataProvider {
     }
   }
 
-  Future<User> updateUserRole(String userId, String roleId ) async {
+  Future<void> updateUser(User user) async {
+    final http.Response response = await httpClient.patch(
+      '$_baseUrl/${user.id}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+        'password': user.password,
+      }),
+    );
+
+    if (response.statusCode != 204) {
+      throw Exception('Failed to update user');
+    }
+  }
+
+  Future<User> updateUserRole(String userId, String roleId) async {
     final response = await http.put(
       '$_baseUrl/users/$userId/changerole',
       headers: <String, String>{

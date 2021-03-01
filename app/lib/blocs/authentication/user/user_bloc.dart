@@ -34,7 +34,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     }
 
-   if (event is UserRoleUpdate) {
+    if (event is UserUpdate) {
+      try {
+        await userRepository.updateUser(event.user);
+        final users = await userRepository.getUsers();
+        yield UserLoadSuccess(users);
+      } catch (_) {
+        yield UserOperationFailure();
+      }
+    }
+
+    if (event is UserRoleUpdate) {
       try {
         await userRepository.updateUserRole(event.userId, event.roleId);
         final users = await userRepository.getUsers();
