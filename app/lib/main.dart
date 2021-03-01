@@ -2,6 +2,7 @@ import 'package:app/blocs/authentication/authBloc.dart';
 import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/login/login.dart';
 import 'package:app/blocs/authentication/register/register_bloc.dart';
+import 'package:app/constants/colors.dart';
 import 'package:app/data_provider/auth_data.dart';
 import 'package:app/repositories/authentication_repository.dart';
 import 'package:app/routes.dart';
@@ -15,16 +16,8 @@ class TokenData {
   static String token;
 }
 
-Future<String> getToken() async {
-  final storage = new FlutterSecureStorage();
-  var token = await storage.read(key: "jwt_token");
-  return "'Bearer $token';";
-}
-
 void main() async {
   Bloc.observer = SimpleBlocObserver();
-  WidgetsFlutterBinding.ensureInitialized();
-  TokenData.token = await getToken();
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository(
           authenticationDataProvider: AuthenticationDataProvider());
@@ -68,6 +61,7 @@ class App extends StatelessWidget {
             title: 'Job Portal',
             debugShowCheckedModeBanner: false,
             initialRoute: "/",
+            theme: ThemeData(primaryColor: kBrown500, accentColor: kBrown300),
             onGenerateRoute: MyPageRouter().onGenerateRoute,
             // home: AdminDashboard(),
           ),

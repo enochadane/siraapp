@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/models/job.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import "package:http/http.dart" as http;
 
 class JobDataProvider {
@@ -10,13 +11,18 @@ class JobDataProvider {
   final _baseUrl = "http://10.0.2.2:8383/api";
 
   final http.Client httpClient;
-  final String token;
+  String token;
 
   JobDataProvider({this.httpClient, this.token}) : super();
 
+  Future<String> getToken() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: "jwt_token");
+    return "Bearer $token";
+  }
 
   Future<Job> createJob(Job job) async {
-    // final token = await getTokenFromStorage();
+    token = await getToken();
 
     var data = {
       "name": job.name,
@@ -33,7 +39,7 @@ class JobDataProvider {
     try {
       final response = await http.post("$_baseUrl/jobs",
           headers: <String, String>{
-            "authorization": "Bearer $token",
+            "authorization": "$token",
             'Content-Type': 'application/json',
           },
           body: jsonEncode(data));
@@ -110,6 +116,8 @@ class JobDataProvider {
   }
 
   Future<Job> updateJob(String id, Job job) async {
+    token = await getToken();
+
     var data = {
       "name": job.name,
       "description": job.description,
@@ -144,6 +152,8 @@ class JobDataProvider {
   }
 
   Future<void> deleteJob(String id) async {
+    token = await getToken();
+
     final response = await http.delete(
       "$_baseUrl/jobs/$id",
       headers: <String, String>{

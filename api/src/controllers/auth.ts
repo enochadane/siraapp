@@ -74,9 +74,7 @@ export const signIn = async (req: any, res: any) => {
   const secret = process.env.JWT_SECRET || "sample secret";
 
   try {
-    console.log("the password is Password", password);
     models.User.findOne({ email }).populate("role_id", "_id name").exec(async (_err, user: IUser | null) => {
-      console.log("user is ", user);
       if (!user) {
         return res.status(400).json({ error: "User doesn't exist" });
       }

@@ -10,14 +10,19 @@ import 'create_edit_job.dart';
 
 class JobDetails extends StatelessWidget {
   static const routeName = "/jobs/single";
-    final Job selectedJob;
-    final User user;
+  final Job selectedJob;
+  final User user;
 
   const JobDetails({Key key, this.selectedJob, this.user}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
+    handleDelete() {
+      context.read<JobBloc>().add(JobDelete(selectedJob));
+      // BlocProvider.of<JobBloc>(context).add(JobDelete(selectedJob));
+      Navigator.of(context).pop();
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: kSurfaceWhite,
@@ -34,8 +39,8 @@ class JobDetails extends StatelessWidget {
           }
         }, builder: (BuildContext context, JobState state) {
           // if (state is JobsLoadedSuccess) {
-            // selectedJob = state.jobs
-                // .firstWhere((element) => selectedJob.id == element.id);
+          // selectedJob = state.jobs
+          // .firstWhere((element) => selectedJob.id == element.id);
           // }
           return Column(
             children: [
@@ -67,7 +72,7 @@ class JobDetails extends StatelessWidget {
                               InkWell(
                                   onTap: () async {
                                     await _showDeleteWizard(
-                                        context, selectedJob);
+                                        context, selectedJob, handleDelete);
                                     Navigator.pop(context);
                                   },
                                   child: Icon(Icons.delete)),
@@ -100,7 +105,6 @@ class JobDetails extends StatelessWidget {
                     SizedBox(height: 20),
                     Text(
                       selectedJob.description,
-                      // style: TextStyle(fontSize: 18.0, color: kGrayText),
                     ),
                   ],
                 ),
@@ -152,7 +156,8 @@ class JobDetails extends StatelessWidget {
     );
   }
 
-  Future<void> _showDeleteWizard(BuildContext context, Job selectedJob) async {
+  Future<void> _showDeleteWizard(
+      BuildContext context, Job selectedJob, Function handleDelete) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -181,14 +186,10 @@ class JobDetails extends StatelessWidget {
               width: 5,
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.redAccent)),
-              child: Text('Delete'),
-              onPressed: () {
-                context.read<JobBloc>().add(JobDelete(selectedJob));
-                Navigator.of(context).pop();
-              },
-            ),
+                style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: Colors.redAccent)),
+                child: Text('Delete'),
+                onPressed: handleDelete),
           ],
         );
       },
