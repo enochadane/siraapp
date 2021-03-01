@@ -75,18 +75,6 @@ export const applyForJob = async (req: Request, res: Response) => {
       other_info,
     });
 
-    // const newApplication = new models.Application();
-    // newApplication.applicant_id = applicant_id;
-    // newApplication.job_id = job_id;
-    // newApplication.company_id = company_id;
-    // newApplication.first_name = first_name;
-    // newApplication.last_name = last_name;
-    // newApplication.phone = phone;
-    // newApplication.email = email;
-    // newApplication.other_info = other_info;
-
-    // const application = newApplication.save();
-
     if (!application) {
       return res
         .status(403)
@@ -98,14 +86,14 @@ export const applyForJob = async (req: Request, res: Response) => {
   }
 };
 
-export const getApplicationWithCompanyId = async (
+export const getApplicationsWithJobId = async (
   req: Request,
   res: Response
 ) => {
-  const company_id = req.params.company_id;
+  const job_id = req.params.job_id;
 
   try {
-    const applications = await models.Application.find({ company_id });
+    const applications = await models.Application.find({ job_id });
 
     if (!applications) {
       return res
@@ -116,6 +104,27 @@ export const getApplicationWithCompanyId = async (
     return res.status(200).json(applications);
   } catch (error) {
     return res.status(404).json({ message: "There is an error on applicaton" });
+  }
+};
+
+export const getApplicationsWithApplicantId = async (
+  req: Request,
+  res: Response
+) => {
+  const applicant_id = req.params.applicant_id;
+
+  try {
+    const applications = await models.Application.find({ applicant_id });
+
+    if (!applications) {
+      return res
+      .status(404)
+      .json({message: "Can't find applications with the given applicant id"});
+    }
+
+    return res.status(200).json(applications);
+  } catch (error) {
+    return res.status(404).json({ message: "Error in fetching application"});
   }
 };
 
@@ -135,9 +144,6 @@ export const updateApplication = async (req: Request | any, res: Response) => {
     const application_id = req.params.id;
     const application = await models.Application.findByIdAndUpdate(
       application_id, {
-        job_id,
-        applicant_id,
-        company_id,
         first_name,
         last_name,
         phone,

@@ -1,3 +1,4 @@
+import 'package:app/models/application.dart';
 import 'package:app/repositories/application_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,9 +17,16 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
     if (event is ApplicationLoad) {
       yield ApplicationLoading();
       try {
-        // final applications =
-            // await applicationRepository.getApplications(event.user.id);
-        // yield ApplicationLoadSuccess(applications);
+        List<Application> applications;
+        print('${event.user.id} from applicationbloc **************************************************************************');
+        if (event.user.role == "SEEKER") {
+          applications = await applicationRepository
+              .getApplicationsWithApplicantId(event.user.id);
+        } else if (event.user.role == "EMPLOYER") {
+          applications =
+              await applicationRepository.getApplications(event.job.id);
+        }
+        yield ApplicationLoadSuccess(applications);
       } catch (_) {
         yield ApplicationOperationFailure();
       }
@@ -50,7 +58,7 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
       try {
         await applicationRepository.deleteApplication(event.application.id);
         final applications = await applicationRepository
-            .getApplications(event.application.companyId);
+            .getApplications(event.application.applicantId);
         yield ApplicationLoadSuccess(applications);
       } catch (_) {
         yield ApplicationOperationFailure();

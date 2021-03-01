@@ -16,8 +16,7 @@ class AddUpdateApplication extends StatefulWidget {
   // final Job job;
   // final User user;
 
-  AddUpdateApplication({Key key, this.args})
-      : super(key: key);
+  AddUpdateApplication({Key key, this.args}) : super(key: key);
 
   @override
   _AddUpdateApplicationState createState() => _AddUpdateApplicationState();
@@ -218,7 +217,7 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                             }
                           }
                         },
-                        child: Text('Submit'),
+                        child: widget.args.edit? Text('Update') : Text('Submit'),
                       );
                     },
                   ),

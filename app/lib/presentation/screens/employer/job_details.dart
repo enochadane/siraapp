@@ -135,7 +135,7 @@ class JobDetails extends StatelessWidget {
                 height: 20.0,
               ),
               (user.role != "EMPLOYER")
-                  ? (user.role != "SEEKER")
+                  ? (user.role == "SEEKER")
                       ? RaisedButton(
                           padding: EdgeInsets.symmetric(
                               horizontal: 30.0, vertical: 5.0),
@@ -175,21 +175,21 @@ class JobDetails extends StatelessWidget {
                                 style: TextStyle(fontSize: 18.0)),
                           ))
                   : Container(
-                      color: kBrown400,
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed(ApplicationList.route),
-                            child: Text(
-                              'View Applications',
-                              style: TextStyle(color: Colors.white),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context)
+                                  .pushNamed(ApplicationList.route, arguments: ApplicationArgument(
+                                    job: this.selectedJob,
+                                    user: this.user,
+                                  )),
+                              child: Text('View Applications'),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
             ],

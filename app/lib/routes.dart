@@ -56,44 +56,44 @@ class MyPageRouter {
         {
           return MaterialPageRoute(builder: (context) {
             return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-                listener: (context, state) {
-              print('listener state '+state.toString());
-            }, builder: (context, state) {
-              print("print state in route generate " + state.toString());
-              if (state is AuthenticationAuthenticated) {
-                print("${state.user.role} role");
-                if (state.user.role == "ADMIN") {
-                  return MultiBlocProvider(providers: [
-                    BlocProvider<UserBloc>(
+                listener: (context, state) {},
+                builder: (context, state) {
+                  if (state is AuthenticationAuthenticated) {
+                    print("${state.user.role} role");
+                    if (state.user.role == "ADMIN") {
+                      return MultiBlocProvider(providers: [
+                        BlocProvider<UserBloc>(
+                            create: (context) =>
+                                UserBloc(userRepository: userRepository)
+                                  ..add(UserLoad())),
+                        BlocProvider<RoleBloc>(
+                            create: (context) =>
+                                RoleBloc(roleRepository: roleRepository)
+                                  ..add(RoleLoad())),
+                      ], child: AdminDashboard());
+                    } else if (state.user.role == "EMPLOYER") {
+                      return BlocProvider<JobBloc>(
                         create: (context) =>
-                            UserBloc(userRepository: userRepository)
-                              ..add(UserLoad())),
-                    BlocProvider<RoleBloc>(
+                            JobBloc(jobRepository: jobRepository)
+                              ..add(JobLoad(user: state.user)),
+                        child: HomePage(
+                          user: state.user,
+                        ),
+                      );
+                    } else {
+                      return BlocProvider<JobBloc>(
                         create: (context) =>
-                            RoleBloc(roleRepository: roleRepository)
-                              ..add(RoleLoad())),
-                  ], child: AdminDashboard());
-                } else if (state.user.role == "EMPLOYER") {
-                  return BlocProvider<JobBloc>(
-                    create: (context) => JobBloc(jobRepository: jobRepository)
-                      ..add(JobLoad(user: state.user)),
-                    child: HomePage(
-                      user: state.user,
-                    ),
-                  );
-                } else {
-                  return BlocProvider<JobBloc>(
-                    create: (context) => JobBloc(jobRepository: jobRepository)
-                      ..add(JobLoad(user: state.user)),
-                    child: HomePage(
-                      user: state.user,
-                    ),
-                  );
-                }
-              }
-              // otherwise show login page
-              return LoginPage();
-            });
+                            JobBloc(jobRepository: jobRepository)
+                              ..add(JobLoad(user: state.user)),
+                        child: HomePage(
+                          user: state.user,
+                        ),
+                      );
+                    }
+                  }
+                  // otherwise show login page
+                  return LoginPage();
+                });
           });
         }
       case LoginPage.routeName:
@@ -142,19 +142,27 @@ class MyPageRouter {
             builder: (context) => BlocProvider<ApplicationBloc>.value(
               value:
                   ApplicationBloc(applicationRepository: applicationRepository),
-              child: ApplicationList(),
+              child: ApplicationList(
+                args: args,
+              ),
             ),
           );
         }
         break;
       case ApplicationDetails.route:
         {
-          Application application = settings.arguments;
+          // Application application = settings.arguments;
+          ApplicationArgument args = settings.arguments;
           return MaterialPageRoute(
-            builder: (context) => ApplicationDetails(
-              application: application,
-            ),
-          );
+              builder: (context) => BlocProvider<ApplicationBloc>.value(
+                    value: ApplicationBloc(
+                        applicationRepository: applicationRepository),
+                    child: ApplicationDetails(
+                      application: args.application,
+                      job: args.job,
+                      user: args.user,
+                    ),
+                  ));
         }
         break;
       case AddUpdateApplication.route:
