@@ -5,7 +5,7 @@ import { runValidation } from "../validators"
 import {applicantFormValidator} from "../validators/application";
 const router = express.Router()
 
-router.post("/", applicantFormValidator, runValidation,requireSignIn, applyForJob)
+router.post("/", applicantFormValidator,requireSignIn, applyForJob)
 router.get("/company/:company_id", getApplicationWithCompanyId)
 router.get("/:id", getApplication)
 router.patch("/:id", applicantFormValidator, runValidation,requireSignIn, updateApplication)

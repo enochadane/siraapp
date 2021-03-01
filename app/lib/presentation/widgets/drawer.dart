@@ -20,6 +20,31 @@ class MyDrawer extends StatelessWidget {
           children: <Widget>[
             createDrawerHeader(),
             ListTile(
+              title: Text('My Applications'),
+              onTap: (){},
+            ),
+            ListTile(
+              title: Text('Edit Account'),
+              onTap: () {
+                Navigator.of(context).pushNamed(UpdateUser.routeName);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Remove Account',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              title: Text('Close'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
               title: Text(
                 'Logout',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -29,28 +54,6 @@ class MyDrawer extends StatelessWidget {
                     .logOut();
                 Navigator.pushNamedAndRemoveUntil(
                     context, LoginPage.routeName, (route) => false);
-              },
-            ),
-            ListTile(
-              title: Text('Close'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Edit Account'),
-              onTap: () {
-                Navigator.of(context).pushNamed(UpdateUser.routeName);
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.remove_circle,
-                color: Colors.red,
-              ),
-              title: Text('Remove Account'),
-              onTap: () {
-                
               },
             ),
           ],

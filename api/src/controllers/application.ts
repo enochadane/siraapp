@@ -60,15 +60,32 @@ export const getApplication = async (req: Request, res: Response) => {
 };
 
 export const applyForJob = async (req: Request, res: Response) => {
-  const { applicant_id, job_id, company_id, other_info } = req.body;
+  console.log('in the post apply function');
+  const { applicant_id, job_id, company_id, first_name, last_name, phone, email, other_info } = req.body;
 
   try {
     const application = await models.Application.create({
       applicant_id,
       job_id,
-      other_info,
       company_id,
+      first_name,
+      last_name,
+      phone,
+      email,
+      other_info,
     });
+
+    // const newApplication = new models.Application();
+    // newApplication.applicant_id = applicant_id;
+    // newApplication.job_id = job_id;
+    // newApplication.company_id = company_id;
+    // newApplication.first_name = first_name;
+    // newApplication.last_name = last_name;
+    // newApplication.phone = phone;
+    // newApplication.email = email;
+    // newApplication.other_info = other_info;
+
+    // const application = newApplication.save();
 
     if (!application) {
       return res

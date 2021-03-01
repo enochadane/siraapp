@@ -19,7 +19,9 @@ class ApplicationDataProvider {
   }
 
   Future<Application> createApplication(Application application) async {
-    final token = getTokenFromStorage();
+    final token = await getTokenFromStorage();
+    print('$token this is my tokeeeeeennnnnnnnnnnnnnnnnnn');
+    // token.then((value) => print(value));
 
     final response = await httpClient.post(
       '$_baseUrl',
