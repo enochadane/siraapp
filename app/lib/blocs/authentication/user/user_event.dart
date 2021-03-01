@@ -19,6 +19,15 @@ class UserCreate extends UserEvent {
   List<Object> get props => [user];
 }
 
+class UserUpdate extends UserEvent {
+  final User user;
+
+  const UserUpdate(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
 class UserRoleUpdate extends UserEvent {
   final String userId;
   final String roleId;

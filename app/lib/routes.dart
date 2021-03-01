@@ -1,3 +1,4 @@
+import 'package:app/blocs/application/application.dart';
 import 'package:app/blocs/authentication/user/user.dart';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/blocs/role/role.dart';
@@ -15,6 +16,7 @@ import 'package:app/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 import 'blocs/authentication/authentication.dart';
 import 'data_provider/data_provider.dart';
@@ -37,6 +39,12 @@ class MyPageRouter {
 
   final JobCategoryRepository jobCategoryRepository = JobCategoryRepository(
     dataProvider: JobCategoryDataProvider(),
+  );
+
+  final ApplicationRepository applicationRepository = ApplicationRepository(
+    dataProvider: ApplicationDataProvider(
+      httpClient: http.Client(),
+    ),
   );
 
   Route onGenerateRoute(RouteSettings settings) {
@@ -123,7 +131,10 @@ class MyPageRouter {
       case ApplicationList.route:
         {
           return MaterialPageRoute(
-            builder: (context) => ApplicationList(),
+            builder: (context) => BlocProvider<ApplicationBloc>.value(
+              value: ApplicationBloc(applicationRepository: applicationRepository),
+              child: ApplicationList(),
+            ),
           );
         }
         break;
@@ -140,9 +151,14 @@ class MyPageRouter {
       case AddUpdateApplication.route:
         {
           ApplicationArgument args = settings.arguments;
+          // print('${args.user.id} from routesttttttttttttttssssssssssssssssss');
           return MaterialPageRoute(
-            builder: (context) => AddUpdateApplication(
-              args: args,
+            builder: (context) => BlocProvider<ApplicationBloc>.value(
+              value:
+                  ApplicationBloc(applicationRepository: applicationRepository),
+              child: AddUpdateApplication(
+                args: args,
+              ),
             ),
           );
         }
@@ -164,12 +180,13 @@ class MyPageRouter {
           SingleJobDetailArguments args = settings.arguments;
           print("args are ${args.user.username}");
           return MaterialPageRoute(
-              builder: (context) => BlocProvider<JobBloc>.value(
-                  value: JobBloc(jobRepository: jobRepository),
-                  child: (JobDetails(
-                    user: args.user,
-                    selectedJob: args.selectedJob,
-                  ))));
+            builder: (context) => BlocProvider<JobBloc>.value(
+                value: JobBloc(jobRepository: jobRepository),
+                child: (JobDetails(
+                  user: args.user,
+                  selectedJob: args.selectedJob,
+                ))),
+          );
         }
       default:
         {
@@ -181,8 +198,10 @@ class MyPageRouter {
 
 class ApplicationArgument {
   final Application application;
+  final Job job;
+  final User user;
   final bool edit;
-  ApplicationArgument({this.application, this.edit});
+  ApplicationArgument({this.application, this.edit, this.job, this.user});
 }
 
 class JobDetailArgument {

@@ -1,4 +1,5 @@
 import 'package:app/presentation/screens/common/common.dart';
+import 'package:app/presentation/screens/common/user_edit.dart';
 import 'package:app/repositories/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +36,23 @@ class MyDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
               },
-            )
+            ),
+            ListTile(
+              title: Text('Edit Account'),
+              onTap: () {
+                Navigator.of(context).pushNamed(UpdateUser.routeName);
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.remove_circle,
+                color: Colors.red,
+              ),
+              title: Text('Remove Account'),
+              onTap: () {
+                
+              },
+            ),
           ],
         ),
       ),

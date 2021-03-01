@@ -12,13 +12,16 @@ class UserRepository {
     return await dataProvider.createUser(user);
   }
 
-
   Future<User> updateUserRole(String userId, String roleId) async {
     return await dataProvider.updateUserRole(userId, roleId);
   }
 
   Future<List<User>> getUsers() async {
     return await dataProvider.getUsers();
+  }
+
+  Future<void> updateUser(User user) async {
+    await dataProvider.updateUser(user);
   }
 
   Future<void> deleteUser(String id) async {

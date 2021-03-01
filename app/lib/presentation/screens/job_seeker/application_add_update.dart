@@ -1,6 +1,10 @@
 import 'package:app/blocs/application/application.dart';
+import 'package:app/blocs/authentication/authentication.dart';
+import 'package:app/data_provider/auth_data.dart';
 import 'package:app/models/models.dart';
 import 'package:app/presentation/screens/common/application_list.dart';
+import 'package:app/presentation/screens/common/home_page.dart';
+import 'package:app/repositories/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,8 +13,11 @@ import '../../../routes.dart';
 class AddUpdateApplication extends StatefulWidget {
   static const route = 'applicationAddUpdate';
   final ApplicationArgument args;
+  // final Job job;
+  // final User user;
 
-  AddUpdateApplication({this.args});
+  AddUpdateApplication({Key key, this.args})
+      : super(key: key);
 
   @override
   _AddUpdateApplicationState createState() => _AddUpdateApplicationState();
@@ -168,38 +175,52 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      final form = _formKey.currentState;
-                      if (form.validate()) {
-                        form.save();
-                        final ApplicationEvent event = widget.args.edit
-                            ? ApplicationUpdate(
-                                Application(
-                                  id: widget.args.application.id,
-                                  firstName: this._application['firstName'],
-                                  lastName: this._application['lastName'],
-                                  phone: this._application['phone'],
-                                  email: this._application['email'],
-                                  message: this._application['message'],
-                                ),
-                              )
-                            : ApplicationCreate(
-                                Application(
-                                  firstName: this._application['firstName'],
-                                  lastName: this._application['lastName'],
-                                  phone: this._application['phone'],
-                                  email: this._application['email'],
-                                  message: this._application['message'],
-                                ),
-                              );
-                        BlocProvider.of<ApplicationBloc>(context).add(event);
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            ApplicationList.route, (route) => false);
-                      }
+                  child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+                    listener: (context, state) {
+                      // TODO: implement listener
                     },
-                    icon: Icon(Icons.save),
-                    label: Text('SAVE'),
+                    builder: (context, state) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          final form = _formKey.currentState;
+                          if (form.validate()) {
+                            if (state is AuthenticationAuthenticated) {
+                              form.save();
+                              final ApplicationEvent event = widget.args.edit
+                                  ? ApplicationUpdate(
+                                      Application(
+                                        id: widget.args.application.id,
+                                        firstName:
+                                            this._application['firstName'],
+                                        lastName: this._application['lastName'],
+                                        phone: this._application['phone'],
+                                        email: this._application['email'],
+                                        message: this._application['message'],
+                                      ),
+                                    )
+                                  : ApplicationCreate(
+                                      Application(
+                                        applicantId: state.user.id,
+                                        companyId: widget.args.job.companyId,
+                                        jobId: widget.args.job.id,
+                                        firstName:
+                                            this._application['firstName'],
+                                        lastName: this._application['lastName'],
+                                        phone: this._application['phone'],
+                                        email: this._application['email'],
+                                        message: this._application['message'],
+                                      ),
+                                    );
+                              BlocProvider.of<ApplicationBloc>(context)
+                                  .add(event);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  HomePage.routeName, (route) => false);
+                            }
+                          }
+                        },
+                        child: Text('Submit'),
+                      );
+                    },
                   ),
                 ),
               ],
