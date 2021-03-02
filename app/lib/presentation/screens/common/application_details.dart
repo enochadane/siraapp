@@ -12,19 +12,20 @@ import 'application_list.dart';
 
 class ApplicationDetails extends StatelessWidget {
   static const route = 'applicationDetails';
-  final Application application;
-  final User user;
-  final Job job;
+  final ApplicationArgument args;
+  // final Application application;
+  // final User user;
+  // final Job job;
 
-  ApplicationDetails({@required this.application, this.user, this.job});
+  ApplicationDetails({@required this.args});
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ApplicationBloc, ApplicationState>(
       listener: (context, state) {
         if (state is ApplicationOperationFailure) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text("There is an error")),
-          );
+          // Scaffold.of(context).showSnackBar(
+          //   SnackBar(content: Text("There is an error")),
+          // );
         } else if (state is ApplicationLoading) {
           return CircularProgressIndicator();
         } else if (state is ApplicationLoading ||
@@ -50,7 +51,7 @@ class ApplicationDetails extends StatelessWidget {
                                     Navigator.of(context).pushNamed(
                                   AddUpdateApplication.route,
                                   arguments: ApplicationArgument(
-                                      application: this.application,
+                                      application: this.args.application,
                                       edit: true),
                                 ),
                               ),
@@ -60,10 +61,12 @@ class ApplicationDetails extends StatelessWidget {
                               IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  BlocProvider.of<ApplicationBloc>(context)
-                                      .add(ApplicationDelete(this.application));
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                      ApplicationList.route, (route) => false);
+                                  BlocProvider.of<ApplicationBloc>(context).add(
+                                      ApplicationDelete(this.args.application,
+                                          this.args.job));
+                                  // Navigator.of(context).pushNamedAndRemoveUntil(
+                                  //     ApplicationList.route, (route) => false);
+                                  Navigator.pop(context);
                                 },
                               ),
                             ],
@@ -86,7 +89,7 @@ class ApplicationDetails extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${this.application.firstName}',
+                                  '${this.args.application.firstName}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.0,
@@ -115,7 +118,7 @@ class ApplicationDetails extends StatelessWidget {
                                   children: [
                                     SizedBox(height: 20.0),
                                     Text(
-                                      'Full Name: ${this.application.firstName} ${this.application.lastName}',
+                                      'Full Name: ${this.args.application.firstName} ${this.args.application.lastName}',
                                       style: TextStyle(fontSize: 18.0),
                                     ),
                                   ],
@@ -123,14 +126,14 @@ class ApplicationDetails extends StatelessWidget {
                                 // Text('Major : '),
                                 SizedBox(height: 15.0),
                                 Text(
-                                  'Phone: ${this.application.phone}',
+                                  'Phone: ${this.args.application.phone}',
                                   style: TextStyle(
                                     fontSize: 18.0,
                                   ),
                                 ),
                                 SizedBox(height: 15.0),
                                 Text(
-                                  'Email: ${this.application.email}',
+                                  'Email: ${this.args.application.email}',
                                   style: TextStyle(
                                     fontSize: 18.0,
                                   ),
@@ -157,7 +160,7 @@ class ApplicationDetails extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Text(
-                                '${this.application.message}',
+                                '${this.args.application.message}',
                                 style: TextStyle(
                                   fontSize: 16.0,
                                 ),

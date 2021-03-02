@@ -1,5 +1,6 @@
 import 'package:app/blocs/application/application.dart';
 import 'package:app/blocs/authentication/authentication.dart';
+import 'package:app/constants/colors.dart';
 import 'package:app/data_provider/auth_data.dart';
 import 'package:app/models/models.dart';
 import 'package:app/presentation/screens/common/application_list.dart';
@@ -23,14 +24,13 @@ class AddUpdateApplication extends StatefulWidget {
 }
 
 class _AddUpdateApplicationState extends State<AddUpdateApplication> {
-  final _messageController = new TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
 
   final Map<String, dynamic> _application = {};
 
   @override
   Widget build(BuildContext context) {
+    print('${widget.args.job} from application update *********** ');
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.args.edit ? "Edit Application" : "Apply"}'),
@@ -53,20 +53,32 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                   },
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    labelText: 'First Name',
-                    focusColor: Color(0xff4064f3),
-                    labelStyle: TextStyle(
-                      color: Color(0xff4064f3),
+                    isCollapsed: true,
+                    labelText: "First Name",
+                    labelStyle: TextStyle(color: kBrown300),
+                    hintText: 'First Name',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Color(0xfff3f3f4),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   onSaved: (value) {
                     setState(() {
                       this._application['firstName'] = value;
                     });
                   },
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 TextFormField(
                   initialValue:
@@ -79,18 +91,30 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                   },
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    labelText: 'Last Name',
-                    focusColor: Color(0xff4064f3),
-                    labelStyle: TextStyle(
-                      color: Color(0xff4064f3),
+                    isCollapsed: true,
+                    labelText: "Last Name",
+                    labelStyle: TextStyle(color: kBrown300),
+                    hintText: 'Last Name',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Color(0xfff3f3f4),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   onSaved: (value) {
                     this._application['lastName'] = value;
                   },
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 TextFormField(
                   initialValue:
@@ -103,20 +127,32 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                   },
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    labelText: 'Phone',
-                    focusColor: Color(0xff4064f3),
-                    labelStyle: TextStyle(
-                      color: Color(0xff4064f3),
+                    isCollapsed: true,
+                    labelText: "Phone",
+                    labelStyle: TextStyle(color: kBrown300),
+                    hintText: '0911..',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Color(0xfff3f3f4),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   onSaved: (value) {
                     setState(() {
                       this._application['phone'] = value;
                     });
                   },
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 TextFormField(
                   initialValue:
@@ -129,20 +165,32 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                   },
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    labelText: 'Email',
-                    focusColor: Color(0xff4064f3),
-                    labelStyle: TextStyle(
-                      color: Color(0xff4064f3),
+                    isCollapsed: true,
+                    labelText: "Email",
+                    labelStyle: TextStyle(color: kBrown300),
+                    hintText: 'someone@example.com',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Color(0xfff3f3f4),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   onSaved: (value) {
                     setState(() {
                       this._application['email'] = value;
                     });
                   },
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 TextFormField(
                   initialValue:
@@ -157,14 +205,23 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                   minLines: 1,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    labelText: 'Message',
-                    focusColor: Color(0xff4064f3),
-                    labelStyle: TextStyle(
-                      color: Color(0xff4064f3),
+                    isCollapsed: true,
+                    labelText: "Message",
+                    labelStyle: TextStyle(color: kBrown300),
+                    hintText: 'I would like to apply for..',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Color(0xfff3f3f4),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBrown300, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   onSaved: (value) {
                     setState(() {
@@ -172,14 +229,25 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                     });
                   },
                 ),
+                SizedBox(
+                  height: 20.0,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
                     listener: (context, state) {
-                      // TODO: implement listener
+                      if (state is ApplicationOperationFailure) {
+                        Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text('There is an Error')));
+                      }
                     },
                     builder: (context, state) {
-                      return ElevatedButton(
+                      return RaisedButton(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 5.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                         onPressed: () {
                           final form = _formKey.currentState;
                           if (form.validate()) {
@@ -217,7 +285,17 @@ class _AddUpdateApplicationState extends State<AddUpdateApplication> {
                             }
                           }
                         },
-                        child: widget.args.edit? Text('Update') : Text('Submit'),
+                        color: kBrown400,
+                        textColor: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            widget.args.edit ? 'Update' : 'Submit',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ),
                       );
                     },
                   ),

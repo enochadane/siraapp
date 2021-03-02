@@ -14,8 +14,10 @@ class ApplicationList extends StatelessWidget {
   ApplicationList({Key key, this.args}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-  
-    final ApplicationLoad event = ApplicationLoad(job: args.job, user: args.user);
+    // print('${args} i\'m the problem *********** ##########');
+
+    final ApplicationLoad event =
+        ApplicationLoad(job: args?.job, user: args.user);
     BlocProvider.of<ApplicationBloc>(context).add(event);
     return Scaffold(
       appBar: AppBar(
@@ -38,10 +40,9 @@ class ApplicationList extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pushNamed(ApplicationDetails.route,
                           arguments: ApplicationArgument(
-                            application: applications[index],
-                            job: args.job,
-                            user: args.user
-                          ));
+                              application: applications[index],
+                              job: args.job,
+                              user: args.user));
                     },
                     child: ApplicationCard(
                       firstName: '${applications[index].firstName}',

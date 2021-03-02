@@ -138,9 +138,10 @@ class MyPageRouter {
       case ApplicationList.route:
         {
           ApplicationArgument args = settings.arguments;
+          print('${args.job} from routes *************************');
           return MaterialPageRoute(
-            builder: (context) => BlocProvider<ApplicationBloc>.value(
-              value:
+            builder: (context) => BlocProvider<ApplicationBloc>(
+              create: (context) =>
                   ApplicationBloc(applicationRepository: applicationRepository),
               child: ApplicationList(
                 args: args,
@@ -153,22 +154,24 @@ class MyPageRouter {
         {
           // Application application = settings.arguments;
           ApplicationArgument args = settings.arguments;
+          print(
+              '${args.job} from application details routes *************************');
           return MaterialPageRoute(
-              builder: (context) => BlocProvider<ApplicationBloc>.value(
-                    value: ApplicationBloc(
-                        applicationRepository: applicationRepository),
-                    child: ApplicationDetails(
-                      application: args.application,
-                      job: args.job,
-                      user: args.user,
-                    ),
-                  ));
+            builder: (context) => BlocProvider<ApplicationBloc>.value(
+              value:
+                  ApplicationBloc(applicationRepository: applicationRepository),
+              child: ApplicationDetails(
+                args: args,
+              ),
+            ),
+          );
         }
         break;
       case AddUpdateApplication.route:
         {
           ApplicationArgument args = settings.arguments;
-          // print('${args.user.id} from routesttttttttttttttssssssssssssssssss');
+          print(
+              '${args.job} from routesttttttttttttttssssssssssssssssss***********');
           return MaterialPageRoute(
             builder: (context) => BlocProvider<ApplicationBloc>.value(
               value:

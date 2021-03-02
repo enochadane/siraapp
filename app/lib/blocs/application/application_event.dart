@@ -14,7 +14,6 @@ class ApplicationLoad extends ApplicationEvent {
 
   @override
   List<Object> get props => [job, user];
-
 }
 
 class ApplicationCreate extends ApplicationEvent {
@@ -43,8 +42,9 @@ class ApplicationUpdate extends ApplicationEvent {
 
 class ApplicationDelete extends ApplicationEvent {
   final Application application;
+  final Job job;
 
-  const ApplicationDelete(this.application);
+  const ApplicationDelete(this.application, this.job);
 
   @override
   List<Object> get props => [application];
