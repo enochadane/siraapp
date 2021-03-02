@@ -3,9 +3,7 @@ import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/data_provider/auth_data.dart';
 import 'package:app/models/models.dart';
-import 'package:app/presentation/screens/common/application_list.dart';
 import 'package:app/presentation/screens/common/home_page.dart';
-import 'package:app/repositories/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,8 +12,6 @@ import '../../../routes.dart';
 class AddUpdateApplication extends StatefulWidget {
   static const route = 'applicationAddUpdate';
   final ApplicationArgument args;
-  // final Job job;
-  // final User user;
 
   AddUpdateApplication({Key key, this.args}) : super(key: key);
 

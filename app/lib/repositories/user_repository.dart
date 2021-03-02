@@ -1,6 +1,5 @@
 import 'package:app/data_provider/data_provider.dart';
 import 'package:app/models/models.dart';
-import 'package:app/models/role.dart';
 import 'package:flutter/cupertino.dart';
 
 class UserRepository {

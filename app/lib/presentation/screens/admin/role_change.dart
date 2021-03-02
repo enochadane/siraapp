@@ -1,7 +1,6 @@
 import 'package:app/blocs/authentication/user/user_bloc.dart';
 import 'package:app/blocs/authentication/user/user_event.dart';
 import 'package:app/blocs/role/role_bloc.dart';
-import 'package:app/blocs/role/role_event.dart';
 import 'package:app/blocs/role/role_state.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/models/models.dart';
@@ -27,7 +26,6 @@ class _ChangeRoleState extends State<ChangeRole> {
   Role selectedRole;
 
   buildRoleDropDown(List<Role> roles) {
-    print("role is ${widget.user.toJson()}");
     if (selectedRole == null) {
       selectedRole = roles.firstWhere(
           (element) => element.name == widget.user.role,

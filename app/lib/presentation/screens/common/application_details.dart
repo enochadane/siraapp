@@ -61,11 +61,8 @@ class ApplicationDetails extends StatelessWidget {
                               IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  BlocProvider.of<ApplicationBloc>(context).add(
-                                      ApplicationDelete(this.args.application,
-                                          this.args.job));
-                                  // Navigator.of(context).pushNamedAndRemoveUntil(
-                                  //     ApplicationList.route, (route) => false);
+                                  BlocProvider.of<ApplicationBloc>(context)
+                                      .add(ApplicationDelete(this.args.application));
                                   Navigator.pop(context);
                                 },
                               ),

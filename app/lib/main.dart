@@ -6,22 +6,25 @@ import 'package:app/constants/colors.dart';
 import 'package:app/data_provider/auth_data.dart';
 import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:app/repositories/authentication_repository.dart';
+import 'package:app/repositories/repository.dart';
 import 'package:app/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'bloc_observer.dart';
+import 'data_provider/data_provider.dart';
 
-class TokenData {
-  static String token;
-}
+  final JobRepository jobRepository = JobRepository(
+    dataProvider: JobDataProvider(),
+  );
 
 void main() async {
   Bloc.observer = SimpleBlocObserver();
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository(
           authenticationDataProvider: AuthenticationDataProvider());
+
+        
   runApp(App(
     authenticationRepository: authenticationRepository,
   ));
@@ -49,9 +52,8 @@ class App extends StatelessWidget {
                       ..add(AppLoaded())),
             BlocProvider<LoginBloc>(
                 create: (context) => LoginBloc(
-                    authenticationBloc:
                         AuthenticationBloc(authenticationRepository),
-                    authenticationRepository: this.authenticationRepository)),
+                    this.authenticationRepository)),
             BlocProvider<RegisterBloc>(
                 create: (context) => RegisterBloc(
                     authenticationBloc:
@@ -64,7 +66,6 @@ class App extends StatelessWidget {
             initialRoute: HomePage.routeName,
             theme: ThemeData(primaryColor: kBrown500, accentColor: kBrown300),
             onGenerateRoute: MyPageRouter().onGenerateRoute,
-            // home: AdminDashboard(),
           ),
         ));
   }

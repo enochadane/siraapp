@@ -9,8 +9,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthenticationBloc authenticationBloc;
   final AuthenticationRepository authenticationRepository;
 
-  LoginBloc({this.authenticationBloc, this.authenticationRepository})
-      : super(LoginInitial());
+  LoginBloc(AuthenticationBloc authenticationBloc,
+      AuthenticationRepository authenticationRepository)
+      : assert(authenticationBloc != null),
+        assert(authenticationRepository != null),
+        authenticationBloc = authenticationBloc,
+        authenticationRepository = authenticationRepository,
+        super(LoginInitial());
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -39,5 +44,4 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginFailure(error: err.message ?? 'An unknown error occured');
     }
   }
-
 }

@@ -16,12 +16,16 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
-  final bool _isRemoved = false;
   @override
   Widget build(BuildContext context) {
     handleUserDelete(User selectedUser) {
       final UserEvent event = UserDelete(selectedUser);
       BlocProvider.of<UserBloc>(context).add(event);
+    }
+
+    handleRoleDelete(Role selectedRole) {
+      final RoleEvent event = RoleDelete(selectedRole);
+      BlocProvider.of<RoleBloc>(context).add(event);
     }
 
     return DefaultTabController(
@@ -163,7 +167,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       InkWell(
                                         onTap: () async {
                                           await _showRoleDeleteWizard(
-                                              context, state.roles[index]);
+                                              context,
+                                              state.roles[index],
+                                              handleRoleDelete);
                                         },
                                         child: Icon(
                                           Icons.delete,
@@ -193,8 +199,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
         ));
   }
 
-  Future<void> _showRoleDeleteWizard(
-      BuildContext context, Role selectedRole) async {
+  Future<void> _showRoleDeleteWizard(BuildContext context, Role selectedRole,
+      Function handleRoleDelete) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -227,8 +233,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     textStyle: TextStyle(color: Colors.redAccent)),
                 child: Text('Delete'),
                 onPressed: () {
-                  final RoleEvent event = RoleDelete(selectedRole);
-                  BlocProvider.of<RoleBloc>(context).add(event);
+                  handleRoleDelete(selectedRole);
+                  Navigator.of(context).pop();
                 }),
           ],
         );

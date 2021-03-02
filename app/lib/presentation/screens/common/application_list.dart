@@ -1,6 +1,5 @@
 import 'package:app/blocs/application/application.dart';
 import 'package:app/presentation/screens/common/application_details.dart';
-import 'package:app/presentation/screens/job_seeker/application_add_update.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,11 +13,10 @@ class ApplicationList extends StatelessWidget {
   ApplicationList({Key key, this.args}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // print('${args} i\'m the problem *********** ##########');
-
     final ApplicationLoad event =
-        ApplicationLoad(job: args?.job, user: args.user);
+        ApplicationLoad(job: args?.job, user: args?.user);
     BlocProvider.of<ApplicationBloc>(context).add(event);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Application Lists"),
@@ -31,30 +29,39 @@ class ApplicationList extends StatelessWidget {
 
           if (state is ApplicationLoadSuccess) {
             final applications = state.applications;
-            print(applications);
-            return Container(
-              child: ListView.builder(
-                itemCount: applications.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushNamed(ApplicationDetails.route,
-                          arguments: ApplicationArgument(
-                              application: applications[index],
-                              job: args.job,
-                              user: args.user));
-                    },
-                    child: ApplicationCard(
-                      firstName: '${applications[index].firstName}',
-                      lastName: '${applications[index].lastName}',
-                      phone: '${applications[index].phone}',
-                      email: '${applications[index].email}',
-                      message: '${applications[index].message}',
+            return applications.length > 0
+                ? Container(
+                    child: ListView.builder(
+                      itemCount: applications.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                ApplicationDetails.route,
+                                arguments: ApplicationArgument(
+                                    application: applications[index],
+                                    job: args.job,
+                                    user: args.user));
+                          },
+                          child: ApplicationCard(
+                            firstName: '${applications[index].firstName}',
+                            lastName: '${applications[index].lastName}',
+                            phone: '${applications[index].phone}',
+                            email: '${applications[index].email}',
+                            message: '${applications[index].message}',
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            );
+                  )
+                : Container(
+                    child: ApplicationCard(
+                    firstName: "No Application",
+                    lastName: "Has Found",
+                    phone: "",
+                    email: "",
+                    message: "For this Job",
+                  ));
           }
 
           return Center(

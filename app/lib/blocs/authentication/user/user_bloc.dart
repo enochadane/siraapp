@@ -15,9 +15,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (event is UserLoad) {
       yield UserLoading();
       try {
-        print("before users");
         final users = await userRepository.getUsers();
-        print("users are $users");
         yield UserLoadSuccess(users);
       } catch (_) {
         yield UserOperationFailure();

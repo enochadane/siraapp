@@ -9,73 +9,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: must_be_immutable
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const String routeName = "/";
   final User user;
+
   HomePage({@required this.user});
 
   @override
-  Widget build(BuildContext context) {
-    // context.read<JobBloc>().add(JobLoad(user: user));
+  _HomePageState createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-       drawer: MyDrawer(),
-      appBar: AppBar(
-        title: Text("Job List"),
-      ),
-      body: Container(
-        child: BlocConsumer<JobBloc, JobState>(listener: (context, state) {
-          if (state is JobOperationFailure) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(content: Text("There is an error")),
-            );
-          } else if (state is JobLoading) {
-            return CircularProgressIndicator();
-          } else if (state is JobLoading ||
-              state is JobsLoadedSuccess && state.jobs.length == 0) {
-            return Text("No Jobs Are Available");
-          }
-        }, builder: (context, state) {
-          if (state is JobLoading) {
-            return CircularProgressIndicator();
-          } else if (state is JobsLoadedSuccess) {
-            if (state.jobs.length > 0) {
-              return ListView.builder(
-                  itemCount: state.jobs.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, JobDetails.routeName,
-                            arguments: SingleJobDetailArguments(
-                                selectedJob: state.jobs[index], user: user));
-                      },
-                      child: JobRow(
-                        job: state.jobs[index],
+            drawer: MyDrawer(
+              user: widget.user,
+            ),
+            appBar: AppBar(
+              title: Text("Job List"),
+            ),
+          body: BlocConsumer<JobBloc, JobState>(listener: (context, state) {
+        if (state is JobOperationFailure) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text("There is an error")),
+          );
+          // _scaffoldKey.currentState.showSnackBar(
+          //   SnackBar(content: Text('There is an Error')),
+          // );
+          BlocProvider.of<JobBloc>(context).add(JobLoad(user: widget.user));
+        }
+        if (state is JobCreate) {
+          BlocProvider.of<JobBloc>(context).add(JobLoad(user: widget.user));
+        }
+      }, builder: (context, state) {
+        if (state is JobsLoadedSuccess) {
+            return Container(
+              child: (state.jobs.length > 0)
+                  ? ListView.builder(
+                      itemCount: state.jobs.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, JobDetails.routeName,
+                                arguments: SingleJobDetailArguments(
+                                    selectedJob: state.jobs[index],
+                                    user: widget.user));
+                          },
+                          child: JobRow(
+                            job: state.jobs[index],
+                          ),
+                        );
+                      })
+                  : Card(
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
+                        child: Text("No Jobs Are Available",
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold)),
                       ),
-                    );
-                  });
-            }
-            return Card(
-                child: Container(
-              width: double.infinity,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-              child: Text("No Jobs Are Available",
-                  style:
-                      TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-            ));
-          }
-          return Container();
-        }),
-      ),
-      floatingActionButton: (user.role == "EMPLOYER")
-          ? FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                Navigator.pushNamed(context, CreateEditJobPage.routeName);
-              },
-            )
-          : null,
+                    ),
+            );
+            
+          // );
+        }
+        return Container();
+      }),
+      floatingActionButton: (widget.user.role == "EMPLOYER")
+                ? FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () {
+                      Navigator.pushNamed(context, CreateEditJobPage.routeName);
+                    },
+                  )
+                : null,
     );
   }
 }

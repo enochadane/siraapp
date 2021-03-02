@@ -1,4 +1,3 @@
-import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/authentication/register/register.dart';
 import 'package:app/blocs/authentication/register/register_bloc.dart';
 import 'package:app/constants/colors.dart';
@@ -31,7 +30,8 @@ class _SignUpPage extends State<SignUpPage> {
   final _passwordController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
 
-  bool _isCompany = false;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   AccountType selectedAccount;
   List<AccountType> accountTypes = [
     const AccountType(
@@ -41,76 +41,80 @@ class _SignUpPage extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     bool isKeyboardShowing = MediaQuery.of(context).viewInsets.vertical > 0;
 
     void _showError(String error) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text(error),
-        backgroundColor: Theme.of(context).errorColor,
-      ));
-    }
-
-    return BlocConsumer<RegisterBloc, RegisterState>(
-        listener: (context, state) {
-      if (state is RegisterFailure) {
-        _showError("There is an error on registering");
-      }
-      if (state is RegisterSuccess) {
-        Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
-      }
-    }, builder: (context, state) {
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
-          child: Container(
-            height: height,
-            margin: EdgeInsets.only(bottom: 100.0),
-            decoration: BoxDecoration(),
-            child: Column(children: [
-              logo(isKeyboardShowing),
-              Align(
-                alignment: isKeyboardShowing
-                    ? Alignment.center
-                    : Alignment.bottomCenter,
-                child: Form(
-                    key: _formKey,
-                    child: SingleChildScrollView(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 20.0),
-                        height: height * 0.6,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            _buildUserNameTextField(),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            _buildEmailTextField(),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            _buildPasswordTextField(),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            _buildChooseAccountType(),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _submitButton(),
-                            _createAccountLabel(),
-                          ],
-                        ),
-                      ),
-                    )),
-              ),
-            ]),
-          ),
+      // Scaffold.of(context).showSnackBar(SnackBar(
+      //   content: Text(error),
+      //   backgroundColor: Theme.of(context).errorColor,
+      // ));
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text(error),
+          backgroundColor: Theme.of(context).errorColor,
         ),
       );
-    });
+    }
+
+    return Scaffold(
+      key: _scaffoldKey,
+      resizeToAvoidBottomInset: false,
+      body:
+          BlocConsumer<RegisterBloc, RegisterState>(listener: (context, state) {
+        if (state is RegisterFailure) {
+          _showError("There is an error on registering");
+        }
+        if (state is RegisterSuccess) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, "/login", (route) => false);
+        }
+      }, builder: (context, state) {
+        return SingleChildScrollView(
+          child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  logo(isKeyboardShowing),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _buildUserNameTextField(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _buildEmailTextField(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _buildPasswordTextField(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _buildChooseAccountType(),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _submitButton(),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _createAccountLabel(),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )),
+        );
+      }),
+    );
   }
 
   Widget logo(isKeyboardShowing) {
@@ -265,18 +269,15 @@ class _SignUpPage extends State<SignUpPage> {
 
   Widget _buildChooseAccountType() {
     return DropdownButton<AccountType>(
-      
       hint: Text('Select Account Type'),
       value: selectedAccount,
       onChanged: (AccountType value) {
         if (value.accountName == 'Company') {
-          _isCompany = true;
-          _role_id = "603ba9a11bd36aa35679ec4c";
+          this._role_id = "603a84416090c2311190aead";
 
           //603ba9a11bd36aa35679ec4c
         } else {
-          _isCompany = false;
-          _role_id = "603ba9cf1bd36aa35679ec4d";
+          this._role_id = "603a84396090c2311190aeac";
 
           //603ba9cf1bd36aa35679ec4d
         }

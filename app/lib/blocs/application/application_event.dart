@@ -42,9 +42,8 @@ class ApplicationUpdate extends ApplicationEvent {
 
 class ApplicationDelete extends ApplicationEvent {
   final Application application;
-  final Job job;
 
-  const ApplicationDelete(this.application, this.job);
+  const ApplicationDelete(this.application);
 
   @override
   List<Object> get props => [application];

@@ -17,32 +17,22 @@ class _ProfilePageFormState extends State<ProfilePageForm> {
 
   final _formKey = GlobalKey<FormState>();
 
+  // ignore: unused_field
   String _firstName = '';
-  String _lastName = '';
+  // ignore: unused_field
   String _email = '';
-  String _phone = '';
 
   final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
 
   void _openFileExplorer() async {
     FilePickerResult result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       File file = File(result.files.single.path);
-      print(file.path);
     } else {}
 
     if (result != null) {
       PlatformFile file = result.files.first;
-
-      print(file.name);
-      print(file.bytes);
-      print(file.size);
-      print(file.extension);
-      print(file.path);
     } else {}
   }
 
@@ -180,7 +170,6 @@ class _ProfilePageFormState extends State<ProfilePageForm> {
     setState(() {
       _imageFile = pickedFile;
     });
-    // print(_imageFile.path + ' profile page');
   }
 
   Widget _buildFirstNameField() {

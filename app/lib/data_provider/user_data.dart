@@ -44,13 +44,13 @@ class UserDataProvider {
           var resultUser = User.fromJson(user);
           return resultUser;
         }).toList();
-        print("is result ${result[0].role}");
         return result;
       } else {
         throw Exception('Failed to load users');
       }
     } catch (err) {
-      print(err);
+      print("the error is $err");
+      return null;
     }
   }
 

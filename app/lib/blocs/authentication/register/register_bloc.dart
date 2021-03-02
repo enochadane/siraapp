@@ -28,7 +28,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           email: event.email,
           password: event.password,
           role_id: event.role_id);
-      print("logged in user $isCreated");
 
       if (isCreated) {
         yield RegisterSuccess();
