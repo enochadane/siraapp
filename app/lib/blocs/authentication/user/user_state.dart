@@ -1,5 +1,4 @@
 import 'package:app/models/models.dart';
-import 'package:app/models/role.dart';
 import 'package:equatable/equatable.dart';
 
 class UserState extends Equatable {

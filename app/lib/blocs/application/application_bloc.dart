@@ -18,7 +18,6 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
       yield ApplicationLoading();
       try {
         List<Application> applications;
-        print('${event.user.id} from applicationbloc **************************************************************************');
         if (event.user.role == "SEEKER") {
           applications = await applicationRepository
               .getApplicationsWithApplicantId(event.user.id);

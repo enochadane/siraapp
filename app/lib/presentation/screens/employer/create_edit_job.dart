@@ -2,6 +2,7 @@ import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/constants/colors.dart';
 import 'package:app/models/models.dart';
+import 'package:app/presentation/screens/common/home_page.dart';
 import 'package:app/repositories/job_category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -297,7 +298,7 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
   }
 
   Widget buildJopType() {
-    List<String> job_types = [
+    List<String> jobTypes = [
       "FullTime",
       "Internship",
       "PartTime",
@@ -313,7 +314,7 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
         ),
         trailing: DropdownButton(
           value: this._job["job_type"],
-          items: job_types.map((type) {
+          items: jobTypes.map((type) {
             return DropdownMenuItem(
               child: Text(type),
               value: type,
@@ -447,30 +448,16 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
       bool isEditing, BuildContext context, Job selectedJob, User currentUser) {
     return BlocConsumer<JobBloc, JobState>(listener: (context, JobState state) {
       if (state is JobOperationFailure) {
+        print("");
         Scaffold.of(context).showSnackBar(
           SnackBar(content: Text("There is an error on creating or updating")),
         );
       } else if (state is JobsLoadedSuccess) {
-        Navigator.of(context).pop();
-        // BlocProvider.of<JobBloc>(context)
-        // .add(JobLoad(userType: "employer", companyId: _job["company_id"]));
+         BlocProvider.of<JobBloc>(context)
+                    .add(JobLoad(user: currentUser));
+        // Navigator
       }
     }, builder: (BuildContext context, JobState state) {
-      // if (state is JobLoading) {
-      //   return RaisedButton(
-      //       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-      //       shape: RoundedRectangleBorder(
-      //         borderRadius: BorderRadius.circular(10.0),
-      //       ),
-      //       onPressed: () {},
-      //       color: kBrown400,
-      //       textColor: Colors.white,
-      //       child: Padding(
-      //         padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-      //         child: Text(isEditing ? "Updating" : "Creating",
-      //             style: TextStyle(fontSize: 18.0)),
-      //       ));
-      // }
       return RaisedButton(
           padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
           shape: RoundedRectangleBorder(
@@ -495,13 +482,18 @@ class _CreateEditJobPageState extends State<CreateEditJobPage> {
                   jobPosition: this._job["job_position"]);
 
               if (isEditing) {
+                context.read<JobBloc>().add(
+                    JobUpdate(id: selectedJob.id, job: job, user: currentUser));
+                BlocProvider.of<JobBloc>(context)
+                    .add(JobLoad(user: currentUser));
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    HomePage.routeName, (route) => false);
+              } else {
                 context
                     .read<JobBloc>()
-                    .add(JobUpdate(selectedJob.id, job, currentUser));
-              } else {
-                print("company id is ${this._job["company_id"]}");
-                context.read<JobBloc>().add(JobCreate(job, currentUser));
-                // BlocProvider.of<JobBloc>(context).add(JobCreate(job));
+                    .add(JobCreate(job: job, user: currentUser));
+                     Navigator.of(context).pushNamedAndRemoveUntil(
+                    HomePage.routeName, (route) => false);
               }
             }
           },

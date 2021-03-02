@@ -1,10 +1,8 @@
 import 'package:app/blocs/application/application.dart';
-import 'package:app/blocs/authentication/login/login.dart';
 import 'package:app/blocs/authentication/user/user.dart';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/blocs/role/role.dart';
 import 'package:app/blocs/role/role_bloc.dart';
-import 'package:app/main.dart';
 import 'package:app/presentation/screens/admin/create_role.dart';
 import 'package:app/presentation/screens/admin/dashboard.dart';
 import 'package:app/presentation/screens/admin/role_change.dart';
@@ -28,7 +26,7 @@ import 'repositories/repository.dart';
 class MyPageRouter {
 // this techinique is called dependency injection
   final JobRepository jobRepository = JobRepository(
-    dataProvider: JobDataProvider(token: TokenData.token),
+    dataProvider: JobDataProvider(),
   );
 
   final RoleRepository roleRepository = RoleRepository(
@@ -50,7 +48,6 @@ class MyPageRouter {
   );
 
   Route onGenerateRoute(RouteSettings settings) {
-    print("where do you print 1 ${settings.name}");
     switch (settings.name) {
       case HomePage.routeName:
         {
@@ -59,7 +56,6 @@ class MyPageRouter {
                 listener: (context, state) {},
                 builder: (context, state) {
                   if (state is AuthenticationAuthenticated) {
-                    print("${state.user.role} role");
                     if (state.user.role == "ADMIN") {
                       return MultiBlocProvider(providers: [
                         BlocProvider<UserBloc>(
@@ -73,6 +69,7 @@ class MyPageRouter {
                       ], child: AdminDashboard());
                     } else if (state.user.role == "EMPLOYER") {
                       return BlocProvider<JobBloc>(
+                        lazy: false,
                         create: (context) =>
                             JobBloc(jobRepository: jobRepository)
                               ..add(JobLoad(user: state.user)),
@@ -98,7 +95,6 @@ class MyPageRouter {
         }
       case LoginPage.routeName:
         {
-          print("where do you print 2");
           return MaterialPageRoute(builder: (context) {
             return LoginPage();
           });
@@ -138,15 +134,14 @@ class MyPageRouter {
       case ApplicationList.route:
         {
           ApplicationArgument args = settings.arguments;
-          return MaterialPageRoute(
-            builder: (context) => BlocProvider<ApplicationBloc>.value(
-              value:
-                  ApplicationBloc(applicationRepository: applicationRepository),
-              child: ApplicationList(
-                args: args,
-              ),
-            ),
-          );
+          print("${args.job} is the jbo");
+          return MaterialPageRoute(builder: (context) {
+            return BlocProvider<ApplicationBloc>(
+                create: (context) => ApplicationBloc(
+                    applicationRepository: applicationRepository)
+                  ..add(ApplicationLoad(job: args.job, user: args.user)),
+                child: ApplicationList(args: args));
+          });
         }
         break;
       case ApplicationDetails.route:
@@ -168,7 +163,6 @@ class MyPageRouter {
       case AddUpdateApplication.route:
         {
           ApplicationArgument args = settings.arguments;
-          // print('${args.user.id} from routesttttttttttttttssssssssssssssssss');
           return MaterialPageRoute(
             builder: (context) => BlocProvider<ApplicationBloc>.value(
               value:
@@ -195,7 +189,6 @@ class MyPageRouter {
       case JobDetails.routeName:
         {
           SingleJobDetailArguments args = settings.arguments;
-          print("args are ${args.user.username}");
           return MaterialPageRoute(
             builder: (context) => BlocProvider<JobBloc>.value(
                 value: JobBloc(jobRepository: jobRepository),

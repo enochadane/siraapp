@@ -41,7 +41,6 @@ class AuthenticationDataProvider {
 
   Future<bool> signUpWithEmailAndPassword(
       String username, String email, String password, String role_id) async {
-    print("$username $password $role_id $email is the user register info");
     final response = await http.post('$_baseUrl/signup',
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -59,9 +58,9 @@ class AuthenticationDataProvider {
     }
   }
 
-  @override
   Future<void> signOut() {
     deleteJwt();
+    return null;
   }
 
   void storeJwt(token) async {
@@ -76,13 +75,11 @@ class AuthenticationDataProvider {
     );
   }
 
-  User getUserFromToken(token) {
+  User getUserFromToken(String token) {
     Map<String, dynamic> payload = Jwt.parseJwt(token);
 
     // To check if token is expired
     bool isExpired = Jwt.isExpired(token);
-    print(isExpired);
-
     // Can be used for auth state
     if (!isExpired) {
       //   Token isn't expired
@@ -138,4 +135,3 @@ class AuthenticationDataProvider {
 // String token = prefs.getString('token');
 
 // String refreshToken = prefs.getString('refreshToken');
-// print('Refresh Token $refreshToken');

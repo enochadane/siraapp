@@ -62,8 +62,7 @@ class ApplicationDetails extends StatelessWidget {
                                 onPressed: () {
                                   BlocProvider.of<ApplicationBloc>(context)
                                       .add(ApplicationDelete(this.application));
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                      ApplicationList.route, (route) => false);
+                                  Navigator.pop(context);
                                 },
                               ),
                             ],

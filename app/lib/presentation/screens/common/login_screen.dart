@@ -24,7 +24,6 @@ class _LoginPage extends State<LoginPage> {
   bool _showPassword = false;
   String _email = "";
   String _password = "";
-  bool _isLoading;
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
@@ -32,7 +31,6 @@ class _LoginPage extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _isLoading = false;
   }
 
   @override
@@ -49,21 +47,14 @@ class _LoginPage extends State<LoginPage> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-            listener: (context, state) {
-          if (state is AuthenticationNotAuthenticated) {
+        body: BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
+          if (state is LoginFailure) {
             _showError("Invalid Username or Password", context);
           }
-          if (state is AuthenticationAuthenticated) {
+          if (state is LoginSuccess) {
+            BlocProvider.of<AuthenticationBloc>(context).add(AppLoaded());
             Navigator.pushNamedAndRemoveUntil(
-            context, HomePage.routeName, (route) => false);
-            
-            // Navigator.pushAndRemoveUntil(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) =>  HomePage(user: state.user),
-            //     ),
-            //     (route) => false);
+                context, HomePage.routeName, (route) => false);
           }
         }, builder: (context, state) {
           return Stack(children: [
@@ -277,7 +268,6 @@ class _LoginPage extends State<LoginPage> {
       onTap: () {
         final form = _formKey.currentState;
         if (form.validate()) {
-          print("validated $_email $_password");
           form.save();
           BlocProvider.of<LoginBloc>(context).add(LoginInWithEmailButtonPressed(
               email: _email, password: _password));

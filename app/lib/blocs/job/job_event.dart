@@ -18,7 +18,7 @@ class JobCreate extends JobEvent {
   final Job job;
   final User user;
 
-  const JobCreate(this.job, this.user);
+  const JobCreate({this.job, this.user});
 
   @override
   List<Object> get props => [job, user];
@@ -32,7 +32,7 @@ class JobUpdate extends JobEvent {
   final Job job;
   final User user;
 
-  JobUpdate(this.id, this.job, this.user);
+  JobUpdate({this.id, this.job, this.user});
 
   @override
   List<Object> get props => [job, user];
@@ -43,7 +43,7 @@ class JobUpdate extends JobEvent {
 class JobDelete extends JobEvent {
   final Job job;
 
-  JobDelete(this.job);
+  JobDelete({this.job});
   @override
   List<Object> get props => [job];
 

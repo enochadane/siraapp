@@ -37,7 +37,6 @@ class User extends Equatable {
       password: map['password'],
       role: map['role']??map['role_id']['name'],
     );
-    print("user data is ${user.toJson()}");
     return user;
   }
 

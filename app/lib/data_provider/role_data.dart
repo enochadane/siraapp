@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
-import 'dart:ffi';
 
 import 'package:app/models/role.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,9 +21,6 @@ class RoleDataProvider {
   Future<Role> createRole(Role role) async {
     try {
       token = await getToken();
-      // token =
-          // 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDNhODQ4NTYwOTBjMjMxMTE5MGFlYWUiLCJ1c2VybmFtZSI6Im5hdGhhbmllbCIsImVtYWlsIjoibmF0aGFuaWVsLmF3ZWxAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNjE0NTkzOTcyLCJleHAiOjE2MTU0NTc5NzJ9.eAJhJ6jCsIcI5-H5YaAZS6JOdoS6q4ZKw_EGSOzLjxU';
-      print("toke is $token");
       final response = await http.post(
         '$_baseUrl/roles',
         headers: <String, String>{
@@ -44,6 +39,7 @@ class RoleDataProvider {
       }
     } catch (error) {
       print(error);
+      return null;
     }
   }
 

@@ -5,15 +5,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import "package:http/http.dart" as http;
 
 class JobDataProvider {
+  JobDataProvider({this.httpClient, this.token}) : super();
+
+  String token;
+
   // final _baseUrl = 'http://localhost:8383/api/jobs';
   // final _baseUrl = "http://10.6.71.227:8383/api";
 
   final _baseUrl = "http://10.0.2.2:8383/api";
 
   final http.Client httpClient;
-  String token;
-
-  JobDataProvider({this.httpClient, this.token}) : super();
 
   Future<String> getToken() async {
     final storage = new FlutterSecureStorage();
@@ -43,16 +44,12 @@ class JobDataProvider {
             'Content-Type': 'application/json',
           },
           body: jsonEncode(data));
-      var jsonResponse = jsonDecode(response.body);
-      print("response is $jsonResponse");
-
       if (response.statusCode == 201) {
         return Job.fromJson(jsonDecode(response.body));
       } else {
         throw Exception('Failed to create course.');
       }
     } catch (e) {
-      print(e.toString());
       throw Exception('Failed to create course.');
     }
   }
@@ -141,7 +138,7 @@ class JobDataProvider {
         throw Exception('Failed to update course.');
       }
     } catch (e) {
-      print(e.toString());
+      return null;
     }
   }
 
@@ -155,7 +152,6 @@ class JobDataProvider {
         'Content-Type': 'application/json',
       },
     );
-    print("response status code is ${response.statusCode}");
     if (response.statusCode == 200) {
       return Job.fromJson(jsonDecode(response.body));
     } else {

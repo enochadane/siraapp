@@ -20,8 +20,6 @@ class ApplicationDataProvider {
 
   Future<Application> createApplication(Application application) async {
     final token = await getTokenFromStorage();
-    print('$token this is my tokeeeeeennnnnnnnnnnnnnnnnnn');
-    // token.then((value) => print(value));
 
     final response = await httpClient.post(
       '$_baseUrl',
@@ -62,7 +60,6 @@ class ApplicationDataProvider {
 
   Future<List<Application>> getApplicationsWithApplicantId(
       String applicantId) async {
-    print('$applicantId form application data provider **********');
 
     final response = await httpClient.get('$_baseUrl/user/$applicantId');
     if (response.statusCode == 200) {
@@ -90,7 +87,6 @@ class ApplicationDataProvider {
 
   Future<void> updateApplication(Application application) async {
     final token = await getTokenFromStorage();
-    print('${application.applicantId} from update data provider ***************');
     final http.Response response = await httpClient.patch(
       '$_baseUrl/${application.id}',
       headers: <String, String>{
@@ -106,8 +102,6 @@ class ApplicationDataProvider {
         'other_info': application.message,
       }),
     );
-
-    print(response);
 
     if (response.statusCode != 204) {
       throw Exception('Failed to update application');

@@ -1,18 +1,9 @@
 import 'package:app/blocs/authentication/authentication.dart';
-import 'package:app/models/job.dart';
 import 'package:app/models/user.dart';
 import 'package:app/presentation/screens/common/common.dart';
 import 'package:app/presentation/screens/common/user_edit.dart';
-import 'package:app/repositories/authentication_repository.dart';
 import 'package:app/routes.dart';
 import 'package:app/blocs/authentication/authBloc.dart';
-import 'package:app/blocs/authentication/authentication.dart';
-import 'package:app/presentation/screens/common/common.dart';
-import 'package:app/presentation/screens/common/user_edit.dart';
-import 'package:app/blocs/authentication/authBloc.dart';
-import 'package:app/blocs/authentication/authentication.dart';
-import 'package:app/presentation/screens/common/common.dart';
-import 'package:app/presentation/screens/common/user_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,28 +23,21 @@ class MyDrawer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             createDrawerHeader(),
-            BlocConsumer<AuthenticationBloc, AuthenticationState>(
-              listener: (context, state) {
-                // TODO: implement listener
-              },
-              builder: (context, state) {
-                if (state is AuthenticationAuthenticated) {
-                  return ListTile(
-                    title: (state.user.role == "SEEKER")
-                        ? Text('My Applications')
-                        : Container(),
+            (user?.role == "SEEKER")
+                ? ListTile(
+                    leading: Icon(Icons.note_outlined),
+                    title: Text(
+                      'My Applications',
+                      style: TextStyle(fontSize: 18.0),
+                    ),
                     onTap: () {
                       Navigator.of(context).pushNamed(ApplicationList.route,
                           arguments: ApplicationArgument(
-                            user: state.user,
+                            user: user,
                           ));
                     },
-                  );
-                } else {
-                  return null;
-                }
-              },
-            ),
+                  )
+                : SizedBox(),
             ListTile(
               leading: Icon(Icons.edit_outlined),
               title: Text(
@@ -65,28 +49,14 @@ class MyDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              focusColor: Colors.blue,
-              hoverColor: Colors.blue,
-              leading: Icon(Icons.delete_outline),
+              leading: Icon(Icons.logout),
               title: Text(
-                'Remove Account',
+                'Logout',
                 style: TextStyle(
                   fontSize: 18.0,
                 ),
               ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text(
-                'Logout',
-               style: TextStyle(
-                  fontSize: 18.0,
-                ),
-              ),
               onTap: () {
-                // RepositoryProvider.of<AuthenticationRepository>(context)
-                // .logOut();
                 BlocProvider.of<AuthenticationBloc>(context)
                     .add(UserLoggedOut());
                 Navigator.pushNamedAndRemoveUntil(
@@ -96,7 +66,10 @@ class MyDrawer extends StatelessWidget {
             Spacer(flex: 1),
             ListTile(
               leading: Icon(Icons.close_outlined),
-              title: Text('Close', style: TextStyle(fontSize: 18.0),),
+              title: Text(
+                'Close',
+                style: TextStyle(fontSize: 18.0),
+              ),
               onTap: () {
                 Navigator.pop(context);
               },

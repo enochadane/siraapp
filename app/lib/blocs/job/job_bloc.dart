@@ -1,4 +1,3 @@
-import 'package:app/blocs/authentication/authentication.dart';
 import 'package:app/blocs/job/job.dart';
 import 'package:app/models/models.dart';
 import 'package:app/repositories/repository.dart';
@@ -18,14 +17,16 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       yield JobLoading();
       try {
         List<Job> jobs;
-        if (event.user.role == "EMPLOYER") {
+        if (event.user?.role == "EMPLOYER") {
           jobs = await jobRepository.getJobsByCompanyId(event.user.id);
         } else {
           jobs = await jobRepository.getJobs();
         }
 
         yield JobsLoadedSuccess(jobs);
-      } catch (_) {
+      } catch (e) {
+        print("error is $e");
+
         yield JobOperationFailure();
       }
     }
@@ -34,14 +35,16 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       try {
         await jobRepository.createJob(event.job);
         var jobs;
-        if (event.user.role == "EMPLOYER") {
+        if (event.user?.role == "EMPLOYER") {
           jobs = await jobRepository.getJobsByCompanyId(event.user.id);
         } else {
           jobs = await jobRepository.getJobs();
         }
 
         yield JobsLoadedSuccess(jobs);
-      } catch (_) {
+      } catch (e) {
+        print("error is $e");
+
         yield JobOperationFailure();
       }
     }
@@ -52,13 +55,14 @@ class JobBloc extends Bloc<JobEvent, JobState> {
         await jobRepository.updateJob(event.id, event.job);
 
         var jobs;
-        if (event.user.role == "SEEKER") {
+        if (event.user?.role == "SEEKER") {
           jobs = await jobRepository.getJobs();
         } else {
           jobs = await jobRepository.getJobsByCompanyId(event.user.id);
         }
         yield JobsLoadedSuccess(jobs);
-      } catch (_) {
+      } catch (e) {
+        print("error is $e");
         yield JobOperationFailure();
       }
     }
@@ -70,7 +74,6 @@ class JobBloc extends Bloc<JobEvent, JobState> {
         final jobs = await jobRepository.getJobs();
         yield JobsLoadedSuccess(jobs);
       } catch (_) {
-        print("there is an error on try catch");
         yield JobOperationFailure();
       }
     }

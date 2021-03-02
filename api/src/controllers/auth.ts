@@ -51,7 +51,6 @@ export const signUp = async (req: any, res: any) => {
           return res.status(201).json(user);
         // } else {
           // return res
-
             // .status(400)
             // .json({ error: "There is something wrong on creating a user" });
         // }
@@ -65,7 +64,7 @@ export const signUp = async (req: any, res: any) => {
   }
 };
 
-export const signIn = async (req: any, res: any) => {
+export const signIn = async (req: any, res: any) =>{
   const email = req.body.email;
   const password = req.body.password;
   if (!email || !password) {
@@ -74,7 +73,7 @@ export const signIn = async (req: any, res: any) => {
   const secret = process.env.JWT_SECRET || "secret";
 
   try {
-    models.User.findOne({ email }).populate("role_id", "_id name").exec(async (_err, user: IUser | null) => {
+    models.User.findOne({ email }).populate("role_id", "_id name").exec( async (_err, user: IUser | null) => {
       if (!user) {
         return res.status(400).json({ error: "User doesn't exist" });
       }
@@ -98,7 +97,7 @@ export const signIn = async (req: any, res: any) => {
         .json({ token, user: { id: user._id, username: user.username, email, role: user.role_id.name } });
     });
   } catch (error) {
-    console.log(error);
+    console.log(`the error is ${error}`);
     return res
       .status(400)
       .json({ error: "There is something wrong on creating a user" });
